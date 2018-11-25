@@ -1,0 +1,706 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="最近优化代码，遇到了一个问题，这里记录一下：类似一个搜索框页面，根据搜索的内容调接口请求，若接口返回数据为空的时候，需要显示一个无数据的view,但是view中要包含用户刚刚textfield键入的内容。也就是说view的高度宽度要自适应这种情况  先来看看效果图： 1. 本来思路:以前都是中文模式，label显示的内容都比较短，可以一行显示完全，所以实现方式就比较多了，可以使用3个label，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TextKit探究">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2018/10/23/TextKit探究/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="最近优化代码，遇到了一个问题，这里记录一下：类似一个搜索框页面，根据搜索的内容调接口请求，若接口返回数据为空的时候，需要显示一个无数据的view,但是view中要包含用户刚刚textfield键入的内容。也就是说view的高度宽度要自适应这种情况  先来看看效果图： 1. 本来思路:以前都是中文模式，label显示的内容都比较短，可以一行显示完全，所以实现方式就比较多了，可以使用3个label，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-812d7acdba73ef12.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-d1bd39daf36b60ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-5c6d193b12738373.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-0a3a4812bcf6e724.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-c34ef654b8a28822.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-11-25T05:21:00.285Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TextKit探究">
+<meta name="twitter:description" content="最近优化代码，遇到了一个问题，这里记录一下：类似一个搜索框页面，根据搜索的内容调接口请求，若接口返回数据为空的时候，需要显示一个无数据的view,但是view中要包含用户刚刚textfield键入的内容。也就是说view的高度宽度要自适应这种情况  先来看看效果图： 1. 本来思路:以前都是中文模式，label显示的内容都比较短，可以一行显示完全，所以实现方式就比较多了，可以使用3个label，">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-812d7acdba73ef12.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2018/10/23/TextKit探究/">
+
+
+
+
+
+  <title> TextKit探究 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/10/23/TextKit探究/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TextKit探究
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-23T11:14:45+08:00">
+                2018-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>最近优化代码，遇到了一个问题，这里记录一下：<br>类似一个搜索框页面，根据搜索的内容调接口请求，若接口返回数据为空的时候，需要显示一个无数据的view,但是view中要包含用户刚刚textfield键入的内容。也就是说view的高度宽度要自适应这种情况</p>
+</blockquote>
+<p>先来看看效果图：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-812d7acdba73ef12.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<h4 id="1-本来思路"><a href="#1-本来思路" class="headerlink" title="1. 本来思路:"></a>1. 本来思路:</h4><p>以前都是中文模式，label显示的内容都比较短，可以一行显示完全，所以实现方式就比较多了，可以使用3个label，分别显示前、中、后三段内容，然后分别配置各个label的属性。<br><strong>但是！</strong>，后来需求变动，要添加英文模式，这里就能看的，英文模式下，要显示的内容就大大加长了。（也就是说一行不能完全显示）<br>这里就要<strong><em>使内容高度宽度自适应了</em></strong><br>这也就是将要提到的<a href="">思路2</a><br><a id="more"></a></p>
+<h4 id="2-思路2，使用UITextview来实现"><a href="#2-思路2，使用UITextview来实现" class="headerlink" title="2. 思路2，使用UITextview来实现"></a>2. 思路2，使用UITextview来实现</h4><p>因为UITextview已经默认将内容拼合起来， 而且它存在一个<code>attributedText</code>属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property(null_resettable,copy) NSAttributedString *attributedText NS_AVAILABLE_IOS(6_0);</span><br></pre></td></tr></table></figure></p>
+<p>所以，我们可以根据<code>range</code>或者根据正则来配置中间用户键入的文字属性。<br>自定义view配置各个控件就不贴了。<br>这里主要就是一个宽度的计算问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">- (void)layoutSubviews &#123;</span><br><span class="line">[super layoutSubviews];</span><br><span class="line"></span><br><span class="line">//textView的最合适的size</span><br><span class="line">CGSize appropriateSize = [self.searchResult sizeThatFits:CGSizeMake(self.bounds.size.width - 5 - 45, CGFLOAT_MAX)];</span><br><span class="line">[self updateSubviewConstraintsWithTextViewSize:appropriateSize];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">此处的约束方法是，这个view最宽为整个屏幕宽度的0.8，</span><br><span class="line">内部如果宽度小于整个屏幕的0.8倍，则显示原始大小，若大于0.8倍。则宽度为0.8*ScreenWidth.</span><br><span class="line">然后高度自适应</span><br><span class="line"></span><br><span class="line">//所以外部约束如下：</span><br><span class="line">self.frontView = [[combineSearchResultView alloc]init];</span><br><span class="line">[self addSubview:self.frontView];</span><br><span class="line">[self.frontView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.centerX.equalTo(self);</span><br><span class="line">make.top.equalTo(self).offset(54);</span><br><span class="line">make.width.lessThanOrEqualTo(self).multipliedBy(0.8);</span><br><span class="line">&#125;];</span><br><span class="line">//内部约束如下：</span><br><span class="line">/**</span><br><span class="line">* 更新子视图约束</span><br><span class="line">*/</span><br><span class="line">- (void)updateSubviewConstraintsWithTextViewSize:(CGSize)tvSize &#123;</span><br><span class="line">&#123;...&#125;</span><br><span class="line">//此处是textView的约束</span><br><span class="line">[self.searchResult mas_remakeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.equalTo(self.icon.mas_right).offset(5);</span><br><span class="line">make.top.equalTo(self.icon);</span><br><span class="line">make.width.equalTo(@(tvSize.width));</span><br><span class="line">make.height.equalTo(@(tvSize.height));</span><br><span class="line">make.right.equalTo(self);</span><br><span class="line">&#125;];</span><br><span class="line">&#123;...&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有一点要注意：<br>我发现一般来说UITextview都会有上下左右四个方向的边距（大约为8px），若想要修改UITextview中内容的四个边距，一般来说我们都会设置<code>contentInset</code>属性，但是，在textview中好像并不太好使，看了下文档，里边有一个属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Inset the text container&apos;s layout area within the text view&apos;s content area</span><br><span class="line">@property(nonatomic, assign) UIEdgeInsets textContainerInset NS_AVAILABLE_IOS(7_0);</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，此属性就是修改textview文本内容的containerView的内边距的<br>设置一下即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.searchResult.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0);</span><br></pre></td></tr></table></figure></p>
+<p><strong>注：若textview的约束没设置正确，设置textContainerInset也有可能会显示不正常</strong></p>
+<p>以上就能达到上图那样的效果</p>
+<h4 id="3-引申，既然是显示文字的控件，那我们就来看下他们的底层实现：TextKit"><a href="#3-引申，既然是显示文字的控件，那我们就来看下他们的底层实现：TextKit" class="headerlink" title="3.引申，既然是显示文字的控件，那我们就来看下他们的底层实现：TextKit"></a>3.引申，既然是显示文字的控件，那我们就来看下他们的底层实现：TextKit</h4><p><code>TextKit</code>是苹果提供的基于<code>Core Text</code>的渲染带文字的诸如<code>UILaebl</code>,<code>UITextField</code>,<code>UITextView</code>等控件的高级API。<br><img src="https://upload-images.jianshu.io/upload_images/1241385-d1bd39daf36b60ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>首先介绍一下，它包含的三大主要的类：<br><code>NSTextStorage、NSLayoutManager、NSTextContainer</code>，正如苹果官方推荐的MVC模式一样，这三个类也分别代表了不同的部分：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-5c6d193b12738373.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到：</p>
+<ol>
+<li><h5 id="NSTextStorage"><a href="#NSTextStorage" class="headerlink" title="NSTextStorage"></a>NSTextStorage</h5>相当于MVC中的model，用来提供要展示的数据。<br>而且NSTextStorage是NSMutableAttributedString的子类，所以配置的时候，可以添加一些文字需要展示的属性。<br>平时我们在使用的时候，可以直接使用此类的实例，但是，如果需要自定义的时候，要继承于他，此时，我们要额外实现四个方法：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/* Note for subclassing NSTextStorage: NSTextStorage is a semi-abstract subclass of NSMutableAttributedString.</span><br><span class="line">It implements change management (beginEditing/endEditing), </span><br><span class="line">verification of attributes, delegate handling, and layout management notification. </span><br><span class="line">The one aspect it does not implement is the actual attributed string storage </span><br><span class="line">--- this is left up to the subclassers, which need to override the two NSMutableAttributedString primitives </span><br><span class="line">in addition to two NSAttributedString primitives:</span><br><span class="line"></span><br><span class="line">- (NSString *)string;</span><br><span class="line">- (NSDictionary *)attributesAtIndex:(NSUInteger)location effectiveRange:(NSRangePointer)range;</span><br><span class="line"></span><br><span class="line">- (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)str;</span><br><span class="line">- (void)setAttributes:(NSDictionary *)attrs range:(NSRange)range;</span><br><span class="line"></span><br><span class="line">These primitives should perform the change then call edited:range:changeInLength: to get everything else to happen.</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">NS_CLASS_AVAILABLE(10_0, 7_0) @interface NSTextStorage : NSMutableAttributedString</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>可以看到，我们要额外实现：四个方法，来配置string，然后NSTextStorage会调用<code>edited:range:changeInLength</code>方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">/**************************** Edit management ****************************/</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">Notifies and records a recent change.  </span><br><span class="line">If there are no outstanding -beginEditing calls, </span><br><span class="line">this method calls -processEditing to trigger post-editing processes.  </span><br><span class="line">This method has to be called by the primitives after changes are made if subclassed and overridden.  </span><br><span class="line">editedRange is the range in the original string (before the edit).</span><br><span class="line">*/</span><br><span class="line">- (void)edited:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta;</span><br><span class="line"></span><br><span class="line">/* </span><br><span class="line">Sends out -textStorage:willProcessEditing, fixes the attributes, </span><br><span class="line">sends out -textStorage:didProcessEditing, and notifies the layout </span><br><span class="line">managers of change with the -processEditingForTextStorage:edited:range:changeInLength:invalidatedRange: method.  </span><br><span class="line">Invoked from -edited:range:changeInLength: or -endEditing.</span><br><span class="line">*/</span><br><span class="line">- (void)processEditing;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，上面的方法会记录改变的信息，也就是说<strong>string的每一次改变, NSTextStorage都会调用此方法。</strong>然后 <em>edited:range:changeInLength:</em>方法也会自动调用<em>beginEdiging</em>方法，传递文字变化状态，<br>（也可以使用<em>beginEditing/endEditing</em>方法包裹住要处理的数据，在endEditing方法调用之后，会自动调用<em>processEditing</em>传递变化。）<br>然后<em>processEditing</em>，会调用<strong>NSLayoutManager</strong>的<em>textStorage:edited:range:changeInLength:invalidatedRange:</em>方法把textStorage传过来的字符串绘制出图形</p>
+<ol start="2">
+<li><h5 id="NSLayoutManager"><a href="#NSLayoutManager" class="headerlink" title="NSLayoutManager"></a>NSLayoutManager</h5><strong>NSLayoutManager</strong>则相当于MVC中的Controller.用来协调model的数据和展示view(UITextView,UITextfield,UILabel etc.)之间的关系。</li>
+</ol>
+<p>这里有一点需要注意：<br><strong><em>如果我们自己要绘制文字的时候，需要先绘制背景，然后再绘制文字。</em></strong><br>常用的方法有几大类：</p>
+<p>1).  生成类：可以生成图形和布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/************************ Causing glyph generation and layout ************************/</span><br><span class="line"></span><br><span class="line">// These methods allow clients to specify exactly the portions of the document for which they wish to have glyphs or layout.  This is particularly important if non-contiguous layout is enabled.  The layout manager still reserves the right to perform glyph generation or layout for larger ranges.  If non-contiguous layout is not enabled, then the range in question will always effectively be extended to start at the beginning of the text.</span><br><span class="line">- (void)ensureGlyphsForCharacterRange:(NSRange)charRange;</span><br><span class="line">- (void)ensureGlyphsForGlyphRange:(NSRange)glyphRange;</span><br><span class="line">- (void)ensureLayoutForCharacterRange:(NSRange)charRange;</span><br><span class="line">- (void)ensureLayoutForGlyphRange:(NSRange)glyphRange;</span><br><span class="line">- (void)ensureLayoutForTextContainer:(NSTextContainer *)container;</span><br><span class="line">- (void)ensureLayoutForBoundingRect:(CGRect)bounds inTextContainer:(NSTextContainer *)container;</span><br></pre></td></tr></table></figure></p>
+<p>2). 获取类：获取图形、布局的信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/************************ Get layout information ************************/</span><br><span class="line">// Returns the container in which the given glyph is laid and (optionally) by reference the whole range of glyphs that are in that container.  This will cause glyph generation and layout for the line fragment containing the specified glyph, or if non-contiguous layout is not enabled, up to and including that line fragment; if non-contiguous layout is not enabled and effectiveGlyphRange is non-NULL, this will additionally cause glyph generation and layout for the entire text container containing the specified glyph.</span><br><span class="line">- (nullable NSTextContainer *)textContainerForGlyphAtIndex:(NSUInteger)glyphIndex effectiveRange:(nullable NSRangePointer)effectiveGlyphRange;</span><br><span class="line">- (nullable NSTextContainer *)textContainerForGlyphAtIndex:(NSUInteger)glyphIndex effectiveRange:(nullable NSRangePointer)effectiveGlyphRange</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/************************ Get glyphs and glyph properties ************************/</span><br><span class="line">// Returns the total number of glyphs.  If non-contiguous layout is not enabled, this will force generation of glyphs for all characters.</span><br><span class="line">@property (readonly, NS_NONATOMIC_IOSONLY) NSUInteger numberOfGlyphs;</span><br><span class="line"></span><br><span class="line">// If non-contiguous layout is not enabled, these will cause generation of all glyphs up to and including glyphIndex.  The first CGGlyphAtIndex variant returns kCGFontIndexInvalid if the requested index is out of the range (0, numberOfGlyphs), and optionally returns a flag indicating whether the requested index is in range.  The second CGGlyphAtIndex variant raises a NSRangeError if the requested index is out of range.</span><br><span class="line">- (CGGlyph)CGGlyphAtIndex:(NSUInteger)glyphIndex isValidIndex:(nullable BOOL *)isValidIndex NS_AVAILABLE(10_11,7_0);</span><br><span class="line">- (CGGlyph)CGGlyphAtIndex:(NSUInteger)glyphIndex NS_AVAILABLE(10_11,7_0);</span><br><span class="line">- (BOOL)isValidGlyphIndex:(NSUInteger)glyphIndex API_AVAILABLE(macosx(10.0), ios(7.0), watchos(2.0), tvos(9.0));</span><br><span class="line"></span><br><span class="line">// If non-contiguous layout is not enabled, this will cause generation of all glyphs up to and including glyphIndex.  It will return the glyph property associated with the glyph at the specified index.</span><br><span class="line">- (NSGlyphProperty)propertyForGlyphAtIndex:(NSUInteger)glyphIndex NS_AVAILABLE(10_5, 7_0);</span><br><span class="line"></span><br><span class="line">// If non-contiguous layout is not enabled, this will cause generation of all glyphs up to and including glyphIndex.  It will return the character index for the first character associated with the glyph at the specified index.</span><br><span class="line">- (NSUInteger)characterIndexForGlyphAtIndex:(NSUInteger)glyphIndex;</span><br><span class="line"></span><br><span class="line">// If non-contiguous layout is not enabled, this will cause generation of all glyphs up to and including those associated with the specified character.  It will return the glyph index for the first glyph associated with the character at the specified index.</span><br><span class="line">- (NSUInteger)glyphIndexForCharacterAtIndex:(NSUInteger)charIndex;</span><br></pre></td></tr></table></figure></p>
+<p>3).  绘图类, 按照图形布局信息，绘制文字<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/************************ Drawing support ************************/</span><br><span class="line">/* These methods are primitives for drawing.  </span><br><span class="line">You can override these to perform additional drawing, or to replace text drawing entirely, but not to change layout.  </span><br><span class="line">You can call them if you want, but focus must already be locked on the destination view or image.  </span><br><span class="line">-drawBackgroundForGlyphRange:atPoint: draws the background color and selection and marked range aspects of the text display, </span><br><span class="line">along with block decoration such as table backgrounds and borders.  </span><br><span class="line">-drawGlyphsForGlyphRange:atPoint: draws the actual glyphs, including attachments, as well as any underlines or strikethroughs.  </span><br><span class="line">In either case all of the specified glyphs must lie in a single container.</span><br><span class="line">*/</span><br><span class="line">- (void)drawBackgroundForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin;</span><br><span class="line">- (void)drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin;</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li><h5 id="NSTextContainer"><a href="#NSTextContainer" class="headerlink" title="NSTextContainer"></a>NSTextContainer</h5>该类是辅助类，辅助view生成盛放NSLayoutManager类生成的图形。<br>如：<br><em>NSTextview</em>中的<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Get the text container for the text view</span><br><span class="line">@property(nonatomic,readonly) NSTextContainer *textContainer NS_AVAILABLE_IOS(7_0);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>该类可以设置以下属性：<br><em>size</em>：展示区域的大小<br><em>exclusionPaths</em>:排除展示区域的路径，是一个内部盛放UIBezierPath对象的数组<br><em>lineBreakMode</em>: 换行模式<br><em>lineFragmentPadding</em>：线段边距</p>
+<p>以及提供了一个方法，来设置以上提及的一些属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**************************** Line fragments ****************************/</span><br><span class="line"></span><br><span class="line">/* Returns the bounds of a line fragment rect inside the receiver for proposedRect.  This is the intersection of proposedRect and the receiver&apos;s bounding rect defined by -size property.  </span><br><span class="line">The regions defined by -exclusionPaths property are excluded from the return value.  charIndex is the character location inside the text storage for the line fragment being processed.  </span><br><span class="line">It is possible that proposedRect can be divided into multiple line fragments due to exclusion paths.  </span><br><span class="line">In that case, remainingRect returns the remainder that can be passed in as the proposed rect for the next iteration.  </span><br><span class="line">baseWritingDirection determines the direction of advancement for line fragments inside a visual horizontal line.  </span><br><span class="line">The values passed into the method are either NSWritingDirectionLeftToRight or NSWritingDirectionRightToLeft.  This method can be overridden by subclasses for further text container region customization.</span><br><span class="line">*/</span><br><span class="line">- (CGRect)lineFragmentRectForProposedRect:(CGRect)proposedRect atIndex:(NSUInteger)characterIndex writingDirection:(NSWritingDirection)baseWritingDirection remainingRect:(nullable CGRect *)remainingRect NS_AVAILABLE(10_11, 7_0);</span><br></pre></td></tr></table></figure></p>
+<p><strong>我们可以通过创建NSTextContainer的子类，然后重写该方法，来定义那些文字展示在不规则图形中的情况</strong><br><img src="https://upload-images.jianshu.io/upload_images/1241385-0a3a4812bcf6e724.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>总结一下；整体的绘制流程如下：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-c34ef654b8a28822.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h5 id="有以下几种应用场景："><a href="#有以下几种应用场景：" class="headerlink" title="有以下几种应用场景："></a>有以下几种应用场景：</h5><ol>
+<li><p>语法高亮</p>
+</li>
+<li><p>类似markdown编辑器。</p>
+</li>
+<li><p>多列展示文章</p>
+</li>
+<li><p>图文混排</p>
+</li>
+<li><p>label上文字点击</p>
+</li>
+</ol>
+<p><a href="https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/CustomTextProcessing/CustomTextProcessing.html#//apple_ref/doc/uid/TP40009542-CH4-SW1" target="_blank" rel="noopener">Using Text Kit to Draw and Manage Text</a><br><a href="https://developer.apple.com/videos/play/wwdc2018/221/" target="_blank" rel="noopener">TextKit Best Practices WWDC 2018</a><br><a href="https://juejin.im/post/5b27451a51882574eb597e04" target="_blank" rel="noopener">TextKit Best Practices WWDC 2018中文图解</a><br><a href="https://blog.vinhis.me/2017/04/16/bullet-list-on-ios-with-textkit.html" target="_blank" rel="noopener">Bullet list on iOS with TextKit</a><br><a href="https://www.objc.io/issues/5-ios7/getting-to-know-textkit/" target="_blank" rel="noopener">Getting to Know TextKit</a><br><a href="https://www.objc.io/issues/9-strings/string-rendering/" target="_blank" rel="noopener">String Rendering</a><br><a href="https://stackoverflow.com/questions/22178773/how-to-fit-text-in-a-circle-in-uilabel" target="_blank" rel="noopener">How to fit text in a circle in UILabel</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2018/10/19/iOS上传文件参数解析-HTTP-header-Content-Disposition/" rel="next" title="iOS上传文件参数解析(HTTP header Content-Disposition)">
+                <i class="fa fa-chevron-left"></i> iOS上传文件参数解析(HTTP header Content-Disposition)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2018/10/31/svn操作/" rel="prev" title="svn操作">
+                svn操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-本来思路"><span class="nav-number">1.</span> <span class="nav-text">1. 本来思路:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-思路2，使用UITextview来实现"><span class="nav-number">2.</span> <span class="nav-text">2. 思路2，使用UITextview来实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-引申，既然是显示文字的控件，那我们就来看下他们的底层实现：TextKit"><span class="nav-number">3.</span> <span class="nav-text">3.引申，既然是显示文字的控件，那我们就来看下他们的底层实现：TextKit</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#NSTextStorage"><span class="nav-number">3.1.</span> <span class="nav-text">NSTextStorage</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NSLayoutManager"><span class="nav-number">3.2.</span> <span class="nav-text">NSLayoutManager</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NSTextContainer"><span class="nav-number">3.3.</span> <span class="nav-text">NSTextContainer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#有以下几种应用场景："><span class="nav-number">3.4.</span> <span class="nav-text">有以下几种应用场景：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,714 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="先来说下意图：以前在做项目的时候，在网上找了好多demo去了解参考，然后时间长了，没有整理，整个桌面就显得格外的杂乱。于是，就起了一个整理下桌面的念头。   然后这些文件之间，我发现了一些共性：比如说iOS中导航栏相关的demo，基本都会包含有“Navigation”or“Nav”关键字，遂，就有了【使用vim指令，查找包含“Nav”关键字的文件或者文件夹】这个思路。也就是本文诞生的理由。  这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim ls find grep sed指令">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2018/09/05/vim-ls-find-grep-sed指令/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="先来说下意图：以前在做项目的时候，在网上找了好多demo去了解参考，然后时间长了，没有整理，整个桌面就显得格外的杂乱。于是，就起了一个整理下桌面的念头。   然后这些文件之间，我发现了一些共性：比如说iOS中导航栏相关的demo，基本都会包含有“Navigation”or“Nav”关键字，遂，就有了【使用vim指令，查找包含“Nav”关键字的文件或者文件夹】这个思路。也就是本文诞生的理由。  这">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-d460dd2452ab1699.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-11-25T05:21:00.298Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vim ls find grep sed指令">
+<meta name="twitter:description" content="先来说下意图：以前在做项目的时候，在网上找了好多demo去了解参考，然后时间长了，没有整理，整个桌面就显得格外的杂乱。于是，就起了一个整理下桌面的念头。   然后这些文件之间，我发现了一些共性：比如说iOS中导航栏相关的demo，基本都会包含有“Navigation”or“Nav”关键字，遂，就有了【使用vim指令，查找包含“Nav”关键字的文件或者文件夹】这个思路。也就是本文诞生的理由。  这">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-d460dd2452ab1699.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2018/09/05/vim-ls-find-grep-sed指令/">
+
+
+
+
+
+  <title> vim ls find grep sed指令 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/09/05/vim-ls-find-grep-sed指令/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                vim ls find grep sed指令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T18:01:27+08:00">
+                2018-09-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>先来说下意图：以前在做项目的时候，在网上找了好多demo去了解参考，然后时间长了，没有整理，整个桌面就显得格外的杂乱。于是，就起了一个整理下桌面的念头。</p>
+</blockquote>
+<blockquote>
+<p>然后这些文件之间，我发现了一些共性：<br>比如说iOS中导航栏相关的demo，基本都会包含有“Navigation”or“Nav”关键字，<br>遂，就有了【使用vim指令，查找包含“Nav”关键字的文件或者文件夹】这个思路。也就是本文诞生的理由。</p>
+</blockquote>
+<p>这里研究了<code>ls</code> <code>find</code> <code>grep</code> <code>sed</code>三个指令。</p>
+<a id="more"></a>
+<h4 id="0-正则"><a href="#0-正则" class="headerlink" title="0. 正则"></a>0. 正则</h4><p>这里有一个前提，正则。显示、查找的时候，可以根据正则来匹配相应的文件，内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">?,*,+,\d,\w 都是等价字符</span><br><span class="line">?等价于匹配长度&#123;0,1&#125;  //0或者1位</span><br><span class="line">*等价于匹配长度&#123;0,&#125;   //随机位数</span><br><span class="line">+等价于匹配长度&#123;1,&#125;   //一位以上</span><br><span class="line">\d等价于[0-9]        //0到9范围内的字符串</span><br><span class="line">\D等价于[^0-9]      //任何不在0到9范围内的字符串</span><br><span class="line">\w等价于[A-Za-z_0-9]</span><br><span class="line">\W等价于[^A-Za-z_0-9]。</span><br><span class="line">常用运算符与表达式：</span><br><span class="line">^ 开始</span><br><span class="line">（） 域段</span><br><span class="line">[] 包含,默认是一个字符长度</span><br><span class="line">[^] 不包含,默认是一个字符长度</span><br><span class="line">&#123;n,m&#125; 匹配长度 </span><br><span class="line">. 任何单个字符(\. 字符点)</span><br><span class="line">| 或</span><br><span class="line">\ 转义</span><br><span class="line">$ 结尾</span><br><span class="line">[A-Z] 26个大写字母</span><br><span class="line">[a-z] 26个小写字母</span><br><span class="line">[0-9] 0至9数字</span><br><span class="line">[A-Za-z0-9] 26个大写字母、26个小写字母和0至9数字</span><br><span class="line">， 分割</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">分割语法：</span><br><span class="line">[A,H,T,W] 包含A或H或T或W字母</span><br><span class="line">[a,h,t,w] 包含a或h或t或w字母</span><br><span class="line">[0,3,6,8] 包含0或3或6或8数字</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">语法与释义：</span><br><span class="line">基础语法 &quot;^([]&#123;&#125;)([]&#123;&#125;)([]&#123;&#125;)$&quot;</span><br><span class="line">正则字符串 = &quot;开始（[包含内容]&#123;长度&#125;）（[包含内容]&#123;长度&#125;）（[包含内容]&#123;长度&#125;）</span><br></pre></td></tr></table></figure>
+<p>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<h4 id="1-ls"><a href="#1-ls" class="headerlink" title="1. ls"></a>1. ls</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">-1  -- single column output</span><br><span class="line">-A  -- list all except . and ..</span><br><span class="line">-B  -- print octal escapes for control characters</span><br><span class="line">-C  -- list entries in columns sorted vertically</span><br><span class="line">-F  -- append file type indicators</span><br><span class="line">-H  -- follow symlinks on the command line</span><br><span class="line">-L  -- list referenced file for sym link</span><br><span class="line">-P  -- do not follow symlinks</span><br><span class="line">-R  -- list subdirectories recursively</span><br><span class="line">-S  -- sort by size</span><br><span class="line">-T  -- show complete time information</span><br><span class="line">-a  -- list entries starting with .</span><br><span class="line">-b  -- as -B, but use C escape codes whenever possible</span><br><span class="line">-c  -- status change time</span><br><span class="line">-d  -- list directory entries instead of contents</span><br><span class="line">-f  -- output is not sorted</span><br><span class="line">-g  -- long listing but without owner information</span><br><span class="line">-h  -- print sizes in human readable form</span><br><span class="line">-i  -- print file inode numbers</span><br><span class="line">-k  -- print sizes of 1k</span><br><span class="line">-l  -- long listing</span><br><span class="line">-m  -- comma separated</span><br><span class="line">-n  -- numeric uid, gid</span><br><span class="line">-o  -- display file flags</span><br><span class="line">-p  -- append file type indicators for directory</span><br><span class="line">-q  -- hide control chars</span><br><span class="line">-r  -- reverse sort order</span><br><span class="line">-s  -- display size of each file in blocks</span><br><span class="line">-t  -- sort by modification time</span><br><span class="line">-u  -- access time</span><br><span class="line">-w  -- print raw characters</span><br><span class="line">-x  -- sort horizontally</span><br></pre></td></tr></table></figure>
+<p>这里搜索包含“Nav”字符的文件，使用<code>ls *Nav*</code> （<em>）为正则里的`</em>等价于匹配长度{0,},也就是所谓的通配符`.
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<h5 id="这里扩展一个知识点"><a href="#这里扩展一个知识点" class="headerlink" title="这里扩展一个知识点"></a>这里扩展一个知识点</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># ls -la</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">total 8</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">drwxr-xr-x    2 root    root         4096 Nov 6 00:04 .</span><br><span class="line">drwxr-x---   14 root     root         4096 Nov 6 00:04 ..</span><br><span class="line">-rw-r--r--    1 root     root         1668 Oct 3 2007 anaconda-ks.cfg</span><br><span class="line">drwxr-xr-x    2 root     root         4096 Nov 6 00:04 aa</span><br></pre></td></tr></table></figure>
+<p>显示的文件详细信息分别代表什么呢？<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>1）total 8 代表当前目录下文件大小的总和为8K（每个目录的大小都按4K算）
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<p>2）drwxr-xr-x 第一个字符有3种情况：“-”表示普通文件，“d”代表目录，“l”代表连接文件，“b”代表设备文件。<br>后面的9个字符每3个为一组，分别代表文件所有者、文件所有者所在用户组、其它用户对文件拥有的权限。每组中3个字符分别代表读、写、执行的权限，若没有其中的任何一个权限则用“-”表示。执行的权限有两个字符可选“x”代表可执行，“s”代表套接口文件。<br>　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　<br><img src="https://upload-images.jianshu.io/upload_images/1241385-d460dd2452ab1699.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>紧接着的数字2代表 “aa”这个目录下的目录文件数目（这个数目=隐藏目录数目+普通目录数目）。我们进入“aa”目录用命令 ls –al （为了看到隐藏文件我们加上-a这个参数）<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">❗️一个`.`表示当前路径，两个`..`表示父路径。</span><br><span class="line">所以，上面的第3行中的4代表当前目录中有子目录4个，即`.`,`..`,`anaconda-ks.cfg`和`aa`</span><br><span class="line">第4行中的14代表这个目录的上一层目录中有14个子目录。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">再接下来的root代表这个文件（目录）的属主为 用户root</span><br><span class="line">再接下来的root代表这个文件（目录）所属的用户组为 组root</span><br><span class="line">4096 代表文件的大小（字节数），目录的大小总是为4096字节。</span><br><span class="line">Nov 6 00:04 代表文件（目录）的修改时间。</span><br><span class="line">aa代表文件（目录）在名字。</span><br></pre></td></tr></table></figure></p>
+<p>3）文件名颜色的含义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">默认色代表普通文件。 例：install.log</span><br><span class="line">绿色代表可执行文件。 例：rc.news</span><br><span class="line">红色代表tar包文件。    例：vim-7.1.tar.bz2</span><br><span class="line">蓝色代表目录文件。    例：aa</span><br><span class="line">水红代表图象文件。    例：Sunset.jpg</span><br><span class="line">青色代表链接文件。    例：rc4.d   （此类文件相当于快捷方式）</span><br><span class="line">黄色代表设备文件。    例：fd0</span><br></pre></td></tr></table></figure></p>
+<p>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>4）几个比较常用的参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-t 按最后修改时间排序。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">-S 按文件大小排序。（大写的S）</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">-r 排序时按倒序。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">-h 显示文件大小时增加可读性 （例：1K 234M 2G）</span><br></pre></td></tr></table></figure></p>
+<p>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>如果这个aa是个普通文件，2就代表这个文件有2个别名（这个文件被人创建了一个硬链接文件）
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<h4 id="2-find"><a href="#2-find" class="headerlink" title="2. find"></a>2. find</h4><p>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">find命令原理：从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件，并可以对其进行相关的操作。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">格式：find [查找目录] [参数] [匹配模型]  </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">多参数格式：find [查找目录] [参数] [匹配模型] [参数] [匹配模型]  </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">例如：</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">1、find . -name &quot;*.sh&quot;           </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找在当前目录（及子目录）下找以sh结尾的文件。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">2、find . -perm 755               </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找在当前目录（及子目录）下找属性为755的文件。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">3、find . -user root                  </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找在当前目录（及子目录）下找属主为root的文件。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">4、find /var -mtime -5           </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找在/var下找更改时间在5天以内的文件。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">5、find /var -mtime +3          </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找在/var下找更改时间在3天以前的文件。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">6、find /etc -type l                </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找在/etc下查找文件类型为|的链接文件。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">7、find . -size +1000000c    </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找在当前目录（及子目录）下查找文件大小大于1M的文件，1M是1000000个字节。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">8、find . -perm 700 |xargs chmod 777         </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找出当前目录（及子目录）下所有权限为700的文件，并把其权限重设为777。</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">9、find . -type f |xargs ls -l                         </span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">查找出文件并查看其详细信息。</span><br></pre></td></tr></table></figure></p>
+<p>所以使用<code>find</code>查找的指令为：<br><code>find ./ -iname &quot;nav&quot;</code>在当前目录下，不区分大小写查找以nav字符为name的文件和文件夹<br><code>find ./ -iname &quot;nav*&quot;</code>在当前目录下，不区分大小写查找以nav字符开头的文件和文件夹<br><code>find ./ -iname &quot;*nav*&quot;</code>在当前目录下，不区分大小写查找name中包含nav的文件和文件夹
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<h4 id="3-grep"><a href="#3-grep" class="headerlink" title="3. grep"></a>3. grep</h4><blockquote>
+<p>grep（global search regular expression(RE) and print out the line，全面搜索正则表达式并把行打印出来）是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">-a 不要忽略二进制数据。</span><br><span class="line">-A&lt;显示列数&gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。</span><br><span class="line">-b 在显示符合范本样式的那一行之外，并显示该行之前的内容。</span><br><span class="line">-c 计算符合范本样式的列数。</span><br><span class="line">-C&lt;显示列数&gt;或-&lt;显示列数&gt;  除了显示符合范本样式的那一列之外，并显示该列之前后的内容。</span><br><span class="line">-d&lt;进行动作&gt; 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep命令将回报信息并停止动作。</span><br><span class="line">-e&lt;范本样式&gt; 指定字符串作为查找文件内容的范本样式。</span><br><span class="line">-E 将范本样式为延伸的普通表示法来使用，意味着使用能使用扩展正则表达式。</span><br><span class="line">-f&lt;范本文件&gt; 指定范本文件，其内容有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每一列的范本样式。</span><br><span class="line">-F 将范本样式视为固定字符串的列表。</span><br><span class="line">-G 将范本样式视为普通的表示法来使用。</span><br><span class="line">-h 在显示符合范本样式的那一列之前，不标示该列所属的文件名称。</span><br><span class="line">-H 在显示符合范本样式的那一列之前，标示该列的文件名称。</span><br><span class="line">-i 忽略字符大小写的差别。</span><br><span class="line">-l 列出文件内容符合指定的范本样式的文件名称。</span><br><span class="line">-L 列出文件内容不符合指定的范本样式的文件名称。</span><br><span class="line">-n 在显示符合范本样式的那一列之前，标示出该列的编号。</span><br><span class="line">-q 不显示任何信息。</span><br><span class="line">-R/-r 此参数的效果和指定“-d recurse”参数相同。</span><br><span class="line">-s 不显示错误信息。</span><br><span class="line">-v 反转查找。</span><br><span class="line">-[w](http://man.linuxde.net/w &quot;w命令&quot;) 只显示全字符合的列。</span><br><span class="line">-x 只显示全列符合的列。</span><br><span class="line">-y 此参数效果跟“-i”相同。</span><br><span class="line">-o 只输出文件中匹配到的部分。</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>上面是<code>grep</code>命令的一些配置参数，<br>但是一些常用的就一个<code>-r</code>即<code>递归子文件夹</code>, <code>-n</code>即<code>显示行号</code><br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>一些用法：
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<ol>
+<li><p>在文件中搜索一个单词，命令会返回一个包含“match_pattern”的文本行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grep match_pattern file_name</span><br><span class="line">grep &quot;match_pattern&quot; file_name</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在多个文件中查找：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &quot;match_pattern&quot; file_1 file_2 file_3 ...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>所以，如果想要找到<code>某个文件夹下的子文件中是否存在某个字符</code>，可以用<br><code>grep -r -n &quot;Nav&quot; ./</code> 即在当前目录以及当前目录的子文件夹中，寻找Nav字符串，并显示行号<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>这里做一个demo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">桌面上新建一个text.txt，内容如下：</span><br><span class="line">➜  Desktop cat text.txt</span><br><span class="line">sfasdfsadfsad signal sdf</span><br><span class="line">saljflskjdlafjsignalsinal</span><br><span class="line">sdjflkasjdlfkjsa</span><br></pre></td></tr></table></figure></p>
+<p>然后执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  Desktop grep &quot;signal&quot; ./text.txt</span><br><span class="line">sfasdfsadfsad signal sdf</span><br><span class="line">saljflskjdlafjsignalsinal</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，<code>grep</code>能匹配到文件内的对应字符
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<h4 id="4-sed"><a href="#4-sed" class="headerlink" title="4. sed"></a>4. sed</h4><p>既然能大规模找到相应的字符了，那肯定会有一个需求：大规模替换：这里就需要用到一个命令<code>sed</code><br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">**命令格式**</span><br><span class="line">sed [options] &apos;[command](http://man.linuxde.net/command &quot;command命令&quot;)&apos; [file](http://man.linuxde.net/file &quot;file命令&quot;)(s)</span><br><span class="line">sed [options] -f scriptfile file(s)</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">### 选项</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">-e&lt;script&gt;或--expression=&lt;script&gt;：以选项中的指定的script来处理输入的文本文件；</span><br><span class="line">-f&lt;script文件&gt;或--file=&lt;script文件&gt;：以选项中指定的script文件来处理输入的文本文件；</span><br><span class="line">-h或--[help](http://man.linuxde.net/help &quot;help命令&quot;)：显示帮助；</span><br><span class="line">-n或--quiet或——silent：仅显示script处理后的结果；</span><br><span class="line">-V或--version：显示版本信息。&lt;/pre&gt;</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">### sed命令</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">a\ 在当前行下面插入文本。</span><br><span class="line">i\ 在当前行上面插入文本。</span><br><span class="line">c\ 把选定的行改为新的文本。</span><br><span class="line">d 删除，删除选择的行。</span><br><span class="line">D 删除模板块的第一行。</span><br><span class="line">s 替换指定字符</span><br><span class="line">h 拷贝模板块的内容到内存中的缓冲区。</span><br><span class="line">H 追加模板块的内容到内存中的缓冲区。</span><br><span class="line">g 获得内存缓冲区的内容，并替代当前模板块中的文本。</span><br><span class="line">G 获得内存缓冲区的内容，并追加到当前模板块文本的后面。</span><br><span class="line">l 列表不能打印字符的清单。</span><br><span class="line">n 读取下一个输入行，用下一个命令处理新的行而不是用第一个命令。</span><br><span class="line">N 追加下一个输入行到模板块后面并在二者间嵌入一个新行，改变当前行号码。</span><br><span class="line">p 打印模板块的行。</span><br><span class="line">P(大写) 打印模板块的第一行。</span><br><span class="line">q 退出Sed。</span><br><span class="line">b lable 分支到脚本中带有标记的地方，如果分支不存在则分支到脚本的末尾。</span><br><span class="line">r file 从file中读行。</span><br><span class="line">t label if分支，从最后一行开始，条件一旦满足或者T，t命令，将导致分支到带有标号的命令处，或者到脚本的末尾。</span><br><span class="line">T label 错误分支，从最后一行开始，一旦发生错误或者T，t命令，将导致分支到带有标号的命令处，或者到脚本的末尾。</span><br><span class="line">[w](http://man.linuxde.net/w &quot;w命令&quot;) file 写并追加模板块到file末尾。  </span><br><span class="line">W file 写并追加模板块的第一行到file末尾。  </span><br><span class="line">! 表示后面的命令对所有没有被选定的行发生作用。  </span><br><span class="line">= 打印当前行号码。  </span><br><span class="line"># 把注释扩展到下一个换行符以前。  &lt;/pre&gt;</span><br><span class="line">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</span><br><span class="line">### sed替换标记</span><br><span class="line">g 表示行内全面替换。  </span><br><span class="line">p 表示打印行。  </span><br><span class="line">w 表示把行写入一个文件。  </span><br><span class="line">x 表示互换模板块中的文本和缓冲区中的文本。  </span><br><span class="line">y 表示把一个字符翻译为另外的字符（但是不用于正则表达式）</span><br><span class="line">\1 子串匹配标记</span><br><span class="line">&amp; 已匹配字符串标记</span><br></pre></td></tr></table></figure></p>
+<h3 id="替换指令格式"><a href="#替换指令格式" class="headerlink" title="替换指令格式"></a>替换指令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed &apos;s/book/books/&apos; file</span><br></pre></td></tr></table></figure>
+<p><strong>-n选项</strong>和<strong>p命令</strong>一起使用表示只打印那些发生替换的行：<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br><code>sed -n &#39;s/[test](http://man.linuxde.net/test &quot;test命令&quot;)/TEST/p&#39; file</code><br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　<br>直接编辑文件<strong>选项-i</strong>，会匹配file文件中每一行的第一个book替换为books：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;s/book/books/g&apos; file</span><br></pre></td></tr></table></figure></p>
+<p>所以根据上面的<code>grep</code>指令，我们可以使用<code>sed</code>来批量替换：<br><code>sed -i &quot;s/原始字符/替换字符/g&quot; grep -r -l  &quot;原始字符&quot; 要替换的文件夹路径</code></p>
+<h5 id="另外："><a href="#另外：" class="headerlink" title="另外："></a>另外：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-i extensionEdit files in-place, saving backups with the specified extension. </span><br><span class="line">If a zero-length extension is given, no backup will be saved. </span><br><span class="line">It is not recommended to give a zero-length extension when in-place editing files, </span><br><span class="line">as you risk corruption or partial content in situations where disk space is exhausted, etc.</span><br><span class="line"></span><br><span class="line">翻译：就地替换文件，根据提供的扩展名保存源文件备份。如果不提供扩展名，则不备份。</span><br><span class="line">建议替换操作时提供文件备份的扩展名，因为如果恰巧磁盘耗尽的话，你将冒着原文件被损坏的风险。</span><br></pre></td></tr></table></figure>
+<p>所以，如果我们不需要备份的话，可以这样</p>
+<p><code>sed -i “” “s/string_old/string_new/g” grep -rl string_old ./</code></p>
+<p>或者要备份原文件</p>
+<p><code>sed -i “.bak” “s/string_old/string_new/g” grep -rl string_old ./</code>
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://www.cnblogs.com/lanchang/p/6597372.html" target="_blank" rel="noopener">find指令</a><br><a href="https://askubuntu.com/questions/225621/how-to-search-for-all-the-files-starting-with-the-name-abc-in-a-directory" target="_blank" rel="noopener">ls资料</a><br><a href="https://superuser.com/questions/345101/bash-is-there-a-way-to-search-for-a-particular-string-in-a-directory-of-files" target="_blank" rel="noopener">find和grep</a><br><a href="https://www.linux.com/learn/vim-tips-basics-search-and-replace" target="_blank" rel="noopener">replace</a><br><a href="https://www.cnblogs.com/jiangzhaowei/p/5451173.html" target="_blank" rel="noopener">find&amp;regular</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2018/08/24/iOSBasicClassType/" rel="next" title="iOSBasicClassType">
+                <i class="fa fa-chevron-left"></i> iOSBasicClassType
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2018/09/10/iOS-UIScrollView-Bug/" rel="prev" title="iOS UIScrollView Bug">
+                iOS UIScrollView Bug <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-正则"><span class="nav-number">1.</span> <span class="nav-text">0. 正则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-ls"><span class="nav-number">2.</span> <span class="nav-text">1. ls</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#这里扩展一个知识点"><span class="nav-number">2.1.</span> <span class="nav-text">这里扩展一个知识点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-find"><span class="nav-number">3.</span> <span class="nav-text">2. find</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-grep"><span class="nav-number">4.</span> <span class="nav-text">3. grep</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-sed"><span class="nav-number">5.</span> <span class="nav-text">4. sed</span></a></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#替换指令格式"><span class="nav-number"></span> <span class="nav-text">替换指令格式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#另外："><span class="nav-number">0.1.</span> <span class="nav-text">另外：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">1.</span> <span class="nav-text">参考</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

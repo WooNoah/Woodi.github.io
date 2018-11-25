@@ -1,0 +1,718 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="前言今天突然回想起来以前在GitHub上创建的一个仓库，本来是想着以后写博客的时候都把数据同步上去，但是，今天尝试了一次，发现步骤稍显复杂，  我先把项目clone到了本地 创建了一个新的文件夹，在新的文件夹中，我新建了一个HTML文件 修改了项目中的index.html文件，新建一个a标签，地址链接到该目录下新建文件夹中的html文件上。 运行，发现一堆乱码（原来，我使用的是markdown语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo+github搭建博客心历路程">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2017/03/09/hexo-github搭建博客心历路程/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="前言今天突然回想起来以前在GitHub上创建的一个仓库，本来是想着以后写博客的时候都把数据同步上去，但是，今天尝试了一次，发现步骤稍显复杂，  我先把项目clone到了本地 创建了一个新的文件夹，在新的文件夹中，我新建了一个HTML文件 修改了项目中的index.html文件，新建一个a标签，地址链接到该目录下新建文件夹中的html文件上。 运行，发现一堆乱码（原来，我使用的是markdown语法">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1241385-b8190a99b67e8b4a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1241385-c272b3931c70cfc4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-11-25T05:21:00.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo+github搭建博客心历路程">
+<meta name="twitter:description" content="前言今天突然回想起来以前在GitHub上创建的一个仓库，本来是想着以后写博客的时候都把数据同步上去，但是，今天尝试了一次，发现步骤稍显复杂，  我先把项目clone到了本地 创建了一个新的文件夹，在新的文件夹中，我新建了一个HTML文件 修改了项目中的index.html文件，新建一个a标签，地址链接到该目录下新建文件夹中的html文件上。 运行，发现一堆乱码（原来，我使用的是markdown语法">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1241385-b8190a99b67e8b4a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2017/03/09/hexo-github搭建博客心历路程/">
+
+
+
+
+
+  <title> hexo+github搭建博客心历路程 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2017/03/09/hexo-github搭建博客心历路程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                hexo+github搭建博客心历路程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-09T10:30:35+08:00">
+                2017-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>今天突然回想起来以前在GitHub上创建的一个仓库，本来是想着以后写博客的时候都把数据同步上去，但是，今天尝试了一次，发现步骤稍显复杂，</p>
+<ol>
+<li>我先把项目clone到了本地</li>
+<li>创建了一个新的文件夹，在新的文件夹中，我新建了一个HTML文件</li>
+<li>修改了项目中的<code>index.html</code>文件，新建一个<code>a</code>标签，地址链接到<strong><em>该目录下新建文件夹中的html文件上。</em></strong></li>
+<li>运行，发现一堆乱码（原来，我使用的是markdown语法，然后写在了html文件中。。实力脑残了一波。。）</li>
+<li>因此，我就修改了index.html中a标签链接的地址（本来为xxx.html，然后改成了xxx.md）</li>
+<li>然后，还是一堆乱码（等我测试了解了一圈之后，重新刷新，其实已经可以看见markdown语法已经有点效果了，但是，还是显示的不太好。）<a id="more"></a>
+<img src="http://upload-images.jianshu.io/upload_images/1241385-b8190a99b67e8b4a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这里写图片描述"></li>
+</ol>
+<p><strong>对策</strong><br>然后，我在网上找了一些方法，可以直接在同一时间上传内容，然后修改首页index上的索引。<code>也就是那种用户可以专注于写博客，不用再费心于首页的样式，GitHub上传同步上的问题了</code><br>想想是不是很开心呢？</p>
+<p>这么以来，</p>
+<h4 id="大致来说，就有两种方法实现："><a href="#大致来说，就有两种方法实现：" class="headerlink" title="大致来说，就有两种方法实现："></a>大致来说，就有两种方法实现：</h4><h5 id="jekyll-Github"><a href="#jekyll-Github" class="headerlink" title="jekyll+Github"></a>jekyll+Github</h5><h5 id="Hexo-Github"><a href="#Hexo-Github" class="headerlink" title="Hexo+Github"></a>Hexo+Github</h5><p>那么这两种都有什么特点呢？</p>
+<ol>
+<li>Jekyll<br>采用ruby实现，所以速度上没有JS快<br>可以直接使用markdown来编辑文本，<br>但是据说不支持本地预览（据说，是据说各位。。放下手中的西瓜刀）</li>
+</ol>
+<ol start="2">
+<li>Hexo<br>采用Javascript实现，<br>可以直接使用markdown来编辑文本，<br>配置到GitHub之前，可以先在本地预览</li>
+</ol>
+<p>安装方面来说：其实我感觉对于Mac用户来说，几乎都是一样的，<br>Mac自带的有ruby，所以jekyll可以直接安装。<br>而Hexo的话，用户需要先自己安装Node.js, 对用我这个安装的有brew的人来说，一行代码的事情：<code>brew install node</code></p>
+<p><em>另外一点</em>，hexo对多平台多设备支持的没有jekyll好，至于解决方法，我后文再说吧</p>
+<p>网上很多人纠结于这两个的选择，我感觉，还是仁者见仁智者见智吧！<br><a href="https://segmentfault.com/a/1190000002476681" target="_blank" rel="noopener">这里有一个各种静态网页生成器的比较</a></p>
+<p>本文采用的是Hexo来配置的。</p>
+<h4 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h4><p>前提：</p>
+<ol>
+<li><a href="https://github.com/hexojs/hexo" target="_blank" rel="noopener">Hexo官网Github</a></li>
+<li>Git -&gt; 电脑安装xcode</li>
+<li>Github客户端 -&gt; <code>brew cask install github-desktop</code></li>
+<li>Node.js -&gt; <code>brew install node</code></li>
+<li>如果以上都做过了，燃石在执行安装hexo过程中会报错：<code>Failed at the hexo-util@0.6.1 build:highlight script</code>,那么还是老老实实去<a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a>手动下载安装node.js吧</li>
+</ol>
+<p>然后，开始！！</p>
+<h5 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h5><ol>
+<li>首先安装hexo  <code>sudo npm install -g hexo</code></li>
+<li>然后新建一个文件夹，用来存放以后的博客，当做博客的根目录。<em>这里默认为桌面</em><code>Blog文件夹</code>-&gt; <code>mkdir Blog</code></li>
+<li><code>cd</code>到<code>Blog</code>文件夹，然后使用<code>hexo init</code>来初始化</li>
+<li>初始化完成之后，这个时候其实就已经创建好index.html文件了，此时我们<code>hexo g (hexo generate)</code>来生成静态页面。</li>
+<li><code>hexo s (hexo server)</code>来本地查看页面。<br>如果成功你会看到一个静态的你的主页。<br>当然，也会失败，我看别人的，是会有失败的情况的， 那么，<code>hexo clean</code>来清理下缓存，重新试下。</li>
+</ol>
+<h5 id="新建Github页面"><a href="#新建Github页面" class="headerlink" title="新建Github页面"></a>新建Github页面</h5><p>这个应该不用多说：</p>
+<ol>
+<li>登录<a href="github.com">Github</a>网址，然后登陆，<code>new repository</code>新建仓库</li>
+<li>项目命名为<code>你github昵称+balabala.github.io</code>（最好以.io结尾）</li>
+<li>然后创建，点击当前仓库的setting选项，拉到倒数第二栏<strong>Github Pages</strong>，修改source栏为<strong><em>master branch</em></strong>, 生成网页<br>然后你会在倒数第二栏的上端看到你的博客的地址，记下来！!后面要用到的！！！</li>
+</ol>
+<h5 id="关联GitHub，基础Hexo配置"><a href="#关联GitHub，基础Hexo配置" class="headerlink" title="关联GitHub，基础Hexo配置"></a>关联GitHub，基础Hexo配置</h5><p>此时我们在<code>~/UserMacName/Desktop/Blog/</code>目录下，然后我们打开该目录下的<code>_config.yml</code>文件进行编辑<br>翻到最下边，然后改成如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repository: https://github.com/WooNoah/woodi.github.io.git  ###这里填写上面看到的网址.git</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure></p>
+<p><strong>注意：</strong><br>hexo在以前的2.x的版本的时候，type栏写的是github, 升级成3.0版本之后，如果继续写type为github，那么会报错<code>找不到github</code>，因此需要先安装<code>hexo-deployer-git</code>(vim指令为:<code>npm install hexo-deployer-git --save</code>)，然后将github修改为git</p>
+<p>然后配置博客相关的信息：<br>_config.yml上面：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: Woooodi&apos;s Private Zone  ##这个是博客的title</span><br><span class="line">subtitle:</span><br><span class="line">description:</span><br><span class="line">author:  D                   ##你的名字</span><br><span class="line">language: zh-Hans               ##语言</span><br><span class="line">timezone:                       ##时区</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://woonoah.github.io/woodi.github.io/        ###这里！！！非！常！重！要！！ 写上你博客的地址，也就是上面setting栏中，让你记住的那个地址</span><br><span class="line">root: /woodi.github.io                               ###像上面说的，如果你的地址是在子文件夹中，那么root设置下</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br></pre></td></tr></table></figure></p>
+<p>当然，更详细的参数配置都可以在<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="noopener">hexo官网上找到</a></p>
+<p>当然，肯定有人是奔着Hexo好看的主题来的，所以，肯定会有人来问，<strong><em>哪里换主题？</em></strong><br>首先，给大家一个<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="noopener">hexo主题选择的网址</a>，大家各选其好，选一个出来，我使用的是一个名叫<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">next</a>的主题<br>下载之：<br>还是cd到Blog根目录，<br><code>git clone https://github.com/iissnan/hexo-theme-next themes/next</code><br>//新版<code>NextT地址</code><br><code>git clone https://github.com/theme-next/hexo-theme-next themes/next</code><br>然后，你就会看到一个theme文件夹，里边放着一个next主题文件</p>
+<p>仍然是_config.yml中，拉到最下边：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Extensions</span><br><span class="line">## Plugins: https://hexo.io/plugins/</span><br><span class="line">## Themes: https://hexo.io/themes/</span><br><span class="line">theme: next    ###这里，可以选择你想要换的主题名称。</span><br></pre></td></tr></table></figure></p>
+<p>当然， 在next文件夹中，也有一个_config.yml文件，我们叫他<code>主题配置文件</code>，而根目录的那个，我们可以叫<code>hexo配置文件</code><br>大家不要搞混了</p>
+<p>然后，大家就可以按照上面的步骤，修改完毕，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean  #先清理，防止有缓存</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
+<p>我们应该就能看到理想的主题了。</p>
+<p>如果没有问题，我们就可以使用新的指令<br><code>hexo deploy</code>来把本地配置部署到GitHub上了。</p>
+<p><strong><em>笔者，因为没有配置上面url部分，导致多调试了1天</em></strong><br>PS，如果不配置上面的URL<br>则会显示如下<br><img src="http://upload-images.jianshu.io/upload_images/1241385-c272b3931c70cfc4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这里写图片描述"></p>
+<p>另外，<br><code>Next</code>模板，存在3中主题组合，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Muse         默认就是这个 </span><br><span class="line">Mist     </span><br><span class="line">Pisces</span><br></pre></td></tr></table></figure></p>
+<p>只有Pisces支持<br>sideBar在左边</p>
+<h4 id="一些基本路径"><a href="#一些基本路径" class="headerlink" title="一些基本路径"></a>一些基本路径</h4><p>　文章在 source/_posts，编辑器可以用 Sublime，支持 markdown 语法。如果想修改头像可以直接在主题的 _config.yml 文件里面修改，友情链接，之类的都在这里，修改名字在 public/index.html 里修改，开始打理你的博客吧，有什么问题或者建议，都可以提出来，我会继续完善。<br>　<br>　#### 另外加一步美化操作：<br>　<a href="https://blog.csdn.net/jinggege0818/article/details/82113120" target="_blank" rel="noopener">hexo next主题下，自动更换背景图片</a><br>　<br>　打开文档下themes\next\source\css\ _custom\custom.styl文件，这个是Next故意留给用户自己个性化定制一些样式的文件，添加以下代码：<br>　<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">　/**</span><br><span class="line">　url可更换为自己喜欢的图片的地址。</span><br><span class="line">　repeat：是否重复出现</span><br><span class="line">　attachment：定义背景图片随滚动轴的移动方式</span><br><span class="line">　position：设置背景图像的起始位置。</span><br><span class="line">　*/</span><br><span class="line">　//https://source.unsplash.com     此网址能获取到随机的图片</span><br><span class="line">　body &#123;</span><br><span class="line">　background:url(https://source.unsplash.com/random/1600x900);</span><br><span class="line">　background-repeat: no-repeat;</span><br><span class="line">　background-attachment:fixed;</span><br><span class="line">　background-position:50% 50%;</span><br><span class="line">　//这一行是设置图片位置的，宽度等宽，高度占整屏的35%</span><br><span class="line">　//background-size:100% 35%;</span><br><span class="line">　&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　<br>　<br>　#### 常用的指令<br>　<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">　hexo new &quot;postName&quot; #新建文章</span><br><span class="line">　hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">　hexo generate #生成静态页面至public目录</span><br><span class="line">　hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）</span><br><span class="line">　hexo deploy #将.deploy目录部署到GitHub</span><br><span class="line">　hexo help  #查看帮助</span><br><span class="line">　hexo version  #查看Hexo的版本</span><br></pre></td></tr></table></figure></p>
+<p>　<br>　<br>　#### 附录<br>　这里在补一个<a href="https://hexo.io/themes/" target="_blank" rel="noopener">Hexo主题站</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2017/03/08/iOS对象等同性/" rel="next" title="iOS对象等同性">
+                <i class="fa fa-chevron-left"></i> iOS对象等同性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2017/03/10/搭建企业级服务器流程/" rel="prev" title="搭建企业级服务器流程">
+                搭建企业级服务器流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大致来说，就有两种方法实现："><span class="nav-number">2.</span> <span class="nav-text">大致来说，就有两种方法实现：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jekyll-Github"><span class="nav-number">2.1.</span> <span class="nav-text">jekyll+Github</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Hexo-Github"><span class="nav-number">2.2.</span> <span class="nav-text">Hexo+Github</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装步骤"><span class="nav-number">3.</span> <span class="nav-text">安装步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装Hexo"><span class="nav-number">3.1.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新建Github页面"><span class="nav-number">3.2.</span> <span class="nav-text">新建Github页面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#关联GitHub，基础Hexo配置"><span class="nav-number">3.3.</span> <span class="nav-text">关联GitHub，基础Hexo配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一些基本路径"><span class="nav-number">4.</span> <span class="nav-text">一些基本路径</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

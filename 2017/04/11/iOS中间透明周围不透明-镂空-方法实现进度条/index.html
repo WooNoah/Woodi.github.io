@@ -1,0 +1,686 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="前言最近由于要给APP更新UI，然后UIDesigner为了”尝鲜”,给我一些新的界面设计，所以我这里也不得不再来造些另外的轮子。如果对您有帮助，麻烦Github给个star 这里先来看下今天要造的轮子 没错，就是上边的进度条。 实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS中间透明周围不透明-镂空-方法实现进度条">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2017/04/11/iOS中间透明周围不透明-镂空-方法实现进度条/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="前言最近由于要给APP更新UI，然后UIDesigner为了”尝鲜”,给我一些新的界面设计，所以我这里也不得不再来造些另外的轮子。如果对您有帮助，麻烦Github给个star 这里先来看下今天要造的轮子 没错，就是上边的进度条。 实现">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1241385-79ae79f01f0b864f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-11-25T05:21:00.292Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS中间透明周围不透明-镂空-方法实现进度条">
+<meta name="twitter:description" content="前言最近由于要给APP更新UI，然后UIDesigner为了”尝鲜”,给我一些新的界面设计，所以我这里也不得不再来造些另外的轮子。如果对您有帮助，麻烦Github给个star 这里先来看下今天要造的轮子 没错，就是上边的进度条。 实现">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1241385-79ae79f01f0b864f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2017/04/11/iOS中间透明周围不透明-镂空-方法实现进度条/">
+
+
+
+
+
+  <title> iOS中间透明周围不透明-镂空-方法实现进度条 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2017/04/11/iOS中间透明周围不透明-镂空-方法实现进度条/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS中间透明周围不透明-镂空-方法实现进度条
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-11T15:07:58+08:00">
+                2017-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近由于要给APP更新UI，然后UIDesigner为了”尝鲜”,给我一些新的界面设计，所以我这里也不得不再来造些另外的轮子。如果对您有帮助，麻烦<a href="https://github.com/WooNoah/WDProgressBar" target="_blank" rel="noopener">Github</a>给个star</p>
+<p>这里先来看下今天要造的轮子<br><img src="http://upload-images.jianshu.io/upload_images/1241385-79ae79f01f0b864f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="效果图"></p>
+<p>没错，就是上边的进度条。</p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><a id="more"></a>
+<ul>
+<li><p>先说下思路（<strong><em>采用的是使用MASK遮罩，然后改变底层OrangeColorLayer长度，以达到进度条长度变化的思路</em></strong>）</p>
+<ol>
+<li>首先，我们创建一个新的类，<code>继承自UIView</code>,然后，我们采用<code>Core Graphics</code>框架和<code>UIBezierPath类</code>来实现中间的进度条样式。先来分析下进度条，可以看出来，进度条内部，有两种颜色：<code>橙色的TintColor</code>，<code>DarkGray的进度达不到的进度条颜色</code>，然后，<code>进度条背景色lightDarkColor</code>,<code>和最上层圆形中的小圆点</code>。</li>
+<li>我这里的进度条，实现发方法是<strong><em>采用4层layer</em></strong>来实现：最底层，绘制<code>DarkGray颜色的进度条</code>，再往上一层，设置有颜色的一层layer,<strong>通过改变该层layer的宽度，已达到有颜色进度条的长度变化</strong>，再上层，是一个<code>中间进度条轮廓透明，周围是lightGrayColor背景色的遮罩View</code>,最上层，是几个进度条内部小圆的layer。<strong><em>采用的是使用MASK遮罩，然后改变底层OrangeColorLayer长度，以达到进度条长度变化的思路</em></strong></li>
+</ol>
+</li>
+<li><p>这里代码<br>   1.先看下暴露出来的API接口</p>
+<p>   @interface RRMyMaterialProgressBar : UIView<br>   //一共项数<br>   //@property (nonatomic,assign) CGFloat totalStepsCounts;</p>
+<p>   @property (nonatomic,strong) CAShapeLayer *firstArc;</p>
+<p>   @property (nonatomic,strong) CAShapeLayer *secondArc;</p>
+<p>   @property (nonatomic,strong) CAShapeLayer *thirdArc;</p>
+<p>   @property (nonatomic,strong) CAShapeLayer *forthArc;</p>
+<p>   //当前进度<br>   @property (nonatomic,assign) CGFloat currentPercentage;<br>   //渲染颜色<br>   //@property (nonatomic,strong) UIColor *progressBarTintColor;</p>
+<ul>
+<li><p>(instancetype)initWithFrame:(CGRect)frame totalStepsCounts:(CGFloat)steps progressBarTintColor:(UIColor *)tintClr;</p>
+<p>@end</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="PS："><a href="#PS：" class="headerlink" title="PS："></a>PS：</h4><p>这里是有一些问题的，最开始的时候，我是在<code>drawRect</code>方法中实现的，然后把总共的圆形个数，和进度条的渲染颜色都作为了外部属性，也是能实现的，但是：<strong>有些问题</strong>：考虑下我们的使用场景：一般我们都是在外层VC的<code>viewWillAppear或者viewDidLoad</code>方法中设置这个progressBar的进度，但是！如果在<code>drawRect</code>方法中实现的话，此时，内部的各个layer都还没有初始化，<strong>全部都是nil</strong>，如果在<code>viewDidAppear</code>方法中设置的话，会有一个BUG：刚进到页面内的时候，会看到进度条的进度是100%的，（因为默认创建ColorLayer的时候是设置的整个Frame的）,然后，调用外层<code>viewDidAppear</code>方法设置进度条的进度Layer长度，此时，进度条才会又从头开始显示。这么一来，用户体验就不是太好了。</p>
+<p>所以，我又优化了一下：progressBarView 初始化的时候，就来绘制这些内层layer,以此来保证外部VC调用<code>viewWillAppear或者viewDidLoad</code>方法的时候，内层progressBar内的各个实例都已经ALLOC,并且可以设置他们。(所以，以前的<code>totalStepsCounts和progressBarTintColor</code>都可以设置为私有变量),然后我们直接在初始化方法中传入参数以赋值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;RRMyMaterialProgressBar.h&quot;</span><br><span class="line"></span><br><span class="line">@interface RRMyMaterialProgressBar()</span><br><span class="line"></span><br><span class="line">@property (nonatomic,strong) CALayer *backColorLayer;</span><br><span class="line"></span><br><span class="line">@property (nonatomic,strong) CAShapeLayer *middleDarkArcLayer;</span><br><span class="line"></span><br><span class="line">@property (nonatomic,strong) CAShapeLayer *foregroundMaskLayer;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//渲染颜色</span><br><span class="line">@property (nonatomic,strong) UIColor *progressBarTintColor;</span><br><span class="line"></span><br><span class="line">//上一次的比例</span><br><span class="line">@property (nonatomic,assign) CGFloat lastPercentage;</span><br><span class="line"></span><br><span class="line">//一共项数</span><br><span class="line">@property (nonatomic,assign) CGFloat totalStepsCounts;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation RRMyMaterialProgressBar</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithFrame:(CGRect)frame totalStepsCounts:(CGFloat)steps progressBarTintColor:(UIColor *)tintClr&#123;</span><br><span class="line">    if (self == [super initWithFrame:frame]) &#123;</span><br><span class="line">        self.progressBarTintColor = tintClr;</span><br><span class="line">        self.totalStepsCounts = steps;</span><br><span class="line">        [self setupSubLayersWithFrame:frame];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)setupSubLayersWithFrame:(CGRect)rect &#123;</span><br><span class="line">    self.layer.backgroundColor = [UIColor redColor].CGColor;</span><br><span class="line"></span><br><span class="line">    //左右两侧的距离</span><br><span class="line">    CGFloat padding = 10.f;</span><br><span class="line">    //外圆的半径</span><br><span class="line">    CGFloat arcRadius = 7.f;</span><br><span class="line">    //中间线的线宽</span><br><span class="line">    CGFloat middleLineWidth = 1.f;</span><br><span class="line">    //内层圆按钮半径</span><br><span class="line">    CGFloat innerArcRadius = 4.f;</span><br><span class="line">    CGFloat viewWidth = rect.size.width;</span><br><span class="line">    CGFloat viewHeight = rect.size.height;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    double arcSinValue = middleLineWidth/arcRadius;</span><br><span class="line">    double radian = asin(arcSinValue);</span><br><span class="line"></span><br><span class="line">    double tanValue = tan(radian);</span><br><span class="line"></span><br><span class="line">    CGFloat arcTanLength = middleLineWidth/tanValue;</span><br><span class="line"></span><br><span class="line">    CGFloat middleLineDistance = (viewWidth - 2 * padding - arcRadius * 2 - (self.totalStepsCounts * 2 - 2) * arcTanLength)/(self.totalStepsCounts - 1);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    self.middleDarkArcLayer = [CAShapeLayer layer];</span><br><span class="line">    UIBezierPath *middleDrakColorPath = [UIBezierPath bezierPath];</span><br><span class="line">    [middleDrakColorPath moveToPoint:CGPointMake(padding, viewHeight/2)];</span><br><span class="line">    [middleDrakColorPath addArcWithCenter:CGPointMake(padding + arcRadius, viewHeight/2) radius:arcRadius startAngle:M_PI endAngle:2*M_PI - radian clockwise:YES];</span><br><span class="line">    [middleDrakColorPath addLineToPoint:CGPointMake(padding + arcRadius +arcTanLength + middleLineDistance, viewHeight/2 - middleLineWidth/2)];</span><br><span class="line">    [middleDrakColorPath addArcWithCenter:CGPointMake(padding + arcRadius +arcTanLength * 2 + middleLineDistance, viewHeight/2) radius:arcRadius startAngle:M_PI + radian endAngle:2 * M_PI - radian clockwise:YES];</span><br><span class="line">    [middleDrakColorPath addLineToPoint:CGPointMake(padding + arcRadius + 3 * arcTanLength + middleLineDistance * 2, viewHeight/2 - middleLineWidth/2)];</span><br><span class="line">    [middleDrakColorPath addArcWithCenter:CGPointMake(padding + arcRadius + 4 * arcTanLength + middleLineDistance * 2, viewHeight/2) radius:arcRadius startAngle:M_PI + radian endAngle:2 * M_PI - radian clockwise:YES];</span><br><span class="line">    [middleDrakColorPath addLineToPoint:CGPointMake(padding + arcRadius + 5 * arcTanLength + middleLineDistance * 3, viewHeight/2 - middleLineWidth/2)];</span><br><span class="line">    [middleDrakColorPath addArcWithCenter:CGPointMake(padding + arcRadius + 6 * arcTanLength + middleLineDistance * 3, viewHeight/2) radius:arcRadius startAngle:M_PI + radian endAngle:3 * M_PI - radian clockwise:YES];</span><br><span class="line">    [middleDrakColorPath addLineToPoint:CGPointMake(padding + arcRadius + 5 * arcTanLength + middleLineDistance * 2, viewHeight/2 + middleLineWidth/2)];</span><br><span class="line">    [middleDrakColorPath addArcWithCenter:CGPointMake(padding + arcRadius + 4 * arcTanLength + middleLineDistance * 2, viewHeight/2) radius:arcRadius startAngle:radian endAngle:M_PI - radian clockwise:YES];</span><br><span class="line">    [middleDrakColorPath addLineToPoint:CGPointMake(padding + arcRadius + 3 * arcTanLength + middleLineDistance, viewHeight/2 + middleLineWidth/2)];</span><br><span class="line">    [middleDrakColorPath addArcWithCenter:CGPointMake(padding + arcRadius + 2 * arcTanLength + middleLineDistance, viewHeight/2) radius:arcRadius startAngle:radian endAngle:M_PI - radian clockwise:YES];</span><br><span class="line">    [middleDrakColorPath addLineToPoint:CGPointMake(padding + arcRadius + arcTanLength, viewHeight/2 + middleLineWidth/2)];</span><br><span class="line">    [middleDrakColorPath addArcWithCenter:CGPointMake(padding + arcRadius, viewHeight/2) radius:arcRadius startAngle:radian endAngle:M_PI - radian clockwise:YES];</span><br><span class="line">    [middleDrakColorPath closePath];</span><br><span class="line"></span><br><span class="line">    self.middleDarkArcLayer.fillColor = RGB(203, 204, 205).CGColor;</span><br><span class="line">    self.middleDarkArcLayer.path = middleDrakColorPath.CGPath;</span><br><span class="line">    [self.layer addSublayer:self.middleDarkArcLayer];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //MARK: 颜色层layer</span><br><span class="line">    self.backColorLayer = [CALayer layer];</span><br><span class="line">    self.backColorLayer.frame = CGRectMake(0, 0, viewWidth, viewHeight);</span><br><span class="line">    self.backColorLayer.backgroundColor = self.progressBarTintColor.CGColor;</span><br><span class="line">    self.backColorLayer.position = CGPointMake(0, viewHeight/2);</span><br><span class="line">    self.backColorLayer.anchorPoint = CGPointMake(0, 0.5);</span><br><span class="line">    [self.layer addSublayer:self.backColorLayer];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    self.foregroundMaskLayer = [CAShapeLayer layer];</span><br><span class="line">    //MARK: 使用UIBezierPath 绘制遮挡VIEW的路径</span><br><span class="line">    UIBezierPath *outerPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0,0, rect.size.width, rect.size.height) cornerRadius:rect.size.height/2];</span><br><span class="line"></span><br><span class="line">    UIBezierPath *colorPath = [UIBezierPath bezierPath];</span><br><span class="line">    [colorPath moveToPoint:CGPointMake(padding, viewHeight/2)];</span><br><span class="line">    [colorPath addArcWithCenter:CGPointMake(padding + arcRadius, viewHeight/2) radius:arcRadius startAngle:M_PI endAngle:2*M_PI - radian clockwise:YES];</span><br><span class="line">    [colorPath addLineToPoint:CGPointMake(padding + arcRadius +arcTanLength + middleLineDistance, viewHeight/2 - middleLineWidth/2)];</span><br><span class="line">    [colorPath addArcWithCenter:CGPointMake(padding + arcRadius +arcTanLength * 2 + middleLineDistance, viewHeight/2) radius:arcRadius startAngle:M_PI + radian endAngle:2 * M_PI - radian clockwise:YES];</span><br><span class="line">    [colorPath addLineToPoint:CGPointMake(padding + arcRadius + 3 * arcTanLength + middleLineDistance * 2, viewHeight/2 - middleLineWidth/2)];</span><br><span class="line">    [colorPath addArcWithCenter:CGPointMake(padding + arcRadius + 4 * arcTanLength + middleLineDistance * 2, viewHeight/2) radius:arcRadius startAngle:M_PI + radian endAngle:2 * M_PI - radian clockwise:YES];</span><br><span class="line">    [colorPath addLineToPoint:CGPointMake(padding + arcRadius + 5 * arcTanLength + middleLineDistance * 3, viewHeight/2 - middleLineWidth/2)];</span><br><span class="line">    [colorPath addArcWithCenter:CGPointMake(padding + arcRadius + 6 * arcTanLength + middleLineDistance * 3, viewHeight/2) radius:arcRadius startAngle:M_PI + radian endAngle:3 * M_PI - radian clockwise:YES];</span><br><span class="line">    [colorPath addLineToPoint:CGPointMake(padding + arcRadius + 5 * arcTanLength + middleLineDistance * 2, viewHeight/2 + middleLineWidth/2)];</span><br><span class="line">    [colorPath addArcWithCenter:CGPointMake(padding + arcRadius + 4 * arcTanLength + middleLineDistance * 2, viewHeight/2) radius:arcRadius startAngle:radian endAngle:M_PI - radian clockwise:YES];</span><br><span class="line">    [colorPath addLineToPoint:CGPointMake(padding + arcRadius + 3 * arcTanLength + middleLineDistance, viewHeight/2 + middleLineWidth/2)];</span><br><span class="line">    [colorPath addArcWithCenter:CGPointMake(padding + arcRadius + 2 * arcTanLength + middleLineDistance, viewHeight/2) radius:arcRadius startAngle:radian endAngle:M_PI - radian clockwise:YES];</span><br><span class="line">    [colorPath addLineToPoint:CGPointMake(padding + arcRadius + arcTanLength, viewHeight/2 + middleLineWidth/2)];</span><br><span class="line">    [colorPath addArcWithCenter:CGPointMake(padding + arcRadius, viewHeight/2) radius:arcRadius startAngle:radian endAngle:M_PI - radian clockwise:YES];</span><br><span class="line"></span><br><span class="line">    [outerPath appendPath:colorPath];</span><br><span class="line">    [outerPath setUsesEvenOddFillRule:YES];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    self.foregroundMaskLayer.path = outerPath.CGPath;</span><br><span class="line">    self.foregroundMaskLayer.fillRule = kCAFillRuleEvenOdd;</span><br><span class="line">    self.foregroundMaskLayer.fillColor = RGB(221, 221, 221).CGColor;</span><br><span class="line">    [self.layer addSublayer:self.foregroundMaskLayer];</span><br><span class="line"></span><br><span class="line">    //MARK: 第一个内部圆</span><br><span class="line">    self.firstArc = [CAShapeLayer layer];</span><br><span class="line">    UIBezierPath *arcPath1 = [UIBezierPath bezierPath];</span><br><span class="line">    [arcPath1 addArcWithCenter:CGPointMake(padding + arcRadius, viewHeight/2) radius:innerArcRadius startAngle:0 endAngle:2 * M_PI clockwise:1];</span><br><span class="line">    self.firstArc.path = arcPath1.CGPath;</span><br><span class="line">    self.firstArc.fillColor = RGB(221, 221, 221).CGColor;</span><br><span class="line">    [self.layer addSublayer:self.firstArc];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //MARK: 第二个内部圆</span><br><span class="line">    self.secondArc = [CAShapeLayer layer];</span><br><span class="line">    UIBezierPath *arcPath2 = [UIBezierPath bezierPath];</span><br><span class="line">    [arcPath2 addArcWithCenter:CGPointMake(padding + arcRadius + arcTanLength + middleLineDistance + arcTanLength, viewHeight/2) radius:innerArcRadius startAngle:0 endAngle:2 * M_PI clockwise:1];</span><br><span class="line">    self.secondArc.path = arcPath2.CGPath;</span><br><span class="line">    self.secondArc.fillColor = RGB(221, 221, 221).CGColor;</span><br><span class="line">    [self.layer addSublayer:self.secondArc];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //MARK: 第三个内部圆</span><br><span class="line">    self.thirdArc = [CAShapeLayer layer];</span><br><span class="line">    UIBezierPath *arcPath3 = [UIBezierPath bezierPath];</span><br><span class="line">    [arcPath3 addArcWithCenter:CGPointMake(padding + arcRadius + arcTanLength + middleLineDistance + arcTanLength + arcTanLength + middleLineDistance + arcTanLength, viewHeight/2) radius:innerArcRadius startAngle:0 endAngle:2 * M_PI clockwise:1];</span><br><span class="line">    self.thirdArc.path = arcPath3.CGPath;</span><br><span class="line">    self.thirdArc.fillColor = RGB(221, 221, 221).CGColor;</span><br><span class="line">    [self.layer addSublayer:self.thirdArc];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //MARK: 第四个内部圆</span><br><span class="line">    self.forthArc = [CAShapeLayer layer];</span><br><span class="line">    UIBezierPath *arcPath4 = [UIBezierPath bezierPath];</span><br><span class="line">    [arcPath4 addArcWithCenter:CGPointMake(padding + arcRadius + arcTanLength + middleLineDistance + arcTanLength + arcTanLength + middleLineDistance + arcTanLength + arcTanLength + middleLineDistance + arcTanLength, viewHeight/2) radius:innerArcRadius startAngle:0 endAngle:2 * M_PI clockwise:1];</span><br><span class="line">    self.forthArc.path = arcPath4.CGPath;</span><br><span class="line">    self.forthArc.fillColor = RGB(221, 221, 221).CGColor;</span><br><span class="line">    [self.layer addSublayer:self.forthArc];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)setCurrentPercentage:(CGFloat)currentPercentage &#123;</span><br><span class="line">    _currentPercentage = currentPercentage;</span><br><span class="line"></span><br><span class="line">    CABasicAnimation *animate = [CABasicAnimation animationWithKeyPath:@&quot;transform.scale.x&quot;];</span><br><span class="line">    animate.fromValue = self.lastPercentage == 0 ? @(0) : @(self.lastPercentage);        </span><br><span class="line">    animate.toValue = @(currentPercentage);</span><br><span class="line">    animate.repeatCount = 1;</span><br><span class="line">    animate.autoreverses = NO;</span><br><span class="line">    animate.duration = 1.f;</span><br><span class="line">    animate.removedOnCompletion = NO;</span><br><span class="line">    animate.fillMode = kCAFillModeForwards;</span><br><span class="line">    [self.backColorLayer addAnimation:animate forKey:@&quot;progressAnimation&quot;];</span><br><span class="line"></span><br><span class="line">    self.lastPercentage = currentPercentage;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="另外"><a href="#另外" class="headerlink" title="另外"></a>另外</h4><p>整个进度条并不是圆形是环形的，如果有UI需求，我们可以通过设置API接口中的四个shapeLayer的<code>fillColor</code>值来改变内部小圆的颜色的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.forthArc.fillColor = [UIColor yourWantedColor].CGColor;</span><br></pre></td></tr></table></figure></p>
+<p>这里有些<a href="http://blog.csdn.net/zhz459880251/article/details/50035631" target="_blank" rel="noopener">参考资料</a><br>都是<a href="https://segmentfault.com/q/1010000005705732" target="_blank" rel="noopener">关于view中间镂空周围不是空的</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2017/04/05/iOS使用CG框架绘制特定形状的view/" rel="next" title="iOS使用CG框架绘制特定形状的view">
+                <i class="fa fa-chevron-left"></i> iOS使用CG框架绘制特定形状的view
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2017/04/13/UITableview代理调用顺序/" rel="prev" title="UITableview代理调用顺序">
+                UITableview代理调用顺序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PS："><span class="nav-number">3.</span> <span class="nav-text">PS：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#另外"><span class="nav-number">4.</span> <span class="nav-text">另外</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
