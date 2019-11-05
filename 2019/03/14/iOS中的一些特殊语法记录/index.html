@@ -1,0 +1,668 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="本篇文章来解释一些iOS代码中的特殊语法、写法，语法糖  1. FBKVOKeyPath123#define FBKVOKeyPath(KEYPATH) \@(((void)(NO &amp;amp;&amp;amp; ((void)KEYPATH, NO)), \(&amp;#123; const char *fbkvokeypath = strchr(#KEYPATH, &amp;apos;.&amp;apos;); NSCAss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS中的一些特殊语法记录">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2019/03/14/iOS中的一些特殊语法记录/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="本篇文章来解释一些iOS代码中的特殊语法、写法，语法糖  1. FBKVOKeyPath123#define FBKVOKeyPath(KEYPATH) \@(((void)(NO &amp;amp;&amp;amp; ((void)KEYPATH, NO)), \(&amp;#123; const char *fbkvokeypath = strchr(#KEYPATH, &amp;apos;.&amp;apos;); NSCAss">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-05T15:47:31.051Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS中的一些特殊语法记录">
+<meta name="twitter:description" content="本篇文章来解释一些iOS代码中的特殊语法、写法，语法糖  1. FBKVOKeyPath123#define FBKVOKeyPath(KEYPATH) \@(((void)(NO &amp;amp;&amp;amp; ((void)KEYPATH, NO)), \(&amp;#123; const char *fbkvokeypath = strchr(#KEYPATH, &amp;apos;.&amp;apos;); NSCAss">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2019/03/14/iOS中的一些特殊语法记录/">
+
+
+
+
+
+  <title> iOS中的一些特殊语法记录 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/03/14/iOS中的一些特殊语法记录/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS中的一些特殊语法记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-14T17:42:09+08:00">
+                2019-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇文章来解释一些iOS代码中的特殊语法、写法，语法糖</p>
+</blockquote>
+<h4 id="1-FBKVOKeyPath"><a href="#1-FBKVOKeyPath" class="headerlink" title="1. FBKVOKeyPath"></a>1. FBKVOKeyPath</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define FBKVOKeyPath(KEYPATH) \</span><br><span class="line">@(((void)(NO &amp;&amp; ((void)KEYPATH, NO)), \</span><br><span class="line">(&#123; const char *fbkvokeypath = strchr(#KEYPATH, &apos;.&apos;); NSCAssert(fbkvokeypath, @&quot;Provided key path is invalid.&quot;); fbkvokeypath + 1; &#125;)))</span><br></pre></td></tr></table></figure>
+<p>摘录自<a href="https://github.com/facebook/KVOController" target="_blank" rel="noopener">KVOController</a>中<code>FBKVOController.h</code>中<br>官方解释如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">This macro ensures that key path exists at compile time.</span><br><span class="line">Given a real receiver with a key path as you would call it, it verifies at compile time that the key path exists, without calling it.</span><br><span class="line"></span><br><span class="line">For example:</span><br><span class="line"></span><br><span class="line">FBKVOKeyPath(string.length) =&gt; @&quot;length&quot;</span><br><span class="line"></span><br><span class="line">Or even the complex case:</span><br><span class="line"></span><br><span class="line">FBKVOKeyPath(string.lowercaseString.length) =&gt; @&quot;lowercaseString.length&quot;.</span><br></pre></td></tr></table></figure></p>
+<p>我们可以使用该宏定义获取<code>string.property</code>中的<code>property</code>属性，而且，默认转换成<code>NSString</code>类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">1 校验传入的KeyPath是否有编译错误</span><br><span class="line">((void)(NO &amp;&amp; ((void)KEYPATH, NO))</span><br><span class="line">// NO &amp;&amp; ... 是为了运行时直接返回NO减少操作， 因为有(void)KEYPATH的存在，所以编译时校验了object.property</span><br><span class="line"></span><br><span class="line">// 2 将传入的object.property转换为&quot;property&quot;</span><br><span class="line">&#123; const char *fbkvokeypath = strchr(#KEYPATH, &apos;.&apos;); NSCAssert(fbkvokeypath, @&quot;Provided key path is invalid.&quot;); fbkvokeypath + 1; &#125;</span><br><span class="line">// 2.1 #KEYPATH将object.property转为字符串&quot;object.property&quot;</span><br><span class="line">// 2.2 strchr截取&quot;.property&quot;</span><br><span class="line">// 2.3 NSCAssert保证fbkvokeypath有效</span><br><span class="line">// 2.4 &quot;.property&quot;+1=&quot;property&quot;</span><br><span class="line"></span><br><span class="line">// 3 使用@()语法糖将char *转换为NSString类型</span><br><span class="line">@(((void)NO, &quot;property&quot;))</span><br><span class="line">// 因为&apos;,&apos;操作符是返回后面的值，即string = (@&quot;a&quot;, @&quot;b&quot;);string的值为@&quot;b&quot;</span><br><span class="line"></span><br><span class="line">2.1 附：c语言中，##表示把两个宏参数贴合在一起，而单个#的功能是将其后面的宏参数进行字符串化操作</span><br><span class="line">2.2 strchr()函数定义：</span><br><span class="line">char *strchr( const char *str, int ch ); </span><br><span class="line">str: 传入的字符串指针</span><br><span class="line">ch：要搜索的字符</span><br><span class="line">return：返回特定字符**第一次**在字符串中的出现的指针，未找到时返回空指针</span><br><span class="line">2.3 NSCAssert和NSAssert区别，见2</span><br><span class="line">2.4 p+1 表示地址，指针p所指向的内存地址的下一个内存地址。</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-NSAssert和NSCAssert区别"><a href="#2-NSAssert和NSCAssert区别" class="headerlink" title="2. NSAssert和NSCAssert区别"></a>2. NSAssert和NSCAssert区别</h4><p>在苹果的SDK中可以看到这两个都是定义的宏<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define NSAssert(condition, desc, ...)  \  </span><br><span class="line">do &#123;                \  </span><br><span class="line">__PRAGMA_PUSH_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">if (!(condition)) &#123;     \  </span><br><span class="line">[[NSAssertionHandler currentHandler] handleFailureInMethod:_cmd \  </span><br><span class="line">object:self file:[NSString stringWithUTF8String:__FILE__] \  </span><br><span class="line">lineNumber:__LINE__ description:(desc), ##__VA_ARGS__]; \  </span><br><span class="line">&#125;               \  </span><br><span class="line">__PRAGMA_POP_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">&#125; while(0)  </span><br><span class="line">#endif</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define NSCAssert(condition, desc, ...) \  </span><br><span class="line">do &#123;                \  </span><br><span class="line">__PRAGMA_PUSH_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">if (!(condition)) &#123;     \  </span><br><span class="line">[[NSAssertionHandler currentHandler] handleFailureInFunction:[NSString stringWithUTF8String:__PRETTY_FUNCTION__] \  </span><br><span class="line">file:[NSString stringWithUTF8String:__FILE__] \  </span><br><span class="line">lineNumber:__LINE__ description:(desc), ##__VA_ARGS__]; \  </span><br><span class="line">&#125;               \  </span><br><span class="line">__PRAGMA_POP_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">&#125; while(0)  </span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>都是使用断言来保证条件的正确性<br>但是要注意一点：<br><code>NSAssert</code>在实现中，强引用了<code>self</code>当前对象，这里有可能会引起循环引用</p>
+<h4 id="3-iOS枚举中直接设置值为字母"><a href="#3-iOS枚举中直接设置值为字母" class="headerlink" title="3. iOS枚举中直接设置值为字母"></a>3. iOS枚举中直接设置值为字母</h4><p>一般情况，我们写枚举like this：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, UIViewAnimationTransition) &#123;  </span><br><span class="line">UIViewAnimationTransitionNone,//默认从0开始  </span><br><span class="line">UIViewAnimationTransitionFlipFromLeft,  </span><br><span class="line">UIViewAnimationTransitionFlipFromRight,  </span><br><span class="line">UIViewAnimationTransitionCurlUp,  </span><br><span class="line">UIViewAnimationTransitionCurlDown,  </span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line">typedef NS_OPTIONS(NSUInteger, UIViewAutoresizing) &#123;  </span><br><span class="line">UIViewAutoresizingNone                 = 0,  </span><br><span class="line">UIViewAutoresizingFlexibleLeftMargin   = 1 &lt;&lt; 0,  </span><br><span class="line">UIViewAutoresizingFlexibleWidth        = 1 &lt;&lt; 1,  </span><br><span class="line">UIViewAutoresizingFlexibleRightMargin  = 1 &lt;&lt; 2,  </span><br><span class="line">UIViewAutoresizingFlexibleTopMargin    = 1 &lt;&lt; 3,  </span><br><span class="line">UIViewAutoresizingFlexibleHeight       = 1 &lt;&lt; 4,  </span><br><span class="line">UIViewAutoresizingFlexibleBottomMargin = 1 &lt;&lt; 5  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>但是，还会有这样的写法<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, Test)</span><br><span class="line">&#123;</span><br><span class="line">TestA = 0,</span><br><span class="line">TestB = 1,</span><br><span class="line">TestC = 4,</span><br><span class="line">TestD = G,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这种情况，就是<strong>使用了”G”的</strong><code>ASCII</code>，赋值给了<code>TestD</code></p>
+<h4 id="4-ReactiveCocoa中的RAC宏定义"><a href="#4-ReactiveCocoa中的RAC宏定义" class="headerlink" title="4. ReactiveCocoa中的RAC宏定义"></a>4. <a href="https://github.com/ReactiveCocoa/ReactiveCocoa" target="_blank" rel="noopener">ReactiveCocoa</a>中的<strong>RAC宏定义</strong></h4><p>先贴个连接：<a href="https://www.jianshu.com/p/7086e090069d" target="_blank" rel="noopener">https://www.jianshu.com/p/7086e090069d</a></p>
+<p><a href="https://www.jianshu.com/p/8deccb9c8398" target="_blank" rel="noopener">参考资料1：KVOController详解</a><br><a href="https://blog.csdn.net/likendsl/article/details/36631401" target="_blank" rel="noopener">参考资料2：NSAssert,NSCassert</a><br><a href="https://www.jianshu.com/p/6e444981ab45" target="_blank" rel="noopener">参考资料3：断言(NSAssert)的使用</a><br><a href="https://www.jianshu.com/p/740233c2d638" target="_blank" rel="noopener">参考资料4：iOS之枚举用法</a><br><a href="https://www.jianshu.com/p/4a1531bac39f" target="_blank" rel="noopener">参考资料5：Hello, 宏定义魔法世界</a>1</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2019/01/25/iOS自定义图片位置按钮/" rel="next" title="iOS自定义图片位置按钮">
+                <i class="fa fa-chevron-left"></i> iOS自定义图片位置按钮
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2019/03/20/WKWebview禁止点击文字或空白部分滚动功能/" rel="prev" title="WKWebview禁止点击文字或空白部分滚动功能">
+                WKWebview禁止点击文字或空白部分滚动功能 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-FBKVOKeyPath"><span class="nav-number">1.</span> <span class="nav-text">1. FBKVOKeyPath</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-NSAssert和NSCAssert区别"><span class="nav-number">2.</span> <span class="nav-text">2. NSAssert和NSCAssert区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-iOS枚举中直接设置值为字母"><span class="nav-number">3.</span> <span class="nav-text">3. iOS枚举中直接设置值为字母</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-ReactiveCocoa中的RAC宏定义"><span class="nav-number">4.</span> <span class="nav-text">4. ReactiveCocoa中的RAC宏定义</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

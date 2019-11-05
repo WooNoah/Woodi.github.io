@@ -1,0 +1,675 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="先说结论： 启动时间 = pre-main()时间 + post-main()时间  App启动过程1234567891011121314①解析Info.plist 加载相关信息，例如闪屏沙箱建立、权限检查②Mach-O加载 如果是胖二进制文件，寻找合适当前CPU架构的部分加载所有依赖的Mach-O文件（递归调用Mach-O加载的方法）定位内部、外部指针引用，例如字符串、函数等执行声明为__at">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS启动优化">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2019/04/15/iOS启动优化/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="先说结论： 启动时间 = pre-main()时间 + post-main()时间  App启动过程1234567891011121314①解析Info.plist 加载相关信息，例如闪屏沙箱建立、权限检查②Mach-O加载 如果是胖二进制文件，寻找合适当前CPU架构的部分加载所有依赖的Mach-O文件（递归调用Mach-O加载的方法）定位内部、外部指针引用，例如字符串、函数等执行声明为__at">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-7eaba2071dca293c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-ca040a890ff8c180.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-25f5f72bed2a87f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-e58c1a5b75e5e11d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-11-05T15:47:31.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS启动优化">
+<meta name="twitter:description" content="先说结论： 启动时间 = pre-main()时间 + post-main()时间  App启动过程1234567891011121314①解析Info.plist 加载相关信息，例如闪屏沙箱建立、权限检查②Mach-O加载 如果是胖二进制文件，寻找合适当前CPU架构的部分加载所有依赖的Mach-O文件（递归调用Mach-O加载的方法）定位内部、外部指针引用，例如字符串、函数等执行声明为__at">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-7eaba2071dca293c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2019/04/15/iOS启动优化/">
+
+
+
+
+
+  <title> iOS启动优化 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/15/iOS启动优化/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS启动优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-15T11:07:49+08:00">
+                2019-04-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>先说结论： 启动时间 = pre-main()时间 + post-main()时间</p>
+</blockquote>
+<h4 id="App启动过程"><a href="#App启动过程" class="headerlink" title="App启动过程"></a>App启动过程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">①解析Info.plist </span><br><span class="line">加载相关信息，例如闪屏</span><br><span class="line">沙箱建立、权限检查</span><br><span class="line">②Mach-O加载 </span><br><span class="line">如果是胖二进制文件，寻找合适当前CPU架构的部分</span><br><span class="line">加载所有依赖的Mach-O文件（递归调用Mach-O加载的方法）</span><br><span class="line">定位内部、外部指针引用，例如字符串、函数等</span><br><span class="line">执行声明为__attribute__((constructor))的C函数</span><br><span class="line">加载类扩展（Category）中的方法</span><br><span class="line">C++静态对象加载、调用ObjC的 +load 函数</span><br><span class="line">③程序执行 </span><br><span class="line">调用main()</span><br><span class="line">调用UIApplicationMain()</span><br><span class="line">调用applicationWillFinishLaunching</span><br></pre></td></tr></table></figure>
+<h4 id="一、Pre-Main阶段"><a href="#一、Pre-Main阶段" class="headerlink" title="一、Pre-Main阶段"></a>一、Pre-Main阶段</h4><p>pre-main阶段的定义为APP开始启动到系统调用main函数这一段时间，这个阶段又可以分为这几个步骤</p>
+<h5 id="1-Dylib-Loading"><a href="#1-Dylib-Loading" class="headerlink" title="1.Dylib Loading"></a>1.Dylib Loading</h5><h5 id="2-Rebase-Binding-Symbols"><a href="#2-Rebase-Binding-Symbols" class="headerlink" title="2.Rebase/Binding Symbols"></a>2.Rebase/Binding Symbols</h5><p>fix-ups adjust pointers within an image (rebasing) and set pointers that point to symbols outside the image (binding). To speed up rebase/binding time you need fewer pointer fix-ups. Apps with large numbers of Objective-C classes, selectors and categories can add 800ms to launch times (large is 20,000). If your app uses C++ code use less virtual functions. Using Swift Structs is also generally faster.</p>
+<h5 id="3-ObjC-Runtime-Setup"><a href="#3-ObjC-Runtime-Setup" class="headerlink" title="3.ObjC Runtime Setup"></a>3.ObjC Runtime Setup</h5><h5 id="4-Initializers"><a href="#4-Initializers" class="headerlink" title="4.Initializers"></a>4.Initializers</h5><p><code>+load</code>是在main函数之前就加载了，<br>而<code>+initialize</code>则是在该类第一次接到消息的时候才会调用，<br>所以，要尽量推后代码的加载时机。<br>但是使用<code>+initialize</code>会有一个问题，也是该方法的调用机制造成的：<br>在使用子类的时候，会先调用父类的<code>+initialize</code>方法。<br>所以，这里可以配合<code>dispatch_once</code>方法来实现类似<code>+load</code>的功能</p>
+<p>这一步可以做的优化有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">①使用 +initialize 来替代 +load</span><br><span class="line">②不要使用 atribute((constructor)) 将方法显式标记为初始化器，而是让初始化方法调用时才执行。</span><br><span class="line">比如使用 dispatch_once(),pthread_once() 或 std::once()。也就是在第一次使用时才初始化，推迟了一部分工作耗时。</span><br><span class="line">也尽量不要用到C++的静态对象。</span><br><span class="line">③还有一个结论就是swift，编译起来要比OC要快</span><br></pre></td></tr></table></figure></p>
+<p>做下总结:<br><img src="https://upload-images.jianshu.io/upload_images/1241385-7eaba2071dca293c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Xcode为我们提供的测试方法："><a href="#Xcode为我们提供的测试方法：" class="headerlink" title="Xcode为我们提供的测试方法："></a>Xcode为我们提供的测试方法：</h4><p>在<code>Edit Scheme</code>-&gt;<code>Arguments</code>-&gt;<code>Environment</code>中添加<code>DYLD_PRINT_STATISTICS</code>，值为<code>1</code><br><img src="https://upload-images.jianshu.io/upload_images/1241385-ca040a890ff8c180.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>再次运行，即可看到各项的结果（皆为毫秒）<br><img src="https://upload-images.jianshu.io/upload_images/1241385-25f5f72bed2a87f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="二、Post-Main-阶段"><a href="#二、Post-Main-阶段" class="headerlink" title="二、Post-Main()阶段"></a>二、Post-Main()阶段</h4><p>这个阶段就是程序加载了main函数之后，到页面展示出来之间的这段时间。<br>这个时间可以这么计算：<br><code>AppDelegate</code>的<code>willFinishLaunchingWithOptions</code>到<code>applicationDidBecomeActive</code>之间的时间，即为post-main()时间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions &#123;</span><br><span class="line">NSLog(@&quot;post-main start:%@&quot;,[self getMMTime]);</span><br><span class="line">return YES;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)applicationDidBecomeActive:(UIApplication *)application &#123;</span><br><span class="line">NSLog(@&quot;post-main stop:%@&quot;,[self getMMTime]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(NSString *)getMMTime&#123;</span><br><span class="line">NSTimeInterval a = [[NSDate date] timeIntervalSince1970] * 1000; // *1000 是精确到毫秒，不乘就是精确到秒</span><br><span class="line">return [NSString stringWithFormat:@&quot;%.0f&quot;, a];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>得出结果为毫秒，相减即得结果。</p>
+<h5 id="优化思路："><a href="#优化思路：" class="headerlink" title="优化思路："></a>优化思路：</h5><p><img src="https://upload-images.jianshu.io/upload_images/1241385-e58c1a5b75e5e11d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><h5 id="中文文章"><a href="#中文文章" class="headerlink" title="中文文章"></a>中文文章</h5><p><a href="https://www.jianshu.com/p/cf95d020e1b2" target="_blank" rel="noopener">WWDC之优化App启动速度</a><br><a href="https://www.jianshu.com/p/5efe327ac7ea" target="_blank" rel="noopener">iOS 程序 main函数之前发生什么</a></p>
+<h5 id="英文文章"><a href="#英文文章" class="headerlink" title="英文文章"></a>英文文章</h5><p><a href="https://medium.com/@avijeet.dutta13/ios-app-launch-time-analysis-and-optimization-a219ee81447c" target="_blank" rel="noopener">iOS App Launch time analysis and optimizations</a><br><a href="https://techblog.izotope.com/2018/03/08/improving-your-ios-apps-launch-time/" target="_blank" rel="noopener">Improving Your iOS App’s Launch Time</a><br><a href="https://stackoverflow.com/questions/35929530/ios-app-launch-time-measurement" target="_blank" rel="noopener">iOS app launch time measurement</a><br><a href="https://medium.com/@phillfarrugia/xcode-instruments-measuring-launch-time-cpu-usage-memory-leaks-energy-impact-and-frame-rate-1caf8905079f" target="_blank" rel="noopener">Xcode &amp; Instruments: Measuring Launch time, CPU Usage, Memory Leaks, Energy Impact and Frame Rate</a></p>
+<h5 id="Apple-Documentation"><a href="#Apple-Documentation" class="headerlink" title="Apple Documentation"></a>Apple Documentation</h5><p><a href="https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/TheAppLifeCycle/TheAppLifeCycle.html" target="_blank" rel="noopener">The App Life Cycle</a><br><a href="https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/OverviewOfDynamicLibraries.html" target="_blank" rel="noopener">Overview of Dynamic Libraries</a><br><a href="https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/MachOTopics/1-Articles/executing_files.html#//apple_ref/doc/uid/TP40001829" target="_blank" rel="noopener">Executing Mach-O Files</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2019/04/09/Workflow相关/" rel="next" title="Workflow相关">
+                <i class="fa fa-chevron-left"></i> Workflow相关
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2019/04/17/iOS创建大小自适应的view/" rel="prev" title="iOS创建大小自适应的view">
+                iOS创建大小自适应的view <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#App启动过程"><span class="nav-number">1.</span> <span class="nav-text">App启动过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一、Pre-Main阶段"><span class="nav-number">2.</span> <span class="nav-text">一、Pre-Main阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-Dylib-Loading"><span class="nav-number">2.1.</span> <span class="nav-text">1.Dylib Loading</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-Rebase-Binding-Symbols"><span class="nav-number">2.2.</span> <span class="nav-text">2.Rebase/Binding Symbols</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-ObjC-Runtime-Setup"><span class="nav-number">2.3.</span> <span class="nav-text">3.ObjC Runtime Setup</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-Initializers"><span class="nav-number">2.4.</span> <span class="nav-text">4.Initializers</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Xcode为我们提供的测试方法："><span class="nav-number">3.</span> <span class="nav-text">Xcode为我们提供的测试方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、Post-Main-阶段"><span class="nav-number">4.</span> <span class="nav-text">二、Post-Main()阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优化思路："><span class="nav-number">4.1.</span> <span class="nav-text">优化思路：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#中文文章"><span class="nav-number">5.1.</span> <span class="nav-text">中文文章</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#英文文章"><span class="nav-number">5.2.</span> <span class="nav-text">英文文章</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Apple-Documentation"><span class="nav-number">5.3.</span> <span class="nav-text">Apple Documentation</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

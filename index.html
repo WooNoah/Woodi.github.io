@@ -248,7 +248,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/22/iOS-openURL调用失败/">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/08/27/DailyBrainStorm/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="D">
@@ -270,8 +270,8 @@
             
               
                 
-                <a class="post-title-link" href="/woodi.github.io/2018/11/22/iOS-openURL调用失败/" itemprop="url">
-                  iOS openURL调用失败
+                <a class="post-title-link" href="/woodi.github.io/2019/08/27/DailyBrainStorm/" itemprop="url">
+                  DailyBrainStorm
                 </a>
               
             
@@ -287,8 +287,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-22T17:21:35+08:00">
-                2018-11-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-27T12:59:43+08:00">
+                2019-08-27
               </time>
             
 
@@ -326,1057 +326,38 @@
         
           
             <blockquote>
-<p>今天改代码的时候，遇到一个问题，在APP内部跳转到Safari打开某个链接的时候，竟然报错了。然后经过一番试错，终于找到了问题所在！记录一下，以备以后方便查找！</p>
+<p> 写这篇的目的：好多时候没有更新文章，其实并不是没有在做研究，只不过有些小的知识点，并不值得洋洋洒洒的来一篇，故而开了这个tag，每当自己有什么小的研究和小的idea，能够记录下来</p>
 </blockquote>
-<p>先贴上源代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 调用Safari加载URL</span><br><span class="line">*/</span><br><span class="line">- (void)openScheme:(NSString *)urlString &#123;</span><br><span class="line">UIApplication *application = [UIApplication sharedApplication];</span><br><span class="line">NSURL *URL = [NSURL URLWithString:urlString];</span><br><span class="line"></span><br><span class="line">if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) &#123;</span><br><span class="line">[application openURL:URL options:@&#123;&#125; completionHandler:^(BOOL success) &#123;</span><br><span class="line">LOG(@&quot;Open %@: %d&quot;,urlString,success);</span><br><span class="line">&#125;];</span><br><span class="line">&#125; else &#123;</span><br><span class="line">#pragma clang diagnostic push</span><br><span class="line">#pragma clang diagnostic ignored &quot;-Wdeprecated-declarations&quot;</span><br><span class="line">//过期的方法</span><br><span class="line">BOOL success = [application openURL:URL];</span><br><span class="line">#pragma clang diagnostic pop</span><br><span class="line">LOG(@&quot;Open %@: %d&quot;,urlString,success);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>传入的参数为：<code>www.gsfxuk.cn/index.html</code><br>从逻辑来看，没什么问题，而且最奇怪的，在另外一个项目中，同样的代码，是没有问题的。</p>
-<h4 id="这里罗列一下思考是几个方面："><a href="#这里罗列一下思考是几个方面：" class="headerlink" title="这里罗列一下思考是几个方面："></a>这里罗列一下思考是几个方面：</h4><ol>
-<li>URL问题<br>打断点看了一下生成的URL，是有值的。<code>排除！</code><br>引申：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">以前遇到一个问题：</span><br><span class="line">后台在录入数据的时候，手滑在URL的结尾多加了一个空格，eg: www.baidu.com ,</span><br><span class="line">就因为这个空格，就会造成无法生成正确的URL对象。（NSURL对象为nil）</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>应对此种问题的解决方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *validStr = [transferStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];</span><br></pre></td></tr></table></figure></p>
-<p><strong><em>此时得到的<code>validStr</code>即为不带空格的字符串！</em></strong></p>
-<ol start="2">
-<li>新方法存在不兼容问题<br>根据苹果的习惯，新方法是有版本要求的，但是出了新方法之后，老的方法也是一样可行的，所以我就先调用一下老的方法，排除一下。结果！<code>不行！</code>排除此猜想</li>
-<li>方法传参问题<br>接着看一下新方法的入参，即多了的那个<code>options</code><br>该参数解释如下：引用自<a href="https://juejin.im/entry/57e8c5e28ac247005bd90dcc" target="_blank" rel="noopener">iOS10 新变化之废弃的 openURL</a><blockquote>
-<p>options目前可传入参数Key在UIApplication头文件只有一个:UIApplicationOpenURLOptionUniversalLinksOnly,其对应的Value为布尔值,默认为False.如该Key对应的Value为True,那么打开所传入的Universal Link时,只允许通过这个Link所代表的iOS应用跳转的方式打开这个链接,否则就会返回success为false,也就是说只有安装了Link所对应的App的情况下才能打开这个Universal Link,而不是通过启动Safari方式打开这个Link的代表的网站.</p>
-</blockquote>
-</li>
-</ol>
-<p><strong>一句话总结一下：</strong><br>如果传一个空字典的情况（即不传此值，也即默认值），如果传入的scheme在本地能查询的到，调用本地APP，如果本地匹配不到，则调用Safari打开。<br>如果传入的不是一个空字典（即<code>@{UIApplicationOpenURLOptionUniversalLinksOnly: @YES}</code>）,此时当且仅当<strong>URL有效、且本地装了对应APP</strong>的时候，才能打开。(本人猜测是要直接用APP调起某个模块的时候这么写)&lt;本人没遇到过这种情况，所以无法验证，如果说错，请各位大佬批评指正！谢谢！！&gt;</p>
-<p>说到scheme，就必须介绍一下苹果的这个应用间跳转的技术了，见<a href="">引申1</a></p>
-<h4 id="引申"><a href="#引申" class="headerlink" title="引申"></a>引申</h4><ol>
-<li>scheme <a href="https://www.jianshu.com/p/0811ccd6a65d" target="_blank" rel="noopener">摘自-简书谦言忘语</a><h5 id="什么是URL-Schemes？"><a href="#什么是URL-Schemes？" class="headerlink" title="什么是URL Schemes？"></a>什么是URL Schemes？</h5>URL Schemes是苹果给出的用来跳转到系统应用或者跳转到别人的应用的一种机制。同时还可以在应用之间传数据。</li>
-</ol>
-<blockquote>
-<p>通过对比网页链接来理解 iOS 上的 URL Schemes，应该就容易多了。<br>URL Schemes 有两个单词：<br><em>URL，我们都很清楚，<a href="http://www.apple.com" target="_blank" rel="noopener">http://www.apple.com</a><br>就是个 URL，我们也叫它链接或网址；
-</em>Schemes，表示的是一个 URL 中的一个位置——最初始的位置，即 ://<br>之前的那段字符。比如 <a href="http://www.apple.com" target="_blank" rel="noopener">http://www.apple.com</a><br>这个网址的 Schemes是 <strong>http</strong>。<br>根据我们上面对 URL Schemes 的使用，我们可以很轻易地理解，在以本地应用为主的 iOS 上，我们可以像定位一个网页一样，用一种特殊的 URL 来定位一个应用甚至应用里某个具体的功能。而定位这个应用的，就应该是这个应用的 URL 的 Schemes 部分，也就是开头儿那部分。</p>
-</blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/1241385-1d23885f28e34ed8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>我们在项目的<code>info</code>-&gt;<code>URL Types</code>中设置自己的<code>URL Schemes</code>，就等于是在手机中注册了一个域名，然后别的应用或者Safari，WKWebview组件就可以通过访问该scheme已达到调起APP的作用。<br>以下写出调起APP的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NSURL *url = [NSURL URLWithString:@&quot;weixin://&quot;];</span><br><span class="line">[[UIApplication sharedApplication]openURL:url options:@&#123;&#125; completionHandler:^(BOOL success) &#123;</span><br><span class="line">NSLog(@&quot;success:%@&quot;,@(success));</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure></p>
-<p>这么写之后，项目中就会提示<em>是否要打开微信APP</em>了<br>这里也可以理解友盟等第三方登录分享之类的，是在后台配置了应用的独立标识，然后让开发者手动配置在要集成的项目scheme这里，已达到监控统计调起应用，然后再返回的功能。</p>
-<p>######但是思考一点：<br><strong>如果我们又在手机上安装了一个APP，其中配置了相同的<code>weixin</code>scheme，此时会怎么跳转呢？</strong></p>
-<blockquote>
-<p>暂无确定结果！</p>
-</blockquote>
-<p>但是可以确定的是：不同的项目是可以有相同的scheme的。<br>此时，我们可以在调用openURL方法之前，加一个逻辑完善：<br><code>-canOpenURL</code>, 即先判断是否能打开，然后再执行！</p>
-<p>因此，这里也排除了scheme的配置问题。</p>
-<ol start="4">
-<li>因为刚刚思考了scheme的问题，然后想到了类似域名的解释。然后此时灵光一闪：刚刚的入参为<code>www.gsfxuk.cn/index.html</code>，并没有<code>http://</code>或者<code>https://</code>，那么此时传给Safari的时候，它肯定也不知道是个外链啊！！然后我又在别的项目中打印了URL，看到都是包含<code>http://</code>或者<code>https://</code>的。<br>至此，问题定位完成！！</li>
-</ol>
-<h4 id="解决："><a href="#解决：" class="headerlink" title="解决："></a>解决：</h4><p>定位好问题之后，就好解决了。我们只需要判断下传入的URL连接是否包含<code>http://</code>或<code>https://</code>，如果不包含，则给它添加上即可！！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 把string转换成可以URL跳转的类型（指的是带HTTP或者HTTPS）</span><br><span class="line">*/</span><br><span class="line">- (NSString *)convertToURLFormatWithString:(NSString *)str &#123;</span><br><span class="line">if ([str containsString:@&quot;http&quot;] || [str containsString:@&quot;https&quot;]) &#123;</span><br><span class="line">return str;</span><br><span class="line">&#125;else &#123;</span><br><span class="line">NSMutableString *strM = [NSMutableString stringWithString:str];</span><br><span class="line">[strM insertString:@&quot;http://&quot; atIndex:0];</span><br><span class="line">return strM.copy;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12-SW2" target="_blank" rel="noopener">Support Universal Links</a><br><a href="https://useyourloaf.com/blog/querying-url-schemes-with-canopenurl/" target="_blank" rel="noopener">Querying URL Schemes with canOpenURL</a><br><a href="https://developer.apple.com/documentation/uikit/uiapplicationopenurloptionuniversallinksonly?language=objc" target="_blank" rel="noopener">uiapplicationopenurloptionuniversallinksonly参数解释</a><br><a href="https://stackoverflow.com/questions/39548010/openurl-deprecated-in-ios-10" target="_blank" rel="noopener">openURL: deprecated in iOS 10</a><br><a href="https://stackoverflow.com/questions/41579374/how-can-i-programmatically-determine-if-a-url-is-a-universal-link-or-just-a-regu" target="_blank" rel="noopener">How can I programmatically determine if a URL is a Universal Link or just a regular web URL?</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/20/解决git-clone速度慢的问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/11/20/解决git-clone速度慢的问题/" itemprop="url">
-                  解决git clone速度慢的问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-20T14:30:23+08:00">
-                2018-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>有时候从GitHub上拉取仓库，或者cocoapods更新本地仓库的时候，会遇到网速极慢的情况，本来我以为是国外服务器的原因导致了传递速度减慢，然后朋友说他以前遇到过这个问题，并给了解决方案，这里自己记录一下，以备以后再次遇到能够快速解决<br>以下是他的原文：</p>
-</blockquote>
-<p><a href="https://masterking.github.io/2018/10/26/%E8%A7%A3%E5%86%B3git-clone%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank" rel="noopener">解决git clone速度慢的问题</a></p>
-<p>之前一直以为是公司对网络的封锁,导致git clone速度慢,后来网上查找这个问题的时候得知不能怪公司,是因为咱们在这个局域网内…<br>扯多了,回到正题,解决问题,由于我的是Mac电脑,我说的只针对Mac电脑</p>
-<h5 id="1-进入终端命令行模式-输入"><a href="#1-进入终端命令行模式-输入" class="headerlink" title="1. 进入终端命令行模式,输入"></a>1. 进入终端命令行模式,输入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/hosts</span><br></pre></td></tr></table></figure>
-<h5 id="2-输入i进入编辑模式-移动到最后一行准备输入"><a href="#2-输入i进入编辑模式-移动到最后一行准备输入" class="headerlink" title="2. 输入i进入编辑模式,移动到最后一行准备输入"></a>2. 输入i进入编辑模式,移动到最后一行准备输入</h5><h5 id="3-用浏览器访问-http-tool-chinaz-com-使用IP查询工具获得github-com和github-global-ssl-fastly-net的ip地址"><a href="#3-用浏览器访问-http-tool-chinaz-com-使用IP查询工具获得github-com和github-global-ssl-fastly-net的ip地址" class="headerlink" title="3. 用浏览器访问 http://tool.chinaz.com 使用IP查询工具获得github.com和github.global.ssl.fastly.net的ip地址"></a>3. 用浏览器访问 <a href="http://tool.chinaz.com/" target="_blank" rel="noopener">http://tool.chinaz.com</a> 使用<code>IP查询</code>工具获得github.com和github.global.ssl.fastly.net的ip地址</h5><h5 id="4-回到第2步中按如下格式输入"><a href="#4-回到第2步中按如下格式输入" class="headerlink" title="4. 回到第2步中按如下格式输入:"></a>4. 回到第2步中按如下格式输入:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">192.30.253.112 github.com</span><br><span class="line">151.101.44.249 github.global.ssl.fastly.net</span><br></pre></td></tr></table></figure>
-<h5 id="5-按-esc-键-然后输入-wq-保存文件并退出vim编辑模式-到此hosts文件修改结束"><a href="#5-按-esc-键-然后输入-wq-保存文件并退出vim编辑模式-到此hosts文件修改结束" class="headerlink" title="5. 按 esc 键,然后输入 :wq 保存文件并退出vim编辑模式,到此hosts文件修改结束"></a>5. 按 esc 键,然后输入 :wq 保存文件并退出vim编辑模式,到此hosts文件修改结束</h5><h5 id="6-更新DNS缓存-输入”-6-更新DNS缓存-输入"><a href="#6-更新DNS缓存-输入”-6-更新DNS缓存-输入" class="headerlink" title="6. 更新DNS缓存,输入”)6. 更新DNS缓存,输入"></a>6. 更新DNS缓存,输入”)6. 更新DNS缓存,输入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dscacheutil -flushcache</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/20/YYModel优化tips/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/11/20/YYModel优化tips/" itemprop="url">
-                  从YYModel学习到的优化tips
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-20T11:20:29+08:00">
-                2018-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="https://upload-images.jianshu.io/upload_images/1241385-082fa3c0642ecc37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><a href="https://blog.ibireme.com/2015/10/23/ios_model_framework_benchmark/" target="_blank" rel="noopener">iOS JSON模型转换库测评</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/20/iOS遍历数组问题xxx-was-mutated-while-being-enumerated/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/11/20/iOS遍历数组问题xxx-was-mutated-while-being-enumerated/" itemprop="url">
-                  iOS遍历数组问题xxx was mutated while being enumerated
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-20T11:18:27+08:00">
-                2018-11-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="今天遍历数组删除数据的时候，遇到一个问题："><a href="#今天遍历数组删除数据的时候，遇到一个问题：" class="headerlink" title="今天遍历数组删除数据的时候，遇到一个问题："></a>今天遍历数组删除数据的时候，遇到一个问题：</h4><blockquote>
-<p>&lt;__NSArrayM: 0xb550c30&gt; was mutated while being enumerated</p>
-</blockquote>
-<p>这里记录一下。</p>
-<p>源代码是这么写的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (NSMutableArray *)removeIncludeExposureDataWithinArray:(NSMutableArray *)arr &#123;</span><br><span class="line">NSMutableArray *resArr = arr.mutableCopy;</span><br><span class="line">for (TraderNewsModel *m in resArr) &#123;</span><br><span class="line">if ([m.categoryName isEqualToString:@&quot;曝光&quot;]) &#123;</span><br><span class="line">[resArr removeObject:m];</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">return resArr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后报错信息就是如上，大概意思就是数组在枚举遍历的时候，发生变化了。。。</p>
-<p>查阅资料之后发现:<br><code>for in</code>这种遍历方式是不允许的，而<code>for (int i; i &lt; count; i++)</code>和<code>-enumeratorObjectsUsingBlock</code>都是允许的。</p>
-<h4 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h4><ol>
-<li>确保数组在遍历的时候<strong>不被修改</strong>，也就是创建一个tempArrM,来保存修改好的数据即可</li>
-<li>使用<code>for (int i; i &lt; count; i++)</code>或者<code>enumeratorObjectXXX</code>方法来遍历<br>一般的for循环遍历就不说了，这里写一下使用block修改的方式：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 删除包含“曝光”的字段</span><br><span class="line">*/</span><br><span class="line">- (NSMutableArray *)removeIncludeExposureDataWithinArray:(NSMutableArray *)arr &#123;</span><br><span class="line">NSMutableArray *resArr = arr.mutableCopy;</span><br><span class="line">[resArr enumerateObjectsUsingBlock:^(TraderNewsModel *model, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">if ([model.categoryName isEqualToString:@&quot;曝光&quot;]) &#123;</span><br><span class="line">*stop = YES;</span><br><span class="line">[resArr removeObject:model];</span><br><span class="line">&#125;</span><br><span class="line">&#125;];</span><br><span class="line">return resArr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><a href="https://blog.csdn.net/piaodang1234/article/details/11902541" target="_blank" rel="noopener">参考资料</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/17/iOS-nil-NSNull-NULL-Nil/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/11/17/iOS-nil-NSNull-NULL-Nil/" itemprop="url">
-                  iOS nil,NSNull,NULL,Nil
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T00:44:10+08:00">
-                2018-11-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>探索一下，往后台传值的过程中，遇到的一些问题： 后台交互的时候，传了一个字典，字典中有可能包含空值</p>
-</blockquote>
-<p>先来看下现象：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//情况1，直接为nil</span><br><span class="line">NSString *name = nil;</span><br><span class="line"></span><br><span class="line">NSDictionary *dic = @&#123;@&quot;givenName&quot;:@&quot;W&quot;,@&quot;firstName&quot;:@&quot;D&quot;,@&quot;allName&quot;:name,@&quot;gender&quot;:@(55)&#125;;</span><br><span class="line">NSLog(@&quot;%@&quot;,dic);</span><br><span class="line"></span><br><span class="line">//此时，直接报错：</span><br><span class="line">*** Terminating app due to uncaught exception &apos;NSInvalidArgumentException&apos;, reason: </span><br><span class="line">&apos;*** -[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[2]&apos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//情况2，传NSNull的实例变量</span><br><span class="line">NSString *name = [NSNull null];</span><br><span class="line"></span><br><span class="line">NSDictionary *dic = @&#123;@&quot;givenName&quot;:@&quot;W&quot;,@&quot;firstName&quot;:@&quot;D&quot;,@&quot;allName&quot;:name,@&quot;age&quot;:@(55)&#125;;</span><br><span class="line">NSLog(@&quot;%@&quot;,dic);</span><br><span class="line"></span><br><span class="line">//打印结果如下：</span><br><span class="line">Printing description of dic:</span><br><span class="line">&#123;</span><br><span class="line">allName = &quot;&lt;null&gt;&quot;;</span><br><span class="line">firstName = D;</span><br><span class="line">age = 55;</span><br><span class="line">givenName = W;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>所以，看得出来，iOS里的空值还是有区别的，要好好区别，不然可能是会引起崩溃的！</p>
-<p>这里来了解一下他们的概念：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-2465ce8ff7b3a439.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><code>NSNull</code> 在 Foundation 和其它框架中被广泛的使用，以解决如 <code>NSArray</code> 和 <code>NSDictionary</code> 之类的集合不能有 <code>nil</code> 值的缺陷。你可以将 <code>NSNull</code> 理解为有效的将 <code>NULL</code> 或者 <code>nil</code> 值封装<a href="https://en.wikipedia.org/wiki/Object_type_(object-oriented_programming" target="_blank" rel="noopener">boxing</a>#Boxing)，以达到在集合中使用它们的目的。<br>由此可见：<strong>NSString中是可以添加为空对象的，即（nil）</strong><br>而<strong>NSArray, NSDictionary则不行，为了防止崩溃，则使用NSNull来代替</strong></p>
-<p><a href="https://nshipster.cn/nil/" target="_blank" rel="noopener">https://nshipster.cn/nil/</a><br><a href="https://www.jianshu.com/p/6abd21fde286" target="_blank" rel="noopener">https://www.jianshu.com/p/6abd21fde286</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/10/31/svn操作/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/10/31/svn操作/" itemprop="url">
-                  svn操作
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-31T15:23:45+08:00">
-                2018-10-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>这里记录一下一些平时用到的svn指令操作</p>
-</blockquote>
-<h4 id="1-svn-log"><a href="#1-svn-log" class="headerlink" title="1. svn log"></a>1. svn log</h4><p>展示修正的log信息或者路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eg:</span><br><span class="line">svn log ProjectName/Info.plist</span><br><span class="line">就可以看到info.plist文件的修改历史</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1241385-253b5c8609605808.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h4 id="2-svn-diff"><a href="#2-svn-diff" class="headerlink" title="2. svn diff"></a>2. svn diff</h4><p>查看两个文件之间的不同</p>
-<ul>
-<li>如果直接使用svn diff，则展示当前工作区和服务器端的不同。</li>
-<li>如果想要显示特定两个版本的不同，可以用如下写法：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//以下就是展示7504版本和7487版本之间 info.plist文件的变化</span><br><span class="line">svn diff -r 7504:7487 ProjectName/Info.plist</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/woodi.github.io/2018/10/31/svn操作/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/10/23/TextKit探究/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/10/23/TextKit探究/" itemprop="url">
-                  TextKit探究
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-23T11:14:45+08:00">
-                2018-10-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>最近优化代码，遇到了一个问题，这里记录一下：<br>类似一个搜索框页面，根据搜索的内容调接口请求，若接口返回数据为空的时候，需要显示一个无数据的view,但是view中要包含用户刚刚textfield键入的内容。也就是说view的高度宽度要自适应这种情况</p>
-</blockquote>
-<p>先来看看效果图：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-812d7acdba73ef12.gif?imageMogr2/auto-orient/strip" alt=""></p>
-<h4 id="1-本来思路"><a href="#1-本来思路" class="headerlink" title="1. 本来思路:"></a>1. 本来思路:</h4><p>以前都是中文模式，label显示的内容都比较短，可以一行显示完全，所以实现方式就比较多了，可以使用3个label，分别显示前、中、后三段内容，然后分别配置各个label的属性。<br><strong>但是！</strong>，后来需求变动，要添加英文模式，这里就能看的，英文模式下，要显示的内容就大大加长了。（也就是说一行不能完全显示）<br>这里就要<strong><em>使内容高度宽度自适应了</em></strong><br>这也就是将要提到的<a href="">思路2</a><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/woodi.github.io/2018/10/23/TextKit探究/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/10/19/iOS上传文件参数解析-HTTP-header-Content-Disposition/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/10/19/iOS上传文件参数解析-HTTP-header-Content-Disposition/" itemprop="url">
-                  iOS上传文件参数解析(HTTP header Content-Disposition)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-19T16:41:47+08:00">
-                2018-10-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="AFNetworking中提供的图片上传方法："><a href="#AFNetworking中提供的图片上传方法：" class="headerlink" title="AFNetworking中提供的图片上传方法："></a><strong>AFNetworking</strong>中提供的图片上传方法：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[_sessionManager POST:uploadUrl parameters:dict constructingBodyWithBlock:^(id&lt;AFMultipartFormData&gt;  _Nonnull formData) &#123;</span><br><span class="line">if (imageData) &#123;</span><br><span class="line">[formData appendPartWithFileData:imageData name:&lt;#name#&gt; fileName:&lt;#fileName#&gt; mimeType:@&quot;jpg&quot;];</span><br><span class="line">&#125;</span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) &#123;</span><br><span class="line">suc(task,responseObject);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">fail(task,error);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-<p>可以看到里边有几个字段：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">Appends the HTTP header `Content-Disposition: file; filename=#&#123;filename&#125;; name=#&#123;name&#125;&quot;` and `Content-Type: #&#123;mimeType&#125;`, followed by the encoded file data and the multipart form boundary.</span><br><span class="line"></span><br><span class="line">@param data The data to be encoded and appended to the form data.</span><br><span class="line">@param name The name to be associated with the specified data. This parameter must not be `nil`.</span><br><span class="line">@param fileName The filename to be associated with the specified data. This parameter must not be `nil`.</span><br><span class="line">@param mimeType The MIME type of the specified data. (For example, the MIME type for a JPEG image is image/jpeg.) For a list of valid MIME types, see http://www.iana.org/assignments/media-types/. This parameter must not be `nil`.</span><br><span class="line">*/</span><br><span class="line">- (void)appendPartWithFileData:(NSData *)data</span><br><span class="line">name:(NSString *)name</span><br><span class="line">fileName:(NSString *)fileName</span><br><span class="line">mimeType:(NSString *)mimeType</span><br><span class="line">&#123;</span><br><span class="line">NSParameterAssert(name);</span><br><span class="line">NSParameterAssert(fileName);</span><br><span class="line">NSParameterAssert(mimeType);</span><br><span class="line"></span><br><span class="line">NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];</span><br><span class="line">[mutableHeaders setValue:[NSString stringWithFormat:@&quot;form-data; name=\&quot;%@\&quot;; filename=\&quot;%@\&quot;&quot;, name, fileName] forKey:@&quot;Content-Disposition&quot;];</span><br><span class="line">[mutableHeaders setValue:mimeType forKey:@&quot;Content-Type&quot;];</span><br><span class="line"></span><br><span class="line">[self appendPartWithHeaders:mutableHeaders body:data];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="而-Appends-the-HTTP-header-Content-Disposition-file-filename-filename-name-name-quot-and-Content-Type-mimeType-followed-by-the-encoded-file-data-and-the-multipart-form-boundary-又是什么呢？"><a href="#而-Appends-the-HTTP-header-Content-Disposition-file-filename-filename-name-name-quot-and-Content-Type-mimeType-followed-by-the-encoded-file-data-and-the-multipart-form-boundary-又是什么呢？" class="headerlink" title="而 Appends the HTTP header Content-Disposition: file; filename=#{filename}; name=#{name}&quot; and Content-Type: #{mimeType}, followed by the encoded file data and the multipart form boundary.又是什么呢？"></a>而 Appends the HTTP header <code>Content-Disposition: file; filename=#{filename}; name=#{name}&quot;</code> and <code>Content-Type: #{mimeType}</code>, followed by the encoded file data and the multipart form boundary.又是什么呢？</h4><p><img src="https://upload-images.jianshu.io/upload_images/1241385-1bc25da5f14c1aa0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1241385-dbf99a79c8e8edcf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看出来：</p>
-<h4 id="name：就是前后端约定好的描述图片的字段，（比如传入avatar，那就是代表该图片是用户头像，后台在取的时候，也需要根据这个name来取出）"><a href="#name：就是前后端约定好的描述图片的字段，（比如传入avatar，那就是代表该图片是用户头像，后台在取的时候，也需要根据这个name来取出）" class="headerlink" title="name：就是前后端约定好的描述图片的字段，（比如传入avatar，那就是代表该图片是用户头像，后台在取的时候，也需要根据这个name来取出）"></a>name：就是前后端约定好的描述图片的字段，（比如传入avatar，那就是代表该图片是用户头像，后台在取的时候，也需要根据这个name来取出）</h4><h4 id="fileName-上传的文件名称"><a href="#fileName-上传的文件名称" class="headerlink" title="fileName: 上传的文件名称"></a>fileName: 上传的文件名称</h4><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Disposition" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Disposition</a><br><a href="https://tools.ietf.org/html/rfc6266" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc6266</a><br><a href="https://blog.csdn.net/sinat_38364990/article/details/70867357" target="_blank" rel="noopener">https://blog.csdn.net/sinat_38364990/article/details/70867357</a><br><a href="http://blog.csdn.net/wwlhsgs/article/details/45075327" target="_blank" rel="noopener">http://blog.csdn.net/wwlhsgs/article/details/45075327</a><br><a href="http://www.cnblogs.com/brucejia/archive/2012/12/24/2831060.html" target="_blank" rel="noopener">http://www.cnblogs.com/brucejia/archive/2012/12/24/2831060.html</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/10/17/UIWindow相关问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/10/17/UIWindow相关问题/" itemprop="url">
-                  UIWindow相关问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-17T16:22:46+08:00">
-                2018-10-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>这里记录一些关于UIWindow相关的问题</p>
-</blockquote>
+<h4 id="2019年08月27日"><a href="#2019年08月27日" class="headerlink" title="2019年08月27日"></a>2019年08月27日</h4><p>iOS tableview的headerView和footerView,<br>在创建的时候设置的frame，系统会根据宽高来添加约束，因此无法通过添加子视图与父视图之间的约束，来做到“子视图撑大父视图”这样。想要修改tableview的header、footer视图，可以在子视图布局完成之后添加回调，重新设置即可。<br><code>self.tableview.tableHeaderView = self.headerView;</code><br><code>self.tableview.tableFooterView = self.footerView;</code></p>
+<h4 id="2019年09月11日"><a href="#2019年09月11日" class="headerlink" title="2019年09月11日"></a>2019年09月11日</h4><p>iOS label 默认设置lineBreakMode为省略号在右边<br>但是如果使用了NSParagraphStyle,则label设置的lineBreakMode就会失效，使用NSMutableParagraphStyle的lineBreakMode代替即可</p>
+<h4 id="2019年09月19日"><a href="#2019年09月19日" class="headerlink" title="2019年09月19日"></a>2019年09月19日</h4><p>iOS的collectionView, 如果collectionview的frame不足以展示两个cell，则此时cell会居中显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">这里以左右滑动为例：collectionview的height为vHeight, cell的height为cHeight。默认collectionview的cell的item间距和item行间距都为0</span><br><span class="line">如果cHeight &lt; vHeight &lt; 2*cHeight, 此时</span><br><span class="line">eg:  vHeight = 100; cHeight = 70;</span><br><span class="line">此时cell居中展示， 上下间距15</span><br><span class="line"></span><br><span class="line">如果 2*cHeight &lt; vHeight &lt; 3*cHeight</span><br><span class="line">此时，view能只能展示两个cell，则两个cell分别位于view的top和bottom，剩下的距离为两个cell之间的margin</span><br><span class="line"></span><br><span class="line">如果 3*cHeight &lt; vHeight &lt; 4*cHeight</span><br><span class="line">此时，view能展示三个cell，则第一个，第三个分别位于view的顶部和底部，然后中间一个居中展示，(vHeight - 3*cHeight)/2为三个cell之间的间距</span><br><span class="line"></span><br><span class="line">如果 4*cHeight &lt; vHeight &lt; 5*cHeight</span><br><span class="line">此时，view能展示四个cell，则第一个，第四个分别位于view的顶部和底部，然后剩下的两个在中间展示，(vHeight - 4*cHeight)/3为三个cell之间的间距</span><br><span class="line"></span><br><span class="line">剩下的以此类推</span><br></pre></td></tr></table></figure></p>
+<h4 id="2019年09月27日"><a href="#2019年09月27日" class="headerlink" title="2019年09月27日"></a>2019年09月27日</h4><p>iOS UIView提供的方法中，有转换坐标系的方法，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (CGPoint)convertPoint:(CGPoint)point toView:(nullable UIView *)view;</span><br><span class="line">- (CGPoint)convertPoint:(CGPoint)point fromView:(nullable UIView *)view;</span><br><span class="line">- (CGRect)convertRect:(CGRect)rect toView:(nullable UIView *)view;</span><br><span class="line">- (CGRect)convertRect:(CGRect)rect fromView:(nullable UIView *)view;</span><br></pre></td></tr></table></figure></p>
+<p>项目中用到了<code>convertRect: toView:</code>方法<br>总结一下各个参数的含义。</p>
 <ol>
-<li><h4 id="UIApplication-shareApplication-keyWindow上面添加子控件无法响应"><a href="#UIApplication-shareApplication-keyWindow上面添加子控件无法响应" class="headerlink" title="[UIApplication shareApplication].keyWindow上面添加子控件无法响应"></a>[UIApplication shareApplication].keyWindow上面添加子控件无法响应</h4>项目中有些类似的页面，需要封装起来，但是在封装的过程中，遇到了这个问题，<br>总结一下大致流程：</li>
-<li>在一个页面A中，需要弹出一个带有多个按钮以供选择的页面B，（类似以前写的地址选择器）,页面B中又包含了一个封装了collectionView的页面C，跳转逻辑就是这样。</li>
-<li>但是以前写地址选择器的时候，子视图上的控件都是<code>直接添加到新建的view上</code>，但是现在说的情况是添加到<code>[[[UIApplication sharedApplication] delegate] window]</code>或者<code>[UIApplication sharedApplication].keyWindow</code>上，情况不太一样
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/woodi.github.io/2018/10/17/UIWindow相关问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+<li>调用者：转换前的view的父类调用</li>
+<li>rect：转换前的view的frame</li>
+<li>toView：转换后的坐标系view</li>
+</ol>
+<h4 id="2019年10月17日"><a href="#2019年10月17日" class="headerlink" title="2019年10月17日"></a>2019年10月17日</h4><p>影响iOS viewController dealloc的方法小结</p>
+<ol>
+<li><p>VC中的block强引用了self</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eg: AFN的请求</span><br><span class="line">在回调中引用了self</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>dispatch_after中强引用self</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">如下面的代码中这样，不引用self，则会直接销毁</span><br><span class="line">- (void)normalDispatchAfter &#123;</span><br><span class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        NSLog(@&quot;5s later&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">2019-10-18 16:49:56.568192+0800 GCDStrongReferenceDemo[15628:3535241] ~~~~~~~~~~~~~~~~~~~~SecViewController - dealloc</span><br><span class="line">2019-10-18 16:50:00.070705+0800 GCDStrongReferenceDemo[15628:3535241] 5s later</span><br><span class="line">但是，after中的代码由于是添加到Runloop中了，所以5s之后，仍然会调用</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>同样的，以前怀疑的dispatch_group/notify等方法也不会强引用self<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">    __weak typeof (self) weakSelf = self;</span><br><span class="line">    dispatch_group_t group = dispatch_group_create();</span><br><span class="line">    dispatch_queue_t queue = dispatch_queue_create(&quot;com.demo.GCDStrongReference&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line">    </span><br><span class="line">    dispatch_group_async(group, queue, ^&#123;</span><br><span class="line">        dispatch_group_enter(group);</span><br><span class="line">//        NSLog(@&quot;~~~~~~~~~~~~~~~~~~~~1111111111 enter&quot;);</span><br><span class="line">        [weakSelf logWithInfo:@&quot;11111111  enter&quot;];</span><br><span class="line">        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">//            NSLog(@&quot;~~~~~~~~~~~~~~~~~~~~1111111111 leave&quot;);</span><br><span class="line">            [weakSelf logWithInfo:@&quot;11111111  leave&quot;];</span><br><span class="line">            dispatch_group_leave(group);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_group_async(group, queue, ^&#123;</span><br><span class="line">        dispatch_group_enter(group);</span><br><span class="line">//        NSLog(@&quot;~~~~~~~~~~~~~~~~~~~~222222222222&quot;);</span><br><span class="line">        [weakSelf logWithInfo:@&quot;22222222222222&quot;];</span><br><span class="line">        dispatch_group_leave(group);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_group_notify(group, queue, ^&#123;</span><br><span class="line">//        NSLog(@&quot;~~~~~~~~~~~~~~~~~~~~notify&quot;);</span><br><span class="line">        [weakSelf logWithInfo:@&quot;notify&quot;];</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    打印结果也是会直接dealloc</span><br><span class="line">    2019-10-18 16:58:27.441916+0800 GCDStrongReferenceDemo[15858:3547133] ~~~~~~~~~~~~~~~~~~~~SecViewController - 11111111  enter</span><br><span class="line">    2019-10-18 16:58:27.441926+0800 GCDStrongReferenceDemo[15858:3547358] ~~~~~~~~~~~~~~~~~~~~SecViewController - 22222222222222</span><br><span class="line">    2019-10-18 16:58:28.901496+0800 GCDStrongReferenceDemo[15858:3546983] ~~~~~~~~~~~~~~~~~~~~SecViewController - dealloc</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>总结：如果在block中改为弱引用，则可以避免 __weak typeof(self) weakSelf = self;</p>
+</blockquote>
+<h4 id="2019年10月30日-setContentHuggingPriority为抗拉伸优先级"><a href="#2019年10月30日-setContentHuggingPriority为抗拉伸优先级" class="headerlink" title="2019年10月30日 setContentHuggingPriority为抗拉伸优先级"></a>2019年10月30日 setContentHuggingPriority为抗拉伸优先级</h4><p>以前只是按照字面意思，以为是<code>拉伸优先级</code>，结果是<code>抗拉伸优先级</code>:<br>即： 优先级越高，越不容易被拉伸，优先级越低，则越容易被拉伸<br>同理，<code>setContentCompressionResistancePriority</code>为抗压缩优先级<br>即：优先级越高，越不容易被压缩，优先级越低，越容易被压缩。<br>默认情况下: HuggingPriority == 250,  CompressionResistancePriority == 750</p>
+<h4 id="2019年11月05日-可以在不借助第三个变量的情况下使用异或位运算交换两个数的值"><a href="#2019年11月05日-可以在不借助第三个变量的情况下使用异或位运算交换两个数的值" class="headerlink" title="2019年11月05日 可以在不借助第三个变量的情况下使用异或位运算交换两个数的值"></a>2019年11月05日 可以在不借助第三个变量的情况下使用异或位运算交换两个数的值</h4><p>a = 10<br>b = 8<br>a = a ^ b<br>b = a ^ b<br>a = a ^ b<br>结果，a = 8, b = 10</p>
+
+          
         
       
-    </li></ol></div>
+    </div>
 
     <div>
       
@@ -1412,7 +393,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/09/30/iOS数组enumerateXX方法探索/">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/07/17/iOS-performSelector相关操作/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="D">
@@ -1434,8 +415,8 @@
             
               
                 
-                <a class="post-title-link" href="/woodi.github.io/2018/09/30/iOS数组enumerateXX方法探索/" itemprop="url">
-                  iOS数组enumerateXX方法探索
+                <a class="post-title-link" href="/woodi.github.io/2019/07/17/iOS-performSelector相关操作/" itemprop="url">
+                  iOS performSelector相关操作
                 </a>
               
             
@@ -1451,8 +432,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T14:09:40+08:00">
-                2018-09-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-17T13:59:26+08:00">
+                2019-07-17
               </time>
             
 
@@ -1490,11 +471,1115 @@
         
           
             <blockquote>
-<p>今天看到代码，突然突发奇想，想要探索一个问题：<br>NSArray的<code>enumerateObjectsUsingBlock</code>方法到底是同步的还是异步的，如果我们想要在Block内部修改外部的值，是否要使用<code>__block</code>来修饰</p>
+<p>今天遇到一个问题，先来给各位看官看一下：</p>
 </blockquote>
-<p>这里写了一个简单的demo来验证：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line"></span><br><span class="line">self.arr = @[@&quot;1&quot;,@&quot;2&quot;,@&quot;3&quot;,@&quot;4&quot;,@&quot;5&quot;,@&quot;6&quot;,@&quot;7&quot;];</span><br><span class="line">self.count = 0;</span><br><span class="line"></span><br><span class="line">[self testMethod];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)testMethod &#123;</span><br><span class="line">NSMutableArray *arrM = [NSMutableArray arrayWithCapacity:0];</span><br><span class="line">[self.arr enumerateObjectsUsingBlock:^(NSString *str, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">NSLog(@&quot;内部操作 ==&gt;%zd&quot;,self.count++);</span><br><span class="line">[arrM addObject:str];</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;外部结束：数组=%@，==&gt;%zd&quot;,arrM,self.count++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>LOG如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">2018-09-30 14:02:14.144150+0800 testEnumerate[10209:289132] 内部操作 ==&gt;0</span><br><span class="line">2018-09-30 14:02:14.144277+0800 testEnumerate[10209:289132] 内部操作 ==&gt;1</span><br><span class="line">2018-09-30 14:02:14.144363+0800 testEnumerate[10209:289132] 内部操作 ==&gt;2</span><br><span class="line">2018-09-30 14:02:14.144442+0800 testEnumerate[10209:289132] 内部操作 ==&gt;3</span><br><span class="line">2018-09-30 14:02:14.144517+0800 testEnumerate[10209:289132] 内部操作 ==&gt;4</span><br><span class="line">2018-09-30 14:02:14.144592+0800 testEnumerate[10209:289132] 内部操作 ==&gt;5</span><br><span class="line">2018-09-30 14:02:14.144666+0800 testEnumerate[10209:289132] 内部操作 ==&gt;6</span><br><span class="line">2018-09-30 14:02:14.144783+0800 testEnumerate[10209:289132] 外部结束：数组=(</span><br><span class="line">1,</span><br><span class="line">2,</span><br><span class="line">3,</span><br><span class="line">4,</span><br><span class="line">5,</span><br><span class="line">6,</span><br><span class="line">7</span><br><span class="line">)，==&gt;7</span><br></pre></td></tr></table></figure></p>
-<h4 id="可以得出结论："><a href="#可以得出结论：" class="headerlink" title="可以得出结论："></a>可以得出结论：</h4><p><code>enumerateObjectsUsingBlock</code>方法是同步的，<br>而且，想要在block内部修改外部的对象，也不需要<code>__block</code>修饰</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line"></span><br><span class="line">[self performSelector:@selector(backGroundThread) onThread:[NSThread currentThread] withObject:nil waitUntilDone:NO];</span><br><span class="line">NSLog(@&quot;hello world 1&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">- (void)backGroundThread&#123;</span><br><span class="line">NSLog(@&quot;—hello world2—&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>问：这段代码会打印什么？</strong></p>
+<p><em>可能很多人会开始猜了。这里先卖个关子，带着你的疑问继续看下去吧。</em></p>
+<h4 id="首先，总体来看一下苹果提供的performSelector系列的API"><a href="#首先，总体来看一下苹果提供的performSelector系列的API" class="headerlink" title="首先，总体来看一下苹果提供的performSelector系列的API"></a>首先，总体来看一下苹果提供的<code>performSelector</code>系列的API</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@interface NSObject (NSThreadPerformAdditions)</span><br><span class="line"></span><br><span class="line">- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(nullable id)arg waitUntilDone:(BOOL)wait modes:(nullable NSArray&lt;NSString *&gt; *)array;</span><br><span class="line">- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(nullable id)arg waitUntilDone:(BOOL)wait;</span><br><span class="line">// equivalent to the first method with kCFRunLoopCommonModes</span><br><span class="line"></span><br><span class="line">- (void)performSelector:(SEL)aSelector onThread:(NSThread *)thr withObject:(nullable id)arg waitUntilDone:(BOOL)wait modes:(nullable NSArray&lt;NSString *&gt; *)array API_AVAILABLE(macos(10.5), ios(2.0), watchos(2.0), tvos(9.0));</span><br><span class="line">- (void)performSelector:(SEL)aSelector onThread:(NSThread *)thr withObject:(nullable id)arg waitUntilDone:(BOOL)wait API_AVAILABLE(macos(10.5), ios(2.0), watchos(2.0), tvos(9.0));</span><br><span class="line">// equivalent to the first method with kCFRunLoopCommonModes</span><br><span class="line">- (void)performSelectorInBackground:(SEL)aSelector withObject:(nullable id)arg API_AVAILABLE(macos(10.5), ios(2.0), watchos(2.0), tvos(9.0));</span><br><span class="line"></span><br><span class="line">/****************     Delayed perform     ******************/</span><br><span class="line"></span><br><span class="line">@interface NSObject (NSDelayedPerforming)</span><br><span class="line"></span><br><span class="line">- (void)performSelector:(SEL)aSelector withObject:(nullable id)anArgument afterDelay:(NSTimeInterval)delay inModes:(NSArray&lt;NSRunLoopMode&gt; *)modes;</span><br><span class="line">- (void)performSelector:(SEL)aSelector withObject:(nullable id)anArgument afterDelay:(NSTimeInterval)delay;</span><br><span class="line">+ (void)cancelPreviousPerformRequestsWithTarget:(id)aTarget selector:(SEL)aSelector object:(nullable id)anArgument;</span><br><span class="line">+ (void)cancelPreviousPerformRequestsWithTarget:(id)aTarget;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>可以看到，这几个是苹果提供的常用的多线程事件相关操作。用这几个方法，我们可以在子线程处理某些方法、拉回到主线程做一些操作，在当前线程延迟多久做一些操作等等。<br><code>performSelectorInBackground</code>这个就不说了。</p>
+<p>今天主要来研究下带有<code>waitUntilDone</code>参数的方法，即<code>performSelectorOnMainThread: withObject: waitUntilDone:</code>和<code>performSelector: onThread: withObject: waitUntilDone:</code>两个方法：<br>先来看下官方是怎么解释waitUntilDone的wait这个参数的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wait</span><br><span class="line">A Boolean that specifies whether the current thread blocks until after the specified selector is performed on the receiver on the main thread. </span><br><span class="line">Specify YES to block this thread; otherwise, specify NO to have this method return immediately.</span><br><span class="line">If the current thread is also the main thread, and you specify YES for this parameter, the message is delivered and processed immediately.</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>可以看到，这个参数是个bool类型，如果为YES，则会阻塞当前线程直到指定的方法执行完成才返回。<br>如果为NO, 则会立即返回。</p>
+</blockquote>
+<h4 id="这时如果把上面例子中的代码改为这样："><a href="#这时如果把上面例子中的代码改为这样：" class="headerlink" title="这时如果把上面例子中的代码改为这样："></a>这时如果把上面例子中的代码改为这样：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line"></span><br><span class="line">[self performSelector:@selector(backGroundThread) onThread:[NSThread currentThread] withObject:nil waitUntilDone:YES];</span><br><span class="line">NSLog(@&quot;hello world 1&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">- (void)backGroundThread&#123;</span><br><span class="line">NSLog(@&quot;—hello world2—&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时结果是什么？<br>相信大家都能看出来，肯定是 <code>先打印hello world 2，然后再打印hello  world1的</code>.<br>然后回归到最上面的问题。<br>结果是什么呢？<br>好奇的小伙伴们可以项目中跑一下看看：<br>其实结果是：<strong><code>只有hello world 1</code></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2019-07-17 14:24:38.417458+0800 RunloopDemo[4298:394797] hello world 1</span><br></pre></td></tr></table></figure></p>
+<p>这是为什么呢？为什么performSelector要执行的方法没有走呢？<br>这个瞎猜是没用的， 我们只能去查苹果是怎么解释<code>performSelector:onThread:withObject:waitUntilDone:</code>的了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">## Discussion</span><br><span class="line"></span><br><span class="line">You can use this method to deliver messages to other threads in your application. </span><br><span class="line">The message in this case is a method of the current object that you want to execute on the target thread. </span><br><span class="line"></span><br><span class="line">This method queues the message on the run loop of the target thread using the default run loop modes—that is, </span><br><span class="line">the modes associated with the [NSRunLoopCommonModes]  constant. </span><br><span class="line">As part of its normal run loop processing, the target thread dequeues the message (assuming it is running in one of the default run loop modes) and invokes the desired method.</span><br><span class="line"></span><br><span class="line">You cannot cancel messages queued using this method. If you want the option of canceling a message on the current thread, </span><br><span class="line">you must use either the [performSelector:withObject:afterDelay:] or [performSelector:withObject:afterDelay:inModes:] method.</span><br><span class="line"></span><br><span class="line">### Special Considerations</span><br><span class="line"></span><br><span class="line">This method registers with the runloop of its current context, and depends on that runloop being run on a regular basis to perform correctly. </span><br><span class="line">One common context where you might call this method and end up registering with a runloop that is not automatically run on a regular basis is when being invoked by a dispatch queue. </span><br><span class="line">If you need this type of functionality when running on a dispatch queue, you should use [dispatch_after] and related methods to get the behavior you want.</span><br></pre></td></tr></table></figure></p>
+<p>可以看到：<br>此方法是为了把当前线程的对象传递给别的线程的，此方法会被加入到目标线程的runloop队列中，该runloop使用默认mode–NSRunLoopCommonModes。当该线程的runloop执行的时候，它会以此出队列，然后执行想要执行的方法。<br>由此可以得出结论，<code>此方法是依赖于线程的runloop的</code>。<br>而上面例子中，我们使用了<code>dispatch_async</code>创建了一个子线程，我们知道，<code>子线程的runloop是默认不启动的</code>,因此，我们添加对应的方法即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line">// Do any additional setup after loading the view.</span><br><span class="line"></span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line"></span><br><span class="line">[self performSelector:@selector(backGroundThread) onThread:[NSThread currentThread] withObject:nil waitUntilDone:NO];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;hello world 1&quot;);</span><br><span class="line"></span><br><span class="line">NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];</span><br><span class="line">[currentRunLoop run];</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)backGroundThread&#123;</span><br><span class="line">NSLog(@&quot;—hello world2—&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>果然，此时再打印，结果就正常了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019-07-17 14:42:18.784324+0800 RunloopDemo[4477:428656] hello world 1</span><br><span class="line">2019-07-17 14:42:18.784650+0800 RunloopDemo[4477:428656] —hello world2—</span><br></pre></td></tr></table></figure></p>
+<p>但是，经过一系列的操作，我发现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];</span><br><span class="line">[currentRunLoop run];</span><br></pre></td></tr></table></figure></p>
+<p>两行代码放的位置，也是有讲究的。<br><img src="https://upload-images.jianshu.io/upload_images/1241385-bb5ae8163c7f9d24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>一共1、2、3三种情况，结果又不尽相同。</p>
+<ol>
+<li><p>假如放在1️⃣的位置，结果如何呢？又变成<code>只有hello world 1了</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2019-07-17 14:47:44.859178+0800 RunloopDemo[4549:445631] hello world 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2️⃣的位置呢？<code>只有hello world 2了</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2019-07-17 14:48:29.820267+0800 RunloopDemo[4566:448005] —hello world2—</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>位置3️⃣，结果就是上面那样，<code>是正常的</code>。</p>
+</li>
+</ol>
+<p>是不是很奇怪呢？<br>因此再来看下<code>[[NSRunLoop currentRunLoop] run]</code>方法苹果是怎么解释的了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">### Discussion</span><br><span class="line"></span><br><span class="line">If no input sources or timers are attached to the run loop, this method exits immediately; otherwise, it runs the receiver in the `NSDefaultRunLoopMode`by repeatedly invoking [runMode:beforeDate:].</span><br><span class="line">In other words, this method effectively begins an infinite loop that processes data from the run loop’s input sources and timers. </span><br><span class="line"></span><br><span class="line">Manually removing all known input sources and timers from the run loop is not a guarantee that the run loop will exit. </span><br><span class="line">macOS can install and remove additional input sources as needed to process requests targeted at the receiver’s thread. </span><br><span class="line">Those sources could therefore prevent the run loop from exiting. </span><br><span class="line"></span><br><span class="line">If you want the run loop to terminate, you shouldn&apos;t use this method. </span><br><span class="line">Instead, use one of the other run methods and also check other arbitrary conditions of your own, in a loop. A simple example would be:</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BOOL shouldKeepRunning = YES; // global</span><br><span class="line">NSRunLoop *theRL = [NSRunLoop currentRunLoop];</span><br><span class="line">while (shouldKeepRunning &amp;&amp; [theRL runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]);</span><br><span class="line"></span><br><span class="line">where `shouldKeepRunning` is set to `NO`somewhere else in the program.</span><br></pre></td></tr></table></figure></p>
+<p>同样可以看到，RunLoop的run方法，在有输入源或者定时器的情况下，是重复的调用<code>runMode:beforeDate:</code>方法，换句话说，他是一个无限的循环，而且手动移除输入源和定时器并不能保证runloop会退出。所以苹果建议我们使用<code>runMode:beforeDate:</code>，并且给了下面一个标准的写法。<br>所以，我们上面的代码就可以改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];</span><br><span class="line">//[currentRunLoop run];</span><br><span class="line">[currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];</span><br></pre></td></tr></table></figure></p>
+<p>此时，放置在2️⃣、3️⃣位置都是正常运行的了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">那位置1️⃣呢？仔细想想也是可以理解的，</span><br><span class="line">因为run方法中说了，如果输入源或定时器都没有的情况下，runloop是直接退出的。</span><br><span class="line">在位置1️⃣的时候开启runloop，此时并没有输入源加入, 所以此时runloop直接就退出了。</span><br><span class="line">（performSelector:onThread:withObject:waitUntilDone: 方法会把方法作为输入源添加到runloop中),</span><br><span class="line">所以2️⃣、3️⃣位置的时候，就不会出现此问题。</span><br></pre></td></tr></table></figure></p>
+<h4 id="那再来看下拉回到主线程的方法"><a href="#那再来看下拉回到主线程的方法" class="headerlink" title="那再来看下拉回到主线程的方法"></a>那再来看下拉回到主线程的方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(nullable id)arg waitUntilDone:(BOOL)wait modes:(nullable NSArray&lt;NSString *&gt; *)array;</span><br><span class="line">- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(nullable id)arg waitUntilDone:(BOOL)wait;</span><br></pre></td></tr></table></figure>
+<p>因为主线程的Runloop是默认开启的，所以不需要我们来处理。<br>把最上方中方法改为<code>performSelectorOnMainThread</code>，然后<code>waitUntilDone</code>参数为<code>YES</code>的时候，结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019-07-17 15:05:58.550527+0800 RunloopDemo[4714:483346] —hello world2—</span><br><span class="line">2019-07-17 15:05:58.550725+0800 RunloopDemo[4714:483400] hello world 1</span><br></pre></td></tr></table></figure></p>
+<p><code>waitUntilDone</code>参数为<code>NO</code>的时候，结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019-07-17 15:06:52.652589+0800 RunloopDemo[4736:485901] hello world 1</span><br><span class="line">2019-07-17 15:06:52.661368+0800 RunloopDemo[4736:485839] —hello world2—</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，此参数大致可以按“同步”、“异步”的方式来理解。</p>
+<h4 id="因此，可以得出结论！！！！"><a href="#因此，可以得出结论！！！！" class="headerlink" title="因此，可以得出结论！！！！"></a>因此，可以得出结论！！！！</h4><blockquote>
+<p>在方法<code>- (void)performSelector:(SEL)aSelector onThread:(NSThread *)thr withObject:(nullable id)arg waitUntilDone:(BOOL)wait</code>中， 执行方法的时候，是把输入源添加到对应线程的RunLoop中的，但是RunLoop此时并没有启动，所以方法不用调用。话句话说：<strong><code>方法的调用顺序取决于RunLoop的启动时机</code></strong>，参照<code>- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(nullable id)arg waitUntilDone:(BOOL)wait;</code>方法的结果，我们可以知道，RunLoop的启动时机应该是在当前线程调用方法作用域的最后位置。</p>
+</blockquote>
+<p>最终代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">[super viewDidLoad];</span><br><span class="line">// Do any additional setup after loading the view.</span><br><span class="line"></span><br><span class="line">//    [self threadInfo:@&quot;UI THREAD&quot;];</span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">//        [self threadInfo:@&quot;dispatch async&quot;];</span><br><span class="line"></span><br><span class="line">//        [self performSelector:@selector(backGroundThread) onThread:[NSThread currentThread] withObject:nil waitUntilDone:NO];</span><br><span class="line">[self performSelectorOnMainThread:@selector(backGroundThread) withObject:nil waitUntilDone:NO];</span><br><span class="line">//        [self performSelectorInBackground:@selector(backGroundThread) withObject:nil];</span><br><span class="line">//        [self performSelector:@selector(backGroundThread) withObject:nil afterDelay:2 inModes:@[NSDefaultRunLoopMode]];</span><br><span class="line">//        [self performSelector:@selector(backGroundThread) withObject:nil afterDelay:(2)];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;hello world 1&quot;);</span><br><span class="line"></span><br><span class="line">NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];</span><br><span class="line">//[currentRunLoop run];</span><br><span class="line">[currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)backGroundThread&#123;</span><br><span class="line">NSLog(@&quot;—hello world2—&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="举一反三"><a href="#举一反三" class="headerlink" title="举一反三"></a>举一反三</h4><p>苹果提供的别的API, 诸如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)performSelector:(SEL)aSelector withObject:(nullable id)anArgument afterDelay:(NSTimeInterval)delay inModes:(NSArray&lt;NSRunLoopMode&gt; *)modes;</span><br><span class="line">- (void)performSelector:(SEL)aSelector withObject:(nullable id)anArgument afterDelay:(NSTimeInterval)delay;</span><br></pre></td></tr></table></figure></p>
+<p>假如他们也是在子线程中调用的话，我们同样也是需要手动开启runloop的。</p>
+<h4 id="以上。END"><a href="#以上。END" class="headerlink" title="以上。END"></a>以上。END</h4>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/07/12/iOS根据传入的值创建键值相同的字典/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/07/12/iOS根据传入的值创建键值相同的字典/" itemprop="url">
+                  iOS根据传入的值创建键值相同的字典
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T12:13:10+08:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/* This macro is a helper for making view dictionaries for +constraintsWithVisualFormat:options:metrics:views:.  </span><br><span class="line">NSDictionaryOfVariableBindings(v1, v2, v3) is equivalent to [NSDictionary dictionaryWithObjectsAndKeys:v1, @&quot;v1&quot;, v2, @&quot;v2&quot;, v3, @&quot;v3&quot;, nil];</span><br><span class="line">*/</span><br><span class="line">#define NSDictionaryOfVariableBindings(...) _NSDictionaryOfVariableBindings(@&quot;&quot; # __VA_ARGS__, __VA_ARGS__, nil)</span><br><span class="line">UIKIT_EXTERN  NSDictionary *_NSDictionaryOfVariableBindings(NSString *commaSeparatedKeysString, __nullable id firstValue, ...) NS_AVAILABLE_IOS(6_0);</span><br></pre></td></tr></table></figure>
+<p>摘自<a href="https://developer.apple.com/library/archive/samplecode/ViewTransitions/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007411" target="_blank" rel="noopener">Apple Sample</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/05/07/AutoLayout是这么进行自动布局的/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/05/07/AutoLayout是这么进行自动布局的/" itemprop="url">
+                  AutoLayout是这么进行自动布局的
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-07T19:19:15+08:00">
+                2019-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>AutoLayout底层实现为Cassowary算法</p>
+<p>Cassowary是以高效的界面线性方程求解算法被提出来的，他解决的是界面的线性规划问题，而线性规划问题的解法是simplex算法</p>
+<p>iOS12之前 AutoLayout存在的性能问题在<br><a href="https://developer.apple.com/videos/play/wwdc2018/220/" target="_blank" rel="noopener">WWDC 2018 202 session</a>中介绍</p>
+<hr>
+<h4 id="Auto-Layout-的生命周期"><a href="#Auto-Layout-的生命周期" class="headerlink" title="Auto Layout 的生命周期"></a>Auto Layout 的生命周期</h4><p>Auto Layout 不只有布局算法 Cassowary，还包含了布局在运行时的生命周期等一整套布局引擎系统，用来统一管理布局的创建、更新和销毁。了解 Auto Layout 的生命周期，是理解它的性能相关话题的基础。这样，在遇到问题，特别是性能问题时，我们才能从根儿上找到原因，从而避免或改进类似的问题。</p>
+<p>这一整套布局引擎系统叫作 Layout Engine ，是 Auto Layout 的核心，主导着整个界面布局。</p>
+<p>每个视图在得到自己的布局之前，Layout Engine 会将视图、约束、优先级、固定大小通过计算转换成最终的大小和位置。在 Layout Engine 里，每当约束发生变化，就会触发 Deffered Layout Pass，完成后进入监听约束变化的状态。当再次监听到约束变化，即进入下一轮循环中。整个过程如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1241385-650ea7eff36ddbc6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Layout Engine 界面布局过程"></p>
+<p>图中， Constraints Change 表示的就是约束变化，添加、删除视图时会触发约束变化。Activating 或 Deactivating，设置 Constant 或 Priority 时也会触发约束变化。Layout Engine 在碰到约束变化后会重新计算布局，获取到布局后调用 superview.setNeedLayout()，然后进入 Deferred Layout Pass。</p>
+<p>Deferred Layout Pass 的主要作用是做容错处理。如果有些视图在更新约束时没有确定或缺失布局声明的话，会先在这里做容错处理。</p>
+<p>接下来，Layout Engine 会从上到下调用 layoutSubviews() ，通过 Cassowary 算法计算各个子视图的位置，算出来后将子视图的 frame 从 Layout Engine 里拷贝出来。</p>
+<p>在这之后的处理，就和手写布局的绘制、渲染过程一样了。</p>
+<hr>
+<h4 id="我们使用AutoLayout的方式有以下两种："><a href="#我们使用AutoLayout的方式有以下两种：" class="headerlink" title="我们使用AutoLayout的方式有以下两种："></a>我们使用AutoLayout的方式有以下两种：</h4><ol>
+<li>使用iOS提供的基于AutoLayout封装的<code>UIStackView</code><br>其实他更加类似于前端的<code>flexbox</code>布局思路，但是<strong>他有一个要求，就是必须是iOS9之后才可以使用</strong></li>
+</ol>
+<ol start="2">
+<li>另外一个，就是我们直接基于AutoLayout封装成库<br>使用DSL(Domain Specific Language)语言来处理页面布局的方式<br><a href="https://github.com/WooNoah/STMAssembleView" target="_blank" rel="noopener">https://github.com/WooNoah/STMAssembleView</a> (forked from <a href="https://github.com/ming1016/STMAssembleView" target="_blank" rel="noopener">ming1016/STMAssembleView</a>)</li>
+</ol>
+<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><ol>
+<li><p>使用AutoLayout, 要多使用UIView的<code>Compression Resistance Priority</code>和<code>Hugging Priority</code>，<br>可以参考<a href="https://github.com/WooNoah/showAutoLayout" target="_blank" rel="noopener">这个demo</a></p>
+</li>
+<li><h5 id="AutoLayout的一些基本概念"><a href="#AutoLayout的一些基本概念" class="headerlink" title="AutoLayout的一些基本概念"></a>AutoLayout的一些基本概念</h5></li>
+</ol>
+<ul>
+<li>利用约束来控制视图的大小和位置，系统会在运行时通过设置的约束计算得到frame再绘制屏幕</li>
+<li>两个属性Content Compression Resistance（排挤，值越高越固定）和Content Hugging（拥抱）,Masonry代码如下</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//content hugging 为1000</span><br><span class="line">[view setContentHuggingPriority:UILayoutPriorityRequired</span><br><span class="line">forAxis:UILayoutConstraintAxisHorizontal];</span><br><span class="line"></span><br><span class="line">//content compression 为250</span><br><span class="line">[view setContentCompressionResistancePriority:UILayoutPriorityDefaultLow</span><br><span class="line">forAxis:UILayoutConstraintAxisHorizontal];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>multipler属性表示约束值为约束对象的百分比，在Masonry里有对应的multipliedBy函数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//宽度为superView宽度的20%</span><br><span class="line">make.width.equalTo(superView.mas_width).multipliedBy(0.2);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>AutoLayout下UILabel设置多行计算需要设置preferredMaxLayoutWidth</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">label.preferredMaxWidth = [UIScreen mainScreen].bounds.size.width - margin - padding;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>preferredMaxLayoutWidth用来制定最大的宽，一般用在多行的UILabel中</li>
+<li>systemLayoutSizeFittingSize方法能够获得view的高度</li>
+<li>iOS7有两个很有用的属性，topLayoutGuide和bottomLayoutGuide，这个两个主要是方便获取UINavigationController和UITabBarController的头部视图区域和底部视图区域。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Masonry直接支持这个属性</span><br><span class="line">make.top.equalTo(self.mas_topLayoutGuide);</span><br></pre></td></tr></table></figure>
+<h5 id="3-AutoLayout关于更新的几个方法的区别"><a href="#3-AutoLayout关于更新的几个方法的区别" class="headerlink" title="3.AutoLayout关于更新的几个方法的区别"></a>3.<a href="https://github.com/ming1016/study/wiki/Masonry#autolayout%E5%85%B3%E4%BA%8E%E6%9B%B4%E6%96%B0%E7%9A%84%E5%87%A0%E4%B8%AA%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB" target="_blank" rel="noopener"></a>AutoLayout关于更新的几个方法的区别</h5><ul>
+<li>setNeedsLayout：告知页面需要更新，但是不会立刻开始更新。执行后会立刻调用layoutSubviews。</li>
+<li>layoutIfNeeded：告知页面布局立刻更新。所以一般都会和setNeedsLayout一起使用。如果希望立刻生成新的frame需要调用此方法，利用这点一般布局动画可以在更新布局后直接使用这个方法让动画生效。</li>
+<li>layoutSubviews：系统重写布局</li>
+<li>setNeedsUpdateConstraints：告知需要更新约束，但是不会立刻开始</li>
+<li>updateConstraintsIfNeeded：告知立刻更新约束</li>
+<li>updateConstraints：系统更新约束</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">针对Auto Layout的生命周期，我是这么理解的：</span><br><span class="line">Auto Layout拥有一套Layout Engine引擎，由它来主导页面的布局。</span><br><span class="line">App启动后，主线程的Run Loop会一直处于监听状态，</span><br><span class="line">当约束发生变化后会触发Deffered Layout Pass（延迟布局传递），</span><br><span class="line">在里面做容错处理（约束丢失等情况）并把view标识为dirty状态，然后Run Loop再次进入监听阶段。</span><br><span class="line">当下一次刷新屏幕动作来临（或者是调用layoutIfNeeded）时，</span><br><span class="line">Layout Engine 会从上到下调用 layoutSubviews() ，通过 Cassowary算法计算各个子视图的位置，</span><br><span class="line">算出来后将子视图的frame从Layout Engine拷贝出来，接下来的过程就跟手写frame是一样的了。</span><br></pre></td></tr></table></figure>
+<p>把循环这部分总结了一下：<br><em>触发约束变化 —&gt; Layout Engine就需要重新计算布局，会先获取到当前的布局，调用SuperView.SetNeedLayout() —&gt; Deffered Layout Pass进行监听 —&gt; Layout Engine 从上到下调用LayoutSubViews()，通过Cassowary算法计算各个子视图的位置，算出来后将子视图的Frame从Layout Engine里拷贝出来 —&gt; 和手写布局的绘制、渲染一样。</em></p>
+<p>参考：<br><a href="https://ming1016.github.io/2015/11/03/deeply-analyse-autolayout/" target="_blank" rel="noopener">https://ming1016.github.io/2015/11/03/deeply-analyse-autolayout/</a><br><a href="https://github.com/forkingdog/fdstackview" target="_blank" rel="noopener">https://github.com/forkingdog/fdstackview</a><br><a href="https://github.com/facebook/yoga" target="_blank" rel="noopener">https://github.com/facebook/yoga</a><br><a href="https://github.com/ming1016/study/wiki/Masonry" target="_blank" rel="noopener">https://github.com/ming1016/study/wiki/Masonry</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/17/iOS创建大小自适应的view/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/04/17/iOS创建大小自适应的view/" itemprop="url">
+                  iOS创建大小自适应的view
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-17T17:00:56+08:00">
+                2019-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>开发中免不了会遇到要定制那种宽高自适应的view。这里做下总结</p>
+</blockquote>
+<h4 id="1-包括的子view不可滚动（即不包含UIScrollView的别的控件）"><a href="#1-包括的子view不可滚动（即不包含UIScrollView的别的控件）" class="headerlink" title="1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）"></a>1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）</h4><p>这种其实比较好处理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;TestView.h&quot;</span><br><span class="line">#import &quot;Masonry.h&quot;</span><br><span class="line"></span><br><span class="line">@interface TestView()</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UIView *view1;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation TestView</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithFrame:(CGRect)frame &#123;</span><br><span class="line">if (self = [super initWithFrame:frame]) &#123;</span><br><span class="line">self.backgroundColor = [UIColor redColor];</span><br><span class="line">[self createSubviews];</span><br><span class="line">&#125;</span><br><span class="line">return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)createSubviews &#123;</span><br><span class="line">self.view1 = [[UIView alloc]init];</span><br><span class="line">self.view1.backgroundColor = [UIColor yellowColor];</span><br><span class="line">[self addSubview:self.view1];</span><br><span class="line">[self.view1 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.top.right.bottom.equalTo(self);</span><br><span class="line">make.size.mas_equalTo(CGSizeMake(150, 20));</span><br><span class="line">&#125;];      </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//ViewController.m中</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">TestView *test = [[TestView alloc]init];</span><br><span class="line">[self.view addSubview:test];</span><br><span class="line">[test mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.top.equalTo(grayView.mas_bottom).offset(5);</span><br><span class="line">make.centerX.equalTo(self.view);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，只需要设置子视图的边距跟父视图相同，然后设置子视图的宽高即可。<br>但是要注意：<em>在外部给父视图做约束的时候，<code>不要设置跟size相关的属性</code></em><br><img src="https://upload-images.jianshu.io/upload_images/1241385-b3d754b67996dac2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到，父视图（红色）和子视图（黄色）大小是一致的。</p>
+<h4 id="2-子视图中包括可以滚动的控件（UIScrollView）"><a href="#2-子视图中包括可以滚动的控件（UIScrollView）" class="headerlink" title="2.子视图中包括可以滚动的控件（UIScrollView）"></a>2.子视图中包括可以滚动的控件（UIScrollView）</h4><p>比如这个需求：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-29170cc6c90d429c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/1241385-6b0ead550b43a63b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>要弹出一个alert框，然后根据中间文字的长短，来调整整个框的大小！然后给一个最大高度，如果文字超过了这个高度，则为可滚动。</p>
+<p>按照上面的思路，给UIScrollview添加约束，UIScrollView的内部放一个UILabel，然后设置label的约束为四边距跟scrollview相同。我们来测试一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">@interface TestView()</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UIView *view1; //头部view</span><br><span class="line">@property (nonatomic, strong) UIView *view2; //底部view</span><br><span class="line">@property (nonatomic, strong) UIScrollView *scrollView; </span><br><span class="line">@property (nonatomic, strong) UILabel *content;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">- (void)createSubviews &#123;</span><br><span class="line">self.view1 = [[UIView alloc]init];</span><br><span class="line">self.view1.backgroundColor = [UIColor yellowColor];</span><br><span class="line">[self addSubview:self.view1];</span><br><span class="line">[self.view1 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.top.right.equalTo(self);</span><br><span class="line">make.size.mas_equalTo(CGSizeMake(150, 20));</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.scrollView = [[UIScrollView alloc]init];</span><br><span class="line">self.scrollView.backgroundColor = [UIColor orangeColor];</span><br><span class="line">[self addSubview:self.scrollView];</span><br><span class="line">[self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.right.equalTo(self);</span><br><span class="line">make.top.equalTo(self.view1.mas_bottom);</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">self.content = [[UILabel alloc]init];</span><br><span class="line">self.content.text = @&quot;按时；的房价阿斯兰的风景按时；大楼附近奥德赛；立方阿萨德管理局ad；管理会计we；了感觉肉而过；阿夫林的快感骄傲的高考哈尔；快给我如果；卡；管理科见到过；拉的积分；阿刘的时间安排温哥华；按时给家里；的设计费；阿刘四大金刚；卡到房管局；利润空间感；为了国家；打了个健康； 光和热涵盖了看法那个卡了人家给旅客进入那个卡了进入高考了人工；的房价阿斯兰的风景按时；大楼附近奥德赛；立&quot;;</span><br><span class="line">self.content.numberOfLines = 0;</span><br><span class="line">[self.scrollView addSubview:self.content];</span><br><span class="line"></span><br><span class="line">CGSize contentSize = [self.content sizeThatFits:CGSizeMake(150, 9999)];</span><br><span class="line">[self.content mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.edges.equalTo(self.scrollView);</span><br><span class="line">make.size.mas_equalTo(contentSize);</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">self.view2 = [[UIView alloc]init];</span><br><span class="line">self.view2.backgroundColor = [UIColor greenColor];</span><br><span class="line">[self addSubview:self.view2];</span><br><span class="line">[self.view2 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.right.bottom.equalTo(self);</span><br><span class="line">make.top.equalTo(self.scrollView.mas_bottom);</span><br><span class="line">make.size.equalTo(self.view1);</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，已经设置了content的四边距和scrollview一致，然后也给了content一个size。<br>然后设置scrollview的左边和右边，跟父视图一致。<br>设置view2的顶部挨着scrollview的底部。<br>然后view2的底部跟父视图底部一致。<br>这个思路跟上面<a href="">1</a>中的，是符合的。<br>但是结果呢？<br><img src="https://upload-images.jianshu.io/upload_images/1241385-f7c249d3fb1c57c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到，只有view1和view2，<br><em>UIScrollview并没有显示在页面上</em><br>可见，这个时候，再使用<a href="">1</a>的方法就不行了。（如果是我约束设置错了，还请各位大佬批评指正）</p>
+<p>所以这里使用了另外一种思路。</p>
+<blockquote>
+<p>给scrollview的高度添加约束，然后强引用为一个属性。然后在content文字高度计算完全之后，重新更新此约束，即可修改scrollview的高度。当然，此时子视图的各个控件之间高度的约束就可以忽略了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, strong) NSLayoutConstraint *heightConstraint;</span><br><span class="line"></span><br><span class="line">//这里设置高度约束。初始值为0</span><br><span class="line">self.heightConstraint = [NSLayoutConstraint constraintWithItem:self.scrollView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeHeight) multiplier:1 constant:0];</span><br><span class="line">[self addConstraint:self.heightConstraint];</span><br><span class="line"></span><br><span class="line">//此处计算完成之后，更新约束值</span><br><span class="line">CGSize contentSize = [self.content sizeThatFits:CGSizeMake(150, 9999)];</span><br><span class="line">[self.content mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.edges.equalTo(self.scrollView);</span><br><span class="line">make.size.mas_equalTo(contentSize);</span><br><span class="line">&#125;];</span><br><span class="line">self.heightConstraint.constant = contentSize.height;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/1241385-f8b22a4862d64eb6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>此时，可以看到，就能达到我们要的效果。</p>
+<p>然后上面的那种弹框中所说的父视图超过最大高度的时候可滚动，可以在获取到高度的时候给约束添加个判断即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">内容label修改行间距</span><br><span class="line"></span><br><span class="line">@param contentStr 要展示的内容字符串</span><br><span class="line">*/</span><br><span class="line">- (void)replaceContentUsingSpecificLineSpacingWithString:(NSString *)contentStr &#123;</span><br><span class="line">NSMutableParagraphStyle *mps = [[NSMutableParagraphStyle alloc]init];</span><br><span class="line">mps.lineSpacing = 6;</span><br><span class="line">mps.lineBreakMode = NSLineBreakByWordWrapping;</span><br><span class="line"></span><br><span class="line">NSDictionary *contentAttributes = @&#123;</span><br><span class="line">NSParagraphStyleAttributeName: mps,</span><br><span class="line">NSFontAttributeName: [UIFont systemFontOfSize: 13],</span><br><span class="line">&#125;;</span><br><span class="line">NSMutableAttributedString *mas = [[NSMutableAttributedString alloc]initWithString:contentStr attributes:contentAttributes];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.content.attributedText = mas;</span><br><span class="line">[self layoutIfNeeded];</span><br><span class="line"></span><br><span class="line">if (self.content.height &lt; kPxValue(428)) &#123;</span><br><span class="line">LOG(@&quot;短&quot;);</span><br><span class="line">self.scrollHeightConstraint.constant = self.content.height;</span><br><span class="line">&#125;else &#123;</span><br><span class="line">LOG(@&quot;长&quot;);</span><br><span class="line">self.scrollHeightConstraint.constant = kPxValue(428);</span><br><span class="line">self.contentScrollView.contentSize = CGSizeMake(self.contentScrollView.width,self.content.height);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然， 这种效果图，还有一种实现方法：<code>UITextView</code><br>这里有一篇文章可供参考<br><a href="https://www.jianshu.com/p/9e960757de86" target="_blank" rel="noopener">iOS:如何优雅的让UITextView根据输入文字实时改变高度</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/15/iOS启动优化/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/04/15/iOS启动优化/" itemprop="url">
+                  iOS启动优化
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-15T11:07:49+08:00">
+                2019-04-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>先说结论： 启动时间 = pre-main()时间 + post-main()时间</p>
+</blockquote>
+<h4 id="App启动过程"><a href="#App启动过程" class="headerlink" title="App启动过程"></a>App启动过程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">①解析Info.plist </span><br><span class="line">加载相关信息，例如闪屏</span><br><span class="line">沙箱建立、权限检查</span><br><span class="line">②Mach-O加载 </span><br><span class="line">如果是胖二进制文件，寻找合适当前CPU架构的部分</span><br><span class="line">加载所有依赖的Mach-O文件（递归调用Mach-O加载的方法）</span><br><span class="line">定位内部、外部指针引用，例如字符串、函数等</span><br><span class="line">执行声明为__attribute__((constructor))的C函数</span><br><span class="line">加载类扩展（Category）中的方法</span><br><span class="line">C++静态对象加载、调用ObjC的 +load 函数</span><br><span class="line">③程序执行 </span><br><span class="line">调用main()</span><br><span class="line">调用UIApplicationMain()</span><br><span class="line">调用applicationWillFinishLaunching</span><br></pre></td></tr></table></figure>
+<h4 id="一、Pre-Main阶段"><a href="#一、Pre-Main阶段" class="headerlink" title="一、Pre-Main阶段"></a>一、Pre-Main阶段</h4><p>pre-main阶段的定义为APP开始启动到系统调用main函数这一段时间，这个阶段又可以分为这几个步骤</p>
+<h5 id="1-Dylib-Loading"><a href="#1-Dylib-Loading" class="headerlink" title="1.Dylib Loading"></a>1.Dylib Loading</h5><h5 id="2-Rebase-Binding-Symbols"><a href="#2-Rebase-Binding-Symbols" class="headerlink" title="2.Rebase/Binding Symbols"></a>2.Rebase/Binding Symbols</h5><p>fix-ups adjust pointers within an image (rebasing) and set pointers that point to symbols outside the image (binding). To speed up rebase/binding time you need fewer pointer fix-ups. Apps with large numbers of Objective-C classes, selectors and categories can add 800ms to launch times (large is 20,000). If your app uses C++ code use less virtual functions. Using Swift Structs is also generally faster.</p>
+<h5 id="3-ObjC-Runtime-Setup"><a href="#3-ObjC-Runtime-Setup" class="headerlink" title="3.ObjC Runtime Setup"></a>3.ObjC Runtime Setup</h5><h5 id="4-Initializers"><a href="#4-Initializers" class="headerlink" title="4.Initializers"></a>4.Initializers</h5><p><code>+load</code>是在main函数之前就加载了，<br>而<code>+initialize</code>则是在该类第一次接到消息的时候才会调用，<br>所以，要尽量推后代码的加载时机。<br>但是使用<code>+initialize</code>会有一个问题，也是该方法的调用机制造成的：<br>在使用子类的时候，会先调用父类的<code>+initialize</code>方法。<br>所以，这里可以配合<code>dispatch_once</code>方法来实现类似<code>+load</code>的功能</p>
+<p>这一步可以做的优化有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">①使用 +initialize 来替代 +load</span><br><span class="line">②不要使用 atribute((constructor)) 将方法显式标记为初始化器，而是让初始化方法调用时才执行。</span><br><span class="line">比如使用 dispatch_once(),pthread_once() 或 std::once()。也就是在第一次使用时才初始化，推迟了一部分工作耗时。</span><br><span class="line">也尽量不要用到C++的静态对象。</span><br><span class="line">③还有一个结论就是swift，编译起来要比OC要快</span><br></pre></td></tr></table></figure></p>
+<p>做下总结:<br><img src="https://upload-images.jianshu.io/upload_images/1241385-7eaba2071dca293c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Xcode为我们提供的测试方法："><a href="#Xcode为我们提供的测试方法：" class="headerlink" title="Xcode为我们提供的测试方法："></a>Xcode为我们提供的测试方法：</h4><p>在<code>Edit Scheme</code>-&gt;<code>Arguments</code>-&gt;<code>Environment</code>中添加<code>DYLD_PRINT_STATISTICS</code>，值为<code>1</code><br><img src="https://upload-images.jianshu.io/upload_images/1241385-ca040a890ff8c180.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>再次运行，即可看到各项的结果（皆为毫秒）<br><img src="https://upload-images.jianshu.io/upload_images/1241385-25f5f72bed2a87f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="二、Post-Main-阶段"><a href="#二、Post-Main-阶段" class="headerlink" title="二、Post-Main()阶段"></a>二、Post-Main()阶段</h4><p>这个阶段就是程序加载了main函数之后，到页面展示出来之间的这段时间。<br>这个时间可以这么计算：<br><code>AppDelegate</code>的<code>willFinishLaunchingWithOptions</code>到<code>applicationDidBecomeActive</code>之间的时间，即为post-main()时间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions &#123;</span><br><span class="line">NSLog(@&quot;post-main start:%@&quot;,[self getMMTime]);</span><br><span class="line">return YES;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)applicationDidBecomeActive:(UIApplication *)application &#123;</span><br><span class="line">NSLog(@&quot;post-main stop:%@&quot;,[self getMMTime]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(NSString *)getMMTime&#123;</span><br><span class="line">NSTimeInterval a = [[NSDate date] timeIntervalSince1970] * 1000; // *1000 是精确到毫秒，不乘就是精确到秒</span><br><span class="line">return [NSString stringWithFormat:@&quot;%.0f&quot;, a];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>得出结果为毫秒，相减即得结果。</p>
+<h5 id="优化思路："><a href="#优化思路：" class="headerlink" title="优化思路："></a>优化思路：</h5><p><img src="https://upload-images.jianshu.io/upload_images/1241385-e58c1a5b75e5e11d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><h5 id="中文文章"><a href="#中文文章" class="headerlink" title="中文文章"></a>中文文章</h5><p><a href="https://www.jianshu.com/p/cf95d020e1b2" target="_blank" rel="noopener">WWDC之优化App启动速度</a><br><a href="https://www.jianshu.com/p/5efe327ac7ea" target="_blank" rel="noopener">iOS 程序 main函数之前发生什么</a></p>
+<h5 id="英文文章"><a href="#英文文章" class="headerlink" title="英文文章"></a>英文文章</h5><p><a href="https://medium.com/@avijeet.dutta13/ios-app-launch-time-analysis-and-optimization-a219ee81447c" target="_blank" rel="noopener">iOS App Launch time analysis and optimizations</a><br><a href="https://techblog.izotope.com/2018/03/08/improving-your-ios-apps-launch-time/" target="_blank" rel="noopener">Improving Your iOS App’s Launch Time</a><br><a href="https://stackoverflow.com/questions/35929530/ios-app-launch-time-measurement" target="_blank" rel="noopener">iOS app launch time measurement</a><br><a href="https://medium.com/@phillfarrugia/xcode-instruments-measuring-launch-time-cpu-usage-memory-leaks-energy-impact-and-frame-rate-1caf8905079f" target="_blank" rel="noopener">Xcode &amp; Instruments: Measuring Launch time, CPU Usage, Memory Leaks, Energy Impact and Frame Rate</a></p>
+<h5 id="Apple-Documentation"><a href="#Apple-Documentation" class="headerlink" title="Apple Documentation"></a>Apple Documentation</h5><p><a href="https://developer.apple.com/library/archive/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/TheAppLifeCycle/TheAppLifeCycle.html" target="_blank" rel="noopener">The App Life Cycle</a><br><a href="https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/OverviewOfDynamicLibraries.html" target="_blank" rel="noopener">Overview of Dynamic Libraries</a><br><a href="https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/MachOTopics/1-Articles/executing_files.html#//apple_ref/doc/uid/TP40001829" target="_blank" rel="noopener">Executing Mach-O Files</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/09/Workflow相关/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/04/09/Workflow相关/" itemprop="url">
+                  Workflow相关
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-09T11:50:54+08:00">
+                2019-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4><p><a href="https://jiejinghe.com/" target="_blank" rel="noopener">捷径盒</a><br><a href="https://shortcuts.sspai.com/" target="_blank" rel="noopener">少数派</a><br><a href="https://sharecuts.cn/" target="_blank" rel="noopener">捷径社区</a></p>
+<p><a href="https://www.zhihu.com/question/27029837/answer/133756961" target="_blank" rel="noopener">iOS 应用 Workflow 有哪些有趣的或能提升生活效率的玩法？</a><br><a href="https://zhuanlan.zhihu.com/p/27758684" target="_blank" rel="noopener">实用好用的捷径(Workflow/Shortcuts)分享，持续更新……</a><br><a href="https://zhuanlan.zhihu.com/p/27334270" target="_blank" rel="noopener">有了Workflow，没想到手机也能这么好用</a><br><a href="https://zhuanlan.zhihu.com/p/26145402" target="_blank" rel="noopener">加上这些干货，让 Workflow 如虎添翼</a><br><a href="https://www.zhihu.com/question/41528582/answer/147984894" target="_blank" rel="noopener">怎样才能让workflow更好用 ？</a><br><a href="https://zhuanlan.zhihu.com/p/45785789" target="_blank" rel="noopener">全网最全 捷径 Workflow 分享（附网站）</a><br><a href="https://www.zhihu.com/question/36073856" target="_blank" rel="noopener">如何方便地将电影片段的台词拼接到一张截图上？</a></p>
+<h4 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h4><p><a href="https://help.apple.com/workflow/#/" target="_blank" rel="noopener">Workflow Help</a><br><a href="https://sspai.com/post/27733" target="_blank" rel="noopener">Workflow 教程（一）：Workflow 是款什么样的应用？ | 深度测评</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/04/iOS异地上线方式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/04/04/iOS异地上线方式/" itemprop="url">
+                  iOS异地上线方式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-04T11:44:29+08:00">
+                2019-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>iOS异地上线是什么意思，都有哪些情况？</p>
+</blockquote>
+<h4 id="异地上线，大概就是外包给一个公司开发项目，然后在拿不到源码的情况下，我们使用自己公司的苹果开发者账号来上线"><a href="#异地上线，大概就是外包给一个公司开发项目，然后在拿不到源码的情况下，我们使用自己公司的苹果开发者账号来上线" class="headerlink" title="异地上线，大概就是外包给一个公司开发项目，然后在拿不到源码的情况下，我们使用自己公司的苹果开发者账号来上线"></a>异地上线，大概就是外包给一个公司开发项目，然后在<strong>拿不到源码的情况下</strong>，我们使用自己公司的苹果开发者账号来上线</h4><p>大致上分为几种思路：</p>
+<h5 id="1-苹果开发者账号密码给外包公司"><a href="#1-苹果开发者账号密码给外包公司" class="headerlink" title="1. 苹果开发者账号密码给外包公司"></a>1. 苹果开发者账号密码给外包公司</h5><p>这种方法。。。。emmmmmm，自行体会。。。</p>
+<h5 id="2-使用苹果公司提供的授权方式"><a href="#2-使用苹果公司提供的授权方式" class="headerlink" title="2. 使用苹果公司提供的授权方式"></a>2. 使用苹果公司提供的授权方式</h5><p><a href="https://developer.apple.com" target="_blank" rel="noopener">苹果开发者</a>登录账号之后，有个member栏目，<br><strong>然后把别的个人账户添加到要上线的公司账户的组织下面</strong>，<br>此时在xcode中账户设置里面输入个人账户，应该就可以正常上传应用了。</p>
+<h5 id="3-分享p12和mobileProvision文件（只是思路，不确定可不可行）"><a href="#3-分享p12和mobileProvision文件（只是思路，不确定可不可行）" class="headerlink" title="3. 分享p12和mobileProvision文件（只是思路，不确定可不可行）"></a>3. 分享p12和mobileProvision文件（只是思路，不确定可不可行）</h5><h6 id="分两步：1-先创建p12证书"><a href="#分两步：1-先创建p12证书" class="headerlink" title="分两步：1.先创建p12证书"></a>分两步：1.先创建p12证书</h6><p>先在<code>钥匙串</code>-&gt;<code>证书助手</code>-&gt;<code>从证书机构请求证书</code><br><img src="https://upload-images.jianshu.io/upload_images/1241385-57765779ad8e6d35.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>请求完成之后，下载，然后就可以在钥匙串中找到了<br>然后在想要生成p12文件的证书上，<code>右键导出</code><br><img src="https://upload-images.jianshu.io/upload_images/1241385-f2a5e47b3ec6fa2e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>然后输入要保存的名字，以及路径<br><img src="https://upload-images.jianshu.io/upload_images/1241385-2366f7d401e09eb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到文件后缀名为<code>p12</code>类型</p>
+<h6 id="2-然后创建profile-provision-配置文件-文件"><a href="#2-然后创建profile-provision-配置文件-文件" class="headerlink" title="2.然后创建profile provision(配置文件)文件"></a>2.然后创建profile provision(配置文件)文件</h6><p>在<a href="https://developer.apple.com" target="_blank" rel="noopener">苹果开发者</a>的<code>证书管理</code>里边，新建配置文件<br>（开发和发布的要分开）</p>
+<p>创建完成这两个文件之后，就可以把他们发给开发人员了。<br>只需要双击文件之后，这些配置就会被存到<code>钥匙串</code>中。<br>然后在Xcode中就可以选择<code>Profile Provisioning</code>文件中对应的team了（我的猜想）</p>
+<p><a href="https://support.mobincube.com/hc/en-us/articles/200511933-How-to-get-the-p12-file-and-provisioning-profile-for-publishing-an-app-on-App-Store" target="_blank" rel="noopener">https://support.mobincube.com/hc/en-us/articles/200511933-How-to-get-the-p12-file-and-provisioning-profile-for-publishing-an-app-on-App-Store</a></p>
+<h5 id="4-IPA包重签名"><a href="#4-IPA包重签名" class="headerlink" title="4. IPA包重签名"></a>4. IPA包重签名</h5><p><a href="https://github.com/WooNoah/ios-app-signer" target="_blank" rel="noopener">GitHub上有第三方工具 ios-app-signer</a><br>他是一个Mac APP，下载之后运行，就可以看到以下界面<br><img src="https://upload-images.jianshu.io/upload_images/1241385-b8cafc92a9e92c0f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><strong>这里要注意几点：</strong><br><strong>前三项是必选的！！！</strong><br><strong><em>选对<code>签名证书</code>(Signing Certificate) 和 <code>配置文件</code>(Profile Provisioning)</em></strong><br><strong><code>配置文件</code>(Profile Provisioning)</strong>可能需要先按照上面<a href="">3.2</a>的步骤生成一个，然后再选择</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/02/setNeedsLayout-setNeedsDisplay-viewDidLayoutSubviews区别/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/04/02/setNeedsLayout-setNeedsDisplay-viewDidLayoutSubviews区别/" itemprop="url">
+                  setNeedsLayout setNeedsDisplay viewDidLayoutSubviews区别
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-02T15:39:48+08:00">
+                2019-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>对当前了解的知识点做下总结</p>
+</blockquote>
+<h4 id="iOS-Layout机制相关方法"><a href="#iOS-Layout机制相关方法" class="headerlink" title="iOS Layout机制相关方法"></a>iOS Layout机制相关方法</h4><ol>
+<li>修改view的frame<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)sizeToFit</span><br><span class="line">- (CGSize)sizeThatFits:(CGSize)size</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<ol start="2">
+<li>告诉系统来刷新布局<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (void)layoutIfNeeded</span><br><span class="line">- (void)setNeedsLayout</span><br><span class="line">//布局控件的方法</span><br><span class="line">- (void)layoutSubviews</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<ol start="3">
+<li>告诉系统来绘制<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (void)setNeedsDisplay</span><br><span class="line">//绘制方法</span><br><span class="line">- (void)drawRect</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/woodi.github.io/2019/04/02/setNeedsLayout-setNeedsDisplay-viewDidLayoutSubviews区别/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/03/27/iOS-阿拉伯语、波斯语等RTL语言UI适配/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/03/27/iOS-阿拉伯语、波斯语等RTL语言UI适配/" itemprop="url">
+                  iOS 阿拉伯语、波斯语等RTL语言UI适配
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-27T20:37:21+08:00">
+                2019-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>阿拉伯语言是从右到左的方向，然后可以使用约束来适配，<br>都知道有left、right 和 leading、trailing两组约束属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">UIButton *codeButton1 = [[UIButton alloc] init];</span><br><span class="line">codeButton1.translatesAutoresizingMaskIntoConstraints = NO;</span><br><span class="line">[codeButton1 setTitle:@&quot;leadingTrailingButton&quot; forState:UIControlStateNormal];</span><br><span class="line">[codeButton1 setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];</span><br><span class="line">codeButton1.backgroundColor = [UIColor grayColor];</span><br><span class="line">[self.view addSubview:codeButton1];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//添加约束和父视图leading偏差30</span><br><span class="line">NSLayoutConstraint *codeButton1LeftConstraint =</span><br><span class="line">[NSLayoutConstraint constraintWithItem:codeButton1</span><br><span class="line">attribute:NSLayoutAttributeLeading</span><br><span class="line">relatedBy:NSLayoutRelationEqual</span><br><span class="line">toItem:self.view</span><br><span class="line">attribute:NSLayoutAttributeLeading</span><br><span class="line">multiplier:1.f</span><br><span class="line">constant:30.f];</span><br><span class="line"></span><br><span class="line">NSLayoutConstraint *codeButton1TopConstraint =</span><br><span class="line">[NSLayoutConstraint constraintWithItem:codeButton1</span><br><span class="line">attribute:NSLayoutAttributeTop</span><br><span class="line">relatedBy:NSLayoutRelationEqual</span><br><span class="line">toItem:codeButton  //codeButton是另一个在codeButton1上方的按钮</span><br><span class="line">attribute:NSLayoutAttributeBottom</span><br><span class="line">multiplier:1.f</span><br><span class="line">constant:100.f];</span><br><span class="line">NSLayoutConstraint *codeButton1WidthConstraint =</span><br><span class="line">[NSLayoutConstraint constraintWithItem:codeButton1</span><br><span class="line">attribute:NSLayoutAttributeWidth</span><br><span class="line">relatedBy:NSLayoutRelationEqual</span><br><span class="line">toItem:nil</span><br><span class="line">attribute:NSLayoutAttributeNotAnAttribute //这里设置的是一个定值宽度的约束，所以使用NSLayoutAttributeNotAnAttribute</span><br><span class="line">multiplier:1.f</span><br><span class="line">constant:200.f];  </span><br><span class="line">NSLayoutConstraint *codeButton1HeightConstraint =</span><br><span class="line">[NSLayoutConstraint constraintWithItem:codeButton1</span><br><span class="line">attribute:NSLayoutAttributeHeight</span><br><span class="line">relatedBy:NSLayoutRelationEqual</span><br><span class="line">toItem:nil</span><br><span class="line">attribute:NSLayoutAttributeNotAnAttribute</span><br><span class="line">multiplier:1.f</span><br><span class="line">constant:44.f];</span><br><span class="line"></span><br><span class="line">//把约束添加给父视图</span><br><span class="line">[self.view addConstraints:@[codeButton1LeftConstraint,codeButton1TopConstraint]];</span><br></pre></td></tr></table></figure></p>
+<p>如果我们使用leading/trailing，此时会根据UI的方向来改变对左右的定义，<br>而如果我们使用left/right,则没有什么变化，（左边一直是左边，右边一直是右边）</p>
+<p>这里可以手动使用代码来设置UIView的方向：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;</span><br></pre></td></tr></table></figure></p>
+<p>而semanticContentAttribute有以下几种属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, UISemanticContentAttribute) &#123;</span><br><span class="line">UISemanticContentAttributeUnspecified = 0,</span><br><span class="line">UISemanticContentAttributePlayback, // for playback controls such as Play/RW/FF buttons and playhead scrubbers</span><br><span class="line">UISemanticContentAttributeSpatial, // for controls that result in some sort of directional change in the UI, e.g. a segmented control for text alignment or a D-pad in a game</span><br><span class="line">UISemanticContentAttributeForceLeftToRight,</span><br><span class="line">UISemanticContentAttributeForceRightToLeft</span><br><span class="line">&#125; NS_ENUM_AVAILABLE_IOS(9_0);</span><br></pre></td></tr></table></figure></p>
+<p>我们可以通过下面两个方法获取UI布局的方向<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// This method returns the layout direction implied by the provided semantic content attribute relative to the application-wide layout direction (as returned by UIApplication.sharedApplication.userInterfaceLayoutDirection).</span><br><span class="line">+ (UIUserInterfaceLayoutDirection)userInterfaceLayoutDirectionForSemanticContentAttribute:(UISemanticContentAttribute)attribute NS_AVAILABLE_IOS(9_0);</span><br><span class="line"></span><br><span class="line">// This method returns the layout direction implied by the provided semantic content attribute relative to the provided layout direction. For example, when provided a layout direction of RightToLeft and a semantic content attribute of Playback, this method returns LeftToRight. Layout and drawing code can use this method to determine how to arrange elements, but might find it easier to query the container view’s effectiveUserInterfaceLayoutDirection property instead.</span><br><span class="line">+ (UIUserInterfaceLayoutDirection)userInterfaceLayoutDirectionForSemanticContentAttribute:(UISemanticContentAttribute)semanticContentAttribute relativeToLayoutDirection:(UIUserInterfaceLayoutDirection)layoutDirection NS_AVAILABLE_IOS(10_0);</span><br></pre></td></tr></table></figure></p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://www.jianshu.com/p/34b5a8d9a77e" target="_blank" rel="noopener">https://www.jianshu.com/p/34b5a8d9a77e</a><br><a href="https://www.jianshu.com/p/d556a42bb392" target="_blank" rel="noopener">https://www.jianshu.com/p/d556a42bb392</a></p>
+<p><a href="https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPInternational/SupportingRight-To-LeftLanguages/SupportingRight-To-LeftLanguages.html%23//apple_ref/doc/uid/10000171i-CH17-SW1" target="_blank" rel="noopener">https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPInternational/SupportingRight-To-LeftLanguages/SupportingRight-To-LeftLanguages.html#//apple_ref/doc/uid/10000171i-CH17-SW1</a></p>
+<p>|</p>
 
           
         
@@ -1530,7 +1615,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/woodi.github.io/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/woodi.github.io/page/4/">4</a><a class="extend next" rel="next" href="/woodi.github.io/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/woodi.github.io/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/woodi.github.io/page/6/">6</a><a class="extend next" rel="next" href="/woodi.github.io/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1573,7 +1658,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/woodi.github.io/archives">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1628,7 +1713,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

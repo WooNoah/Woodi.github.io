@@ -1,0 +1,703 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="本片文字意在记录gcd的一些用法  1. dispatch_semaphore 相关方法：dispatch_semaphore_create()   //创建信号量，设置能同时执行的最大线程数dispatch_semaphore_wait()      //信号量-1dispatch_semaphore_signal()  //信号量+1   dispatch_semaphore_wait方法：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GCD的一些使用">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2018/11/27/GCD的一些使用/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="本片文字意在记录gcd的一些用法  1. dispatch_semaphore 相关方法：dispatch_semaphore_create()   //创建信号量，设置能同时执行的最大线程数dispatch_semaphore_wait()      //信号量-1dispatch_semaphore_signal()  //信号量+1   dispatch_semaphore_wait方法：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-17175c3346c2a442.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-60f9b2174770d964.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-5e19a6f01d814ad2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-15699ac4262d1996.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-52245f4e5ff2351c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-11-05T15:47:31.048Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GCD的一些使用">
+<meta name="twitter:description" content="本片文字意在记录gcd的一些用法  1. dispatch_semaphore 相关方法：dispatch_semaphore_create()   //创建信号量，设置能同时执行的最大线程数dispatch_semaphore_wait()      //信号量-1dispatch_semaphore_signal()  //信号量+1   dispatch_semaphore_wait方法：">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-17175c3346c2a442.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2018/11/27/GCD的一些使用/">
+
+
+
+
+
+  <title> GCD的一些使用 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/27/GCD的一些使用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                GCD的一些使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-27T17:48:32+08:00">
+                2018-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本片文字意在记录gcd的一些用法</p>
+</blockquote>
+<h4 id="1-dispatch-semaphore"><a href="#1-dispatch-semaphore" class="headerlink" title="1. dispatch_semaphore"></a>1. dispatch_semaphore</h4><blockquote>
+<p>相关方法：<br>dispatch_semaphore_create()   //创建信号量，设置能同时执行的最大线程数<br>dispatch_semaphore_wait()      //信号量-1<br>dispatch_semaphore_signal()  //信号量+1</p>
+</blockquote>
+<blockquote>
+<p>dispatch_semaphore_wait方法：<br>Decrement the counting semaphore. If the resulting value is less than zero, this function waits for a signal to occur before returning.<br>信号量减1，如果结果小于0，会阻塞当前线程等待新信号的出现。<br>如果为DISPATCH_TIME_FOREVER，则会一直等待<br>dispatch_semaphore_signal方法：<br>Increment the counting semaphore. If the previous value was less than zero, this function wakes a thread currently waiting in <a href="">dispatch_semaphore_wait</a><br>信号量加1，如果之前的信号量小于0，则会唤醒dispatch_semaphore_wait方法中等待着的线程</p>
+</blockquote>
+<p>使用的方法：<strong>先降后升</strong><br><a id="more"></a><br>先创建信号量，设置能同时执行的最大线程数。如果为1，则同时可执行的线程就是1个，等进入到耗时操作1的时候，先让信号量降低，然后处理完成之后，再调用signal方法使信号量升高，在别的耗时操作中，也是一样的逻辑。<br>那么，在耗时操作2开始的时候，由于耗时操作1中信号量为0，且等待时间为<code>DISPATCH_TIME_FOREVER</code>，<strong>此时则会一直等待</strong>。</p>
+<h5 id="常规操作如下："><a href="#常规操作如下：" class="headerlink" title="常规操作如下："></a>常规操作如下：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 常规dispatch_semaphore使用方法（多个网络请求，限制最大并发数量）</span><br><span class="line">*/</span><br><span class="line">- (void)dispatchSemaphoreTest1 &#123;</span><br><span class="line">dispatch_queue_t queue = dispatch_queue_create(0, 0);</span><br><span class="line">dispatch_semaphore_t sema = dispatch_semaphore_create(2);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------------------dispatch begin-----------------&quot;);</span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);</span><br><span class="line"></span><br><span class="line">dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">NSString *imgUrl = @&quot;https://www.baidu.com/img/bd_logo1.png&quot;;</span><br><span class="line">[[AFHTTPSessionManager manager] GET:imgUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) &#123;</span><br><span class="line"></span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------success1-----------------&quot;);</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------fail1-----------------&quot;);</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------------------dispatch async complete1-----------------&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">//Thread4: EXC_BAD_INSTRUCTION(code=EXC_I386_INVOP,subcode=0x0)</span><br><span class="line">//https://stackoverflow.com/questions/24337791/exc-bad-instruction-code-exc-i386-invop-subcode-0x0-on-dispatch-semaphore-dis</span><br><span class="line">dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);</span><br><span class="line"></span><br><span class="line">dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">NSString *imgUrl = @&quot;https://www.baidu.com/img/bd_logo1.png&quot;;</span><br><span class="line">[[AFHTTPSessionManager manager] GET:imgUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) &#123;</span><br><span class="line"></span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------success2-----------------&quot;);</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------fail2-----------------&quot;);</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line">NSLog(@&quot;--------------------------dispatch async complete2-----------------&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);</span><br><span class="line">NSString *imgUrl = @&quot;https://www.baidu.com/img/bd_logo1.png&quot;;</span><br><span class="line">[[AFHTTPSessionManager manager] GET:imgUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) &#123;</span><br><span class="line"></span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------success3-----------------&quot;);</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------fail3-----------------&quot;);</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">&#125;];</span><br><span class="line">NSLog(@&quot;--------------------------dispatch async complete3-----------------&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------------------dispatch complete-----------------&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行之后，竟然崩溃了！！<br>报错信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXC_BAD_INSTRUCTION(code=EXC_I386_INVOP,subcode=0x0)</span><br></pre></td></tr></table></figure></p>
+<p>查询了<a href="https://stackoverflow.com/" target="_blank" rel="noopener">stackoverflow</a>之后，发现<a href="https://stackoverflow.com/questions/24337791/exc-bad-instruction-code-exc-i386-invop-subcode-0x0-on-dispatch-semaphore-dis" target="_blank" rel="noopener">此篇文章</a><br>此问题是使用了<code>dispatch_group_enter</code>,<code>dispatch_group_leave</code>和<code>dispatch_group_wait</code>三个方法的途中，遇到的这个问题，他的写法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);</span><br><span class="line">dispatch_group_t group = dispatch_group_create();</span><br><span class="line"></span><br><span class="line">for (...) &#123;</span><br><span class="line">if (...) &#123;</span><br><span class="line">dispatch_group_enter(group);</span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line"></span><br><span class="line">[self webserviceCall:url onCompletion:^&#123;</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)));</span><br><span class="line">dispatch_sync(queue, ^&#123;</span><br><span class="line">// call completion handler passed in by caller</span><br><span class="line">&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>其中回答说：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-17175c3346c2a442.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>是在使用的过程中，调用已经释放了的group才导致的这个问题。</p>
+<p>受此文章启发，我考虑到上面的写法是否也是由于这个原因呢？<br>然后我把<code>dispatch_semaphore_t</code>作为当前类的属性，强引用一下，发现解决了这个问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//只需要在前面创建semaphore和queue的时候，强引用一下，然后再后续的调用中，都修改为self.xxx即可</span><br><span class="line">self.sema = dispatch_semaphore_create(2);</span><br><span class="line">self.queue = dispatch_queue_create(0, 0);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>2018年11月28日<br>今天我又试了一下：发现竟然又不崩溃了？？？？<br>而且也无法复现那个问题了。。。excuse me ???</p>
+<hr>
+<h5 id="异步变同步"><a href="#异步变同步" class="headerlink" title="异步变同步"></a>异步变同步</h5><p>下面的实现是一种取巧的方法，达到了同步的效果，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">- (void)testDispatchSemaphore &#123;</span><br><span class="line">NSLog(@&quot;--------------------------begin-----------------&quot;);</span><br><span class="line">dispatch_semaphore_t sema = dispatch_semaphore_create(0);</span><br><span class="line">dispatch_queue_t que = dispatch_get_global_queue(0, 0);</span><br><span class="line"></span><br><span class="line">dispatch_async(que, ^&#123;</span><br><span class="line">NSLog(@&quot;--------------------------async begin-----------------&quot;);</span><br><span class="line">[NSThread sleepForTimeInterval:3];</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">NSLog(@&quot;--------------------------async complete-----------------&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);</span><br><span class="line">NSLog(@&quot;--------------------------complete-----------------&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//log如下：</span><br><span class="line">--------------------------begin-----------------</span><br><span class="line">--------------------------async begin-----------------</span><br><span class="line">--------------------------async complete-----------------</span><br><span class="line">--------------------------complete-----------------</span><br></pre></td></tr></table></figure></p>
+<h5 id="这里有一个问题点：创建semaphore的时候的初始值问题"><a href="#这里有一个问题点：创建semaphore的时候的初始值问题" class="headerlink" title="这里有一个问题点：创建semaphore的时候的初始值问题"></a>这里有一个问题点：创建semaphore的时候的初始值问题</h5><p>我们都知道，此semaphore值，就是用来限制最大并行线程的，也就是说如果传1，则运行的时候，同一时间只能处理一个线程。如果传4，则同时处理4个。那有没有考虑过，<a href="https://www.google.com/search?q=dispatch+semaphore+create+0" target="_blank" rel="noopener">如果传0呢？</a><br>这里给出了苹果文档上的<a href="https://developer.apple.com/documentation/dispatch/1452955-dispatch_semaphore_create?language=objc" target="_blank" rel="noopener">解释</a></p>
+<blockquote>
+<p>Passing zero for the value is useful for when two threads need to reconcile the completion of a particular event.<br>Passing a value greater than zero is useful for managing a finite pool of resources, where the pool size is equal to the value.</p>
+</blockquote>
+<p>大意好像是：<br><em>如果传0进去，则会使两个线程同时处理完成回调。（当两个线程需要使某个事件完成一致）</em><br><em>如果传大于0的值进去，会使队列资源池变为有限的，从而限制最大并发数</em></p>
+<h5 id="关于队列资源池："><a href="#关于队列资源池：" class="headerlink" title="关于队列资源池："></a>关于队列资源池：</h5><p><img src="https://upload-images.jianshu.io/upload_images/1241385-60f9b2174770d964.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><img src="https://upload-images.jianshu.io/upload_images/1241385-5e19a6f01d814ad2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><img src="https://upload-images.jianshu.io/upload_images/1241385-15699ac4262d1996.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><img src="https://upload-images.jianshu.io/upload_images/1241385-52245f4e5ff2351c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>详见<a href="">Objective-C高级编程 iOS与OS X多线程和内存管理第三章</a></p>
+<h4 id="2-多个异步操作结束之后，统一操作-dispatch-group"><a href="#2-多个异步操作结束之后，统一操作-dispatch-group" class="headerlink" title="2. 多个异步操作结束之后，统一操作(dispatch_group)"></a>2. 多个异步操作结束之后，统一操作(dispatch_group)</h4><blockquote>
+<p>用到的方法：<br>dispatch_group_enter()<br>dispatch_group_leave()<br>dispatch_group_notify()</p>
+</blockquote>
+<p>注意：<strong>这里enter和leave要成对出现</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">- (void)dispatchGroupTest &#123;</span><br><span class="line">dispatch_group_t group = dispatch_group_create();</span><br><span class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;com.fxeyeQueue.www&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line">dispatch_group_enter(group);</span><br><span class="line">dispatch_group_enter(group);</span><br><span class="line">dispatch_group_async(group, queue, ^&#123;</span><br><span class="line"></span><br><span class="line">dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NSString *imgUrl = @&quot;https://www.baidu.com/img/bd_logo1.png&quot;;</span><br><span class="line">[[AFHTTPSessionManager manager] GET:imgUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) &#123;</span><br><span class="line"></span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------success1-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------fail1-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">[[AFHTTPSessionManager manager] GET:imgUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) &#123;</span><br><span class="line"></span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------success2-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------fail2-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_group_notify(group, queue, ^&#123;</span><br><span class="line">NSLog(@&quot;--------------------------notify-----------------&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------------------complete-----------------&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">//log如下：</span><br><span class="line">14:08:58.014812+0800 testOperation[6098:474448] --------------------------complete-----------------</span><br><span class="line">14:09:01.035264+0800 testOperation[6098:474448] --------------------------fail2-----------------</span><br><span class="line">14:09:01.035430+0800 testOperation[6098:474448] --------------------------fail1-----------------</span><br><span class="line">14:09:01.035564+0800 testOperation[6098:474778] --------------------------notify-----------------</span><br></pre></td></tr></table></figure></p>
+<p>也有另外一种写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">把两个请求分别放到两个异步group操作中，即：</span><br><span class="line">- (void)dispatchGroupTest &#123;</span><br><span class="line">dispatch_group_t group = dispatch_group_create();</span><br><span class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;com.fxeyeQueue.www&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line">dispatch_group_async(group, queue, ^&#123;</span><br><span class="line"></span><br><span class="line">NSString *imgUrl = @&quot;https://www.baidu.com/img/bd_logo1.png&quot;;</span><br><span class="line">dispatch_group_enter(group);</span><br><span class="line">[[AFHTTPSessionManager manager] GET:imgUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) &#123;</span><br><span class="line"></span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------success1-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------fail1-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_group_async(group, queue, ^&#123;</span><br><span class="line"></span><br><span class="line">NSString *imgUrl = @&quot;https://www.baidu.com/img/bd_logo1.png&quot;;</span><br><span class="line">dispatch_group_enter(group);</span><br><span class="line">[[AFHTTPSessionManager manager] GET:imgUrl parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) &#123;</span><br><span class="line"></span><br><span class="line">&#125; success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------success2-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">NSLog(@&quot;--------------------------fail2-----------------&quot;);</span><br><span class="line">dispatch_group_leave(group);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_group_notify(group, queue, ^&#123;</span><br><span class="line">NSLog(@&quot;--------------------------notify-----------------&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------------------complete-----------------&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从log上看，也是可以达到效果的，<br>但是！此种写法在时机使用中，遇到了一个问题，会造成整个APP卡死。。</p>
+<h2 id="然后Bugly报错说max-operation-count-reached，思来想去也没找到问题。还请知道解决方法的大佬给予明示！thx"><a href="#然后Bugly报错说max-operation-count-reached，思来想去也没找到问题。还请知道解决方法的大佬给予明示！thx" class="headerlink" title="然后Bugly报错说max operation count reached，思来想去也没找到问题。还请知道解决方法的大佬给予明示！thx~"></a>然后<a href="">Bugly</a>报错说<code>max operation count reached</code>，思来想去也没找到问题。还请知道解决方法的大佬给予明示！thx~</h2><p>今天又接着Google，终于找到了问题所在。受<a href="http://satanwoo.github.io/2017/01/07/DispatchGroupCrash/" target="_blank" rel="noopener">此文</a>启发。<br>项目中代码是在WKWebview的<code>didFinishNavigation</code>方法中调用请求方法。<br>然后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 两个请求结束之后，统一操作</span><br><span class="line">*/</span><br><span class="line">- (void)groupRequest &#123;</span><br><span class="line">dispatch_group_t group = dispatch_group_create();</span><br><span class="line">self.group = group;</span><br><span class="line">dispatch_queue_t queue = dispatch_get_global_queue(0, 0);</span><br><span class="line"></span><br><span class="line">dispatch_group_enter(self.group);</span><br><span class="line">dispatch_group_enter(self.group);</span><br><span class="line">dispatch_group_async(self.group, queue, ^&#123;</span><br><span class="line">[某网络请求方法 &#123;</span><br><span class="line">dispatch_group_leave(self.group);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_group_async(self.group, queue, ^&#123;</span><br><span class="line">[某网络请求方法 &#123;</span><br><span class="line">dispatch_group_leave(self.group);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_group_notify(self.group, queue, ^&#123;</span><br><span class="line">//获取到之后，刷新页面</span><br><span class="line">[self reloadViewWithModelData];</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于webview的加载过程不可控，所以可能存在<strong>多次调用此方法的情况</strong>，然后就会创建很多的group，造成Bugly报出的<a href="https://www.google.com.hk/search?safe=strict&amp;source=hp&amp;ei=hZH7W_6WFMvovgSs3arQBw&amp;q=dispatch+group+max+operation+count+reacthed+&amp;btnK=Google+%E6%90%9C%E7%B4%A2&amp;oq=dispatch+group+max+operation+count+reacthed+&amp;gs_l=psy-ab.3...2814.32604..33494...5.0..2.452.10919.0j14j22j8j1......0....1..gws-wiz.....0..0j0i12j0i10j0i30j0i8i30j33i160.XAbprWZQ1Wo" target="_blank" rel="noopener">max operation count reached</a>问题，因此<strong><em>懒加载group</em></strong>理论上就能解决此问题。上面代码改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (void)groupRequest &#123;</span><br><span class="line">if (self.group == nil) &#123;</span><br><span class="line">dispatch_group_t group = dispatch_group_create();</span><br><span class="line">self.group = group;</span><br><span class="line">&#125;</span><br><span class="line">dispatch_queue_t queue = dispatch_get_global_queue(0, 0);</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-dispatch-barrier"><a href="#3-dispatch-barrier" class="headerlink" title="3. dispatch_barrier"></a>3. dispatch_barrier</h4><p>其实添加依赖之类的操作，除了使用上面的两个， 还可以使用<code>dispatch_barrier</code></p>
+<blockquote>
+<p>notes:<br>但是有一点要先说明：<br>dispatch_barrier必须用在<a href="">并发队列</a>中,而且不能是获取的系统的全局队列，得是通过dispatch_queue_create自己创建的并发队列才可以</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* dispatch_barrier,只在并发队列中才有用，而且不能是获取的系统的全局队列，得是通过dispatch_queue_create自己创建的并发队列才可以</span><br><span class="line">*/</span><br><span class="line">- (void)dispatchBarrierFunction &#123;</span><br><span class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;com.fxxxxxx.www&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">NSLog(@&quot;task1 -%@&quot;,[NSThread currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">NSLog(@&quot;task2 -%@&quot;,[NSThread currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">NSLog(@&quot;task3 -%@&quot;,[NSThread currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_barrier_async(queue, ^&#123;</span><br><span class="line">[NSThread sleepForTimeInterval:5];</span><br><span class="line">NSLog(@&quot;barrier&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">NSLog(@&quot;asynchronous&quot;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">NSLog(@&quot;task4 -%@&quot;,[NSThread currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">NSLog(@&quot;task5 -%@&quot;,[NSThread currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">NSLog(@&quot;task6 -%@&quot;,[NSThread currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>log如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">2018-11-28 17:41:56.986682+0800  asynchronous</span><br><span class="line">2018-11-28 17:41:56.986849+0800  task1 -&lt;NSThread: 0x600002ef63c0&gt;&#123;number = 7, name = (null)&#125;</span><br><span class="line">2018-11-28 17:41:56.986849+0800  task2 -&lt;NSThread: 0x600002efd7c0&gt;&#123;number = 8, name = (null)&#125;</span><br><span class="line">2018-11-28 17:41:56.986885+0800  task3 -&lt;NSThread: 0x600002e20e00&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">2018-11-28 17:42:01.991930+0800  barrier</span><br><span class="line">2018-11-28 17:42:01.992341+0800  task6 -&lt;NSThread: 0x600002ef63c0&gt;&#123;number = 7, name = (null)&#125;</span><br><span class="line">2018-11-28 17:42:01.992397+0800  task5 -&lt;NSThread: 0x600002e20e00&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">2018-11-28 17:42:01.992341+0800  task4 -&lt;NSThread: 0x600002efd7c0&gt;&#123;number = 8, name = (null)&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，<strong>barrier方法可以在中间设置一个阻拦，然后等上面的处理完成之后，再进行下面的操作！</strong><br>但是！！！！如果操作中有网络请求等耗时操作呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* dispatch_barrier,只在并发队列中才有用，而且不能是获取的系统的全局队列，得是通过dispatch_queue_create自己创建的并发队列才可以</span><br><span class="line">* 可以看到，带有网络请求异步回调的情况，并不适用，可以使用dispatch_group_enter/dispatch_group_leave或者dispatch_semaphore_wait来实现</span><br><span class="line">*/</span><br><span class="line">- (void)dispatchBarrierTest &#123;</span><br><span class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;com.fxxxxxx.wwww&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">[self afnRequestWithTag:1 delay:2 complete:^&#123;</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">[self afnRequestWithTag:2 delay:2 complete:^&#123;</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">[self afnRequestWithTag:3 delay:2 complete:^&#123;</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_barrier_async(queue, ^&#123;</span><br><span class="line">NSLog(@&quot;barrier&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">[self afnRequestWithTag:4 delay:2 complete:^&#123;</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">dispatch_async(queue, ^&#123;</span><br><span class="line">[self afnRequestWithTag:5 delay:2 complete:^&#123;</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------------------barrier complete-----------------&quot;);</span><br><span class="line">&#125;</span><br><span class="line">log:</span><br><span class="line">2018-11-28 17:44:43.410024+0800  --------------------------barrier complete-----------------</span><br><span class="line">2018-11-28 17:44:43.410079+0800  barrier</span><br><span class="line">2018-11-28 17:44:45.425016+0800  --------------------------fail3-----------------</span><br><span class="line">2018-11-28 17:44:45.425200+0800  --------------------------fail2-----------------</span><br><span class="line">2018-11-28 17:44:45.425346+0800  --------------------------fail1-----------------</span><br><span class="line">2018-11-28 17:44:45.425454+0800  --------------------------fail4-----------------</span><br><span class="line">2018-11-28 17:44:45.425556+0800  --------------------------fail5-----------------</span><br></pre></td></tr></table></figure></p>
+<p>可以看出来，并不管用了。。<br><strong>所以，如果要在多个操作中请求接口，还是要用上面说的dispatch_group_enter/dispatch_group_leave或者dispatch_semaphore_wait来实现</strong></p>
+<h4 id="附文中代码的Demo"><a href="#附文中代码的Demo" class="headerlink" title="附文中代码的Demo"></a>附文中代码的<a href="https://github.com/WooNoah/GCDDemo" target="_blank" rel="noopener">Demo</a></h4><h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://www.jianshu.com/p/29152d90cef7" target="_blank" rel="noopener">https://www.jianshu.com/p/29152d90cef7</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2018/11/22/iOS-openURL调用失败/" rel="next" title="iOS openURL调用失败">
+                <i class="fa fa-chevron-left"></i> iOS openURL调用失败
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2018/11/30/打造多彩的Xcode-console系统/" rel="prev" title="打造多彩的Xcode console系统">
+                打造多彩的Xcode console系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-dispatch-semaphore"><span class="nav-number">1.</span> <span class="nav-text">1. dispatch_semaphore</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常规操作如下："><span class="nav-number">1.1.</span> <span class="nav-text">常规操作如下：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#异步变同步"><span class="nav-number">1.2.</span> <span class="nav-text">异步变同步</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#这里有一个问题点：创建semaphore的时候的初始值问题"><span class="nav-number">1.3.</span> <span class="nav-text">这里有一个问题点：创建semaphore的时候的初始值问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#关于队列资源池："><span class="nav-number">1.4.</span> <span class="nav-text">关于队列资源池：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-多个异步操作结束之后，统一操作-dispatch-group"><span class="nav-number">2.</span> <span class="nav-text">2. 多个异步操作结束之后，统一操作(dispatch_group)</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#然后Bugly报错说max-operation-count-reached，思来想去也没找到问题。还请知道解决方法的大佬给予明示！thx"><span class="nav-number"></span> <span class="nav-text">然后Bugly报错说max operation count reached，思来想去也没找到问题。还请知道解决方法的大佬给予明示！thx~</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-dispatch-barrier"><span class="nav-number">1.</span> <span class="nav-text">3. dispatch_barrier</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#附文中代码的Demo"><span class="nav-number">2.</span> <span class="nav-text">附文中代码的Demo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="对当前了解的知识点做下总结  iOS Layout机制相关方法 修改view的frame12- (void)sizeToFit- (CGSize)sizeThatFits:(CGSize)size     告诉系统来刷新布局1234- (void)layoutIfNeeded- (void)setNeedsLayout//布局控件的方法- (void)layoutSubviews     告诉系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="setNeedsLayout setNeedsDisplay viewDidLayoutSubviews区别">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2019/04/02/setNeedsLayout-setNeedsDisplay-viewDidLayoutSubviews区别/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="对当前了解的知识点做下总结  iOS Layout机制相关方法 修改view的frame12- (void)sizeToFit- (CGSize)sizeThatFits:(CGSize)size     告诉系统来刷新布局1234- (void)layoutIfNeeded- (void)setNeedsLayout//布局控件的方法- (void)layoutSubviews     告诉系">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-242ca1cabd6d7654.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-5980512176f7ef8c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-d93ad7989d2234fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-11-05T15:47:31.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="setNeedsLayout setNeedsDisplay viewDidLayoutSubviews区别">
+<meta name="twitter:description" content="对当前了解的知识点做下总结  iOS Layout机制相关方法 修改view的frame12- (void)sizeToFit- (CGSize)sizeThatFits:(CGSize)size     告诉系统来刷新布局1234- (void)layoutIfNeeded- (void)setNeedsLayout//布局控件的方法- (void)layoutSubviews     告诉系">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-242ca1cabd6d7654.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2019/04/02/setNeedsLayout-setNeedsDisplay-viewDidLayoutSubviews区别/">
+
+
+
+
+
+  <title> setNeedsLayout setNeedsDisplay viewDidLayoutSubviews区别 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/02/setNeedsLayout-setNeedsDisplay-viewDidLayoutSubviews区别/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                setNeedsLayout setNeedsDisplay viewDidLayoutSubviews区别
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-02T15:39:48+08:00">
+                2019-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>对当前了解的知识点做下总结</p>
+</blockquote>
+<h4 id="iOS-Layout机制相关方法"><a href="#iOS-Layout机制相关方法" class="headerlink" title="iOS Layout机制相关方法"></a>iOS Layout机制相关方法</h4><ol>
+<li>修改view的frame<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)sizeToFit</span><br><span class="line">- (CGSize)sizeThatFits:(CGSize)size</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<ol start="2">
+<li>告诉系统来刷新布局<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (void)layoutIfNeeded</span><br><span class="line">- (void)setNeedsLayout</span><br><span class="line">//布局控件的方法</span><br><span class="line">- (void)layoutSubviews</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<ol start="3">
+<li>告诉系统来绘制<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (void)setNeedsDisplay</span><br><span class="line">//绘制方法</span><br><span class="line">- (void)drawRect</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<a id="more"></a>
+<h4 id="layoutSubviews在以下情况下会被调用："><a href="#layoutSubviews在以下情况下会被调用：" class="headerlink" title="layoutSubviews在以下情况下会被调用："></a>layoutSubviews在以下情况下会被调用：</h4><p>1、init初始化不会触发layoutSubviews</p>
+<p>   但是是用initWithFrame 进行初始化时，当rect的值不为CGRectZero时,也会触发</p>
+<p>   2、addSubview会触发layoutSubviews</p>
+<p>   3、设置view的Frame会触发layoutSubviews，当然前提是frame的值设置前后发生了变化</p>
+<p>   4、滚动一个UIScrollView会触发layoutSubviews</p>
+<p>   5、旋转Screen会触发父UIView上的layoutSubviews事件</p>
+<p>   6、改变一个UIView大小的时候也会触发父UIView上的layoutSubviews事件</p>
+<p>   在苹果的官方文档中强调:<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   You should override this method only if the autoresizing behaviors </span><br><span class="line">   of the subviews do not offer the behavior you want.</span><br></pre></td></tr></table></figure></p>
+<p>   layoutSubviews, 当我们在某个类的内部调整子视图位置时，需要调用。</p>
+<p>   反过来的意思就是说：如果你想要在外部设置subviews的位置，就不要重写。</p>
+<p>   刷新子对象布局</p>
+<p>   -layoutSubviews方法：这个方法，默认没有做任何事情，需要子类进行重写<br>   -setNeedsLayout方法： 标记为需要重新布局，异步调用layoutIfNeeded刷新布局，不立即刷新，但layoutSubviews一定会被调用<br>   -layoutIfNeeded方法：如果，有需要刷新的标记，立即调用layoutSubviews进行布局（如果没有标记，不会调用layoutSubviews）</p>
+<p>   如果要立即刷新，要先调用[view setNeedsLayout]，把标记设为需要布局，然后马上调用[view layoutIfNeeded]，实现布局</p>
+<hr>
+<h5 id="注意！"><a href="#注意！" class="headerlink" title="注意！"></a>注意！</h5><blockquote>
+<p>setNeedsLayout官方文档中这么解释：</p>
+</blockquote>
+<p>   <img src="https://upload-images.jianshu.io/upload_images/1241385-242ca1cabd6d7654.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>   <strong>可以看到划红线部分，此方法是做一个“此视图需要刷新”的标记，然后在下一个刷新周期，刷新布局，如果给一个view1添加上标记<code>[view1 setNeedsLayout]</code>,则view1的子类也会调用<code>layoutSubviews</code>方法</strong></p>
+<blockquote>
+<p>所以，如果我们想要刷新一个视图view1的布局，则要给<strong>他的父类发送消息<code>- setNeedsLayout</code></strong></p>
+</blockquote>
+<p>   如果想要在下一个更新周期到来之前刷新，则可以调用<code>- layoutIfNeeded</code><strong>立刻刷新</strong><br>   PS, 在视图第一次显示之前，标记总是“需要刷新”的，可以直接调用[view layoutIfNeeded]</p>
+<hr>
+<h4 id="重绘"><a href="#重绘" class="headerlink" title="重绘"></a>重绘</h4><p>   -drawRect:(CGRect)rect方法：重写此方法，执行重绘任务<br>   -setNeedsDisplay方法：标记为需要重绘，异步调用drawRect<br>   -setNeedsDisplayInRect:(CGRect)invalidRect方法：标记为需要局部重绘</p>
+<p>   sizeToFit会自动调用sizeThatFits方法；</p>
+<p>   sizeToFit不应该在子类中被重写，应该重写sizeThatFits</p>
+<p>   sizeThatFits传入的参数是receiver当前的size，返回一个适合的size</p>
+<p>   sizeToFit可以被手动直接调用</p>
+<p>   sizeToFit和sizeThatFits方法都没有递归，对subviews也不负责，只负责自己</p>
+<hr>
+<p>   layoutSubviews对subviews重新布局</p>
+<p>   layoutSubviews方法调用先于drawRect</p>
+<p>   setNeedsLayout在receiver标上一个需要被重新布局的标记，在系统runloop的下一个周期自动调用layoutSubviews</p>
+<p>   layoutIfNeeded方法如其名，UIKit会判断该receiver是否需要layout.根据Apple官方文档,layoutIfNeeded方法应该是这样的</p>
+<p>   layoutIfNeeded遍历的不是superview链，应该是subviews链</p>
+<p>   drawRect是对receiver的重绘，能获得context</p>
+<p>   setNeedDisplay在receiver标上一个需要被重新绘图的标记，在下一个draw周期自动重绘，iphone device的刷新频率是60hz，也就是1/60秒后重绘 </p>
+<p>   <img src="https://upload-images.jianshu.io/upload_images/1241385-5980512176f7ef8c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>   <a href="http://www.jianshu.com/p/eb2c4bb4e3f1" target="_blank" rel="noopener">参考link</a></p>
+<hr>
+<h4 id="至于viewDidLayoutSubviews"><a href="#至于viewDidLayoutSubviews" class="headerlink" title="至于viewDidLayoutSubviews"></a>至于viewDidLayoutSubviews</h4><p>   先来看看苹果的官方文档：<br>   <img src="https://upload-images.jianshu.io/upload_images/1241385-d93ad7989d2234fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>   可以看出来，此方式是UIViewController的对象方法,<br>   总结一句：<br>   <code>当viewController的View布局完成全部的子view的时候会被调用，然后就是这个方法在controller的的子视图的position和size被改变的时候被调用。</code></p>
+<p>   <a href="https://www.appcoda.com.tw/view-controller-lifecycle/" target="_blank" rel="noopener">https://www.appcoda.com.tw/view-controller-lifecycle/</a><br>   <a href="https://stackoverflow.com/questions/40737164/whats-exactly-viewdidlayoutsubviews" target="_blank" rel="noopener">https://stackoverflow.com/questions/40737164/whats-exactly-viewdidlayoutsubviews</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2019/03/27/iOS-阿拉伯语、波斯语等RTL语言UI适配/" rel="next" title="iOS 阿拉伯语、波斯语等RTL语言UI适配">
+                <i class="fa fa-chevron-left"></i> iOS 阿拉伯语、波斯语等RTL语言UI适配
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2019/04/04/iOS异地上线方式/" rel="prev" title="iOS异地上线方式">
+                iOS异地上线方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#iOS-Layout机制相关方法"><span class="nav-number">1.</span> <span class="nav-text">iOS Layout机制相关方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#layoutSubviews在以下情况下会被调用："><span class="nav-number">2.</span> <span class="nav-text">layoutSubviews在以下情况下会被调用：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注意！"><span class="nav-number">2.1.</span> <span class="nav-text">注意！</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重绘"><span class="nav-number">3.</span> <span class="nav-text">重绘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#至于viewDidLayoutSubviews"><span class="nav-number">4.</span> <span class="nav-text">至于viewDidLayoutSubviews</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

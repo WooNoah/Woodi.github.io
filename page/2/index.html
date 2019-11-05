@@ -248,7 +248,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/09/30/Xcode10不提示头文件解决方法/">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/03/20/Git操作/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="D">
@@ -270,8 +270,8 @@
             
               
                 
-                <a class="post-title-link" href="/woodi.github.io/2018/09/30/Xcode10不提示头文件解决方法/" itemprop="url">
-                  Xcode10不提示头文件解决方法
+                <a class="post-title-link" href="/woodi.github.io/2019/03/20/Git操作/" itemprop="url">
+                  Git操作
                 </a>
               
             
@@ -287,8 +287,152 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T11:06:19+08:00">
-                2018-09-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-20T16:32:15+08:00">
+                2019-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="Git操作"><a href="#Git操作" class="headerlink" title="Git操作"></a>Git操作</h4><hr>
+<h5 id="常规操作"><a href="#常规操作" class="headerlink" title="常规操作"></a>常规操作</h5><ol>
+<li>git init      </li>
+<li>git add</li>
+<li>git rm</li>
+<li>git commit -m</li>
+<li>git commit -am 相当于 <code>git add + git commit -m</code></li>
+<li>git push -u origin master</li>
+<li>git pull origin master –allow-unrelated-histories</li>
+<li>git status</li>
+<li>git log  <code>查看提交过的版本</code></li>
+<li>git reflog <code>在回退以后又想再次回到之前的版本</code></li>
+<li>git reset    <code>1文件从暂存区回退到工作区 2版本回退</code></li>
+<li>git config –list</li>
+<li>git checkout – <file name="">  <code>1可以丢弃工作区的修改2可以切换分支</code></file></li>
+<li>git clone</li>
+<li>git branch</li>
+<li>git checkout -b &lt;分支名&gt;</li>
+<li>git reset 切换到</li>
+<li>git merge –no-ff -m “添加的注释” &lt;分支名&gt;    不使用fast-forward合并分支</li>
+<li>git branch -d &lt;分支名&gt;   删除分支</li>
+<li>git checkout -b <sha> 如果误删分支之后，想要恢复，则可以使用git reflog查看到sha之后，直接使用git checkout -b <sha>恢复</sha></sha></li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/woodi.github.io/2019/03/20/Git操作/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/03/20/WKWebview禁止点击文字或空白部分滚动功能/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/03/20/WKWebview禁止点击文字或空白部分滚动功能/" itemprop="url">
+                  WKWebview禁止点击文字或空白部分滚动功能
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-20T13:51:58+08:00">
+                2019-03-20
               </time>
             
 
@@ -325,11 +469,16 @@
       
         
           
-            <p>Xcode10 新增了一个构建系统起名“New Build System”（新构建系统），在Xcode10正式发布会变成了Xcode的默认Build System，旧的构建系统称为 legacy build system （传统构建系统), <code>在使用新的构建系统时, 导入头文件时 xcode 会出现闪退或者不提示的情况</code>, 最终发现可能是因为 xcode10 默认了 新构建系统导致的 , 但为什么会导致原因尚不清楚.</p>
-<p>具体的解决方法是将默认的构建系统还是设置为传统的构建系统, 具体的设置路径如下图</p>
-<h5 id="1-点击File-gt-Project-Setting"><a href="#1-点击File-gt-Project-Setting" class="headerlink" title="1.点击File-&gt;Project Setting"></a>1.点击<code>File-&gt;Project Setting</code></h5><p><img src="https://upload-images.jianshu.io/upload_images/1241385-e7b2093917fe1282.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h5 id="2-Build-System中选中Legacy-Build-System"><a href="#2-Build-System中选中Legacy-Build-System" class="headerlink" title="2.Build System中选中Legacy Build System"></a>2.Build System中选中<code>Legacy Build System</code></h5><p><img src="https://upload-images.jianshu.io/upload_images/1241385-071dfbbc1d473b05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><a href="https://www.cnblogs.com/canfixme/p/9704095.html" target="_blank" rel="noopener">参考资料</a></p>
+            <p>WKWebview点击文字或者空白区域，如果页面够长，则会发生滚动<br>两种思路：</p>
+<h4 id="1-在iOS内部修改"><a href="#1-在iOS内部修改" class="headerlink" title="1. 在iOS内部修改"></a>1. 在iOS内部修改</h4><blockquote>
+<p>思路： 1）在WKWebview中寻找是否有相应的属性来修改  //结果并没有<br>2）捕获到webview的双击事件，然后进行拦截</p>
+</blockquote>
+<p>查看苹果api可以看到，WKWebview 中有一个scrollview，scrollview中有几个手势UIPanGestureRecognizer, UIPinchGestureRecognizer等等，但是并没有UITapGestureRecognizer, 而且，苹果在api中详细的说到：<strong>不能修改scrollview的代理，也不能重写gestureRecognizer属性的getter方法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// Use these accessors to configure the scroll view&apos;s built-in gesture recognizers.</span><br><span class="line">// Do not change the gestures&apos; delegates or override the getters for these properties.</span><br><span class="line"></span><br><span class="line">// Change `panGestureRecognizer.allowedTouchTypes` to limit scrolling to a particular set of touch types.</span><br><span class="line">@property(nonatomic, readonly) UIPanGestureRecognizer *panGestureRecognizer NS_AVAILABLE_IOS(5_0);</span><br><span class="line">// `pinchGestureRecognizer` will return nil when zooming is disabled.</span><br><span class="line">@property(nullable, nonatomic, readonly) UIPinchGestureRecognizer *pinchGestureRecognizer NS_AVAILABLE_IOS(5_0);</span><br></pre></td></tr></table></figure></p>
+<p>所以可以在WKWebveiw的子类scrollview中找tap事件，然后找到之后，删除他<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// iterate over all subviews of the WKWebView's scrollView</span></span><br><span class="line"><span class="keyword">for</span> subview <span class="keyword">in</span> _webView.scrollView.subviews &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// iterate over recognizers of subview</span></span><br><span class="line"><span class="keyword">for</span> recognizer <span class="keyword">in</span> subview.gestureRecognizers ?? [] &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// check the recognizer is  a UITapGestureRecognizer</span></span><br><span class="line"><span class="keyword">if</span> recognizer.isKind(of: <span class="type">UITapGestureRecognizer</span>.<span class="keyword">self</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// cast the UIGestureRecognizer as UITapGestureRecognizer</span></span><br><span class="line"><span class="keyword">let</span> tapRecognizer = recognizer <span class="keyword">as</span>! <span class="type">UITapGestureRecognizer</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// check if it is a 1-finger double-tap</span></span><br><span class="line"><span class="keyword">if</span> tapRecognizer.numberOfTapsRequired == <span class="number">2</span> &amp;&amp; tapRecognizer.numberOfTouchesRequired == <span class="number">1</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// remove the recognizer</span></span><br><span class="line">subview.removeGestureRecognizer(recognizer)</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-然后可以考虑JS端修改"><a href="#2-然后可以考虑JS端修改" class="headerlink" title="2. 然后可以考虑JS端修改"></a>2. 然后可以考虑JS端修改</h4><blockquote>
+<p>大概思路是这样： JS中实现双击事件，然后以达到override iOS 系统webview中的双击事件，达到阻拦的效果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">(function()</span><br><span class="line">&#123;</span><br><span class="line">var agent = navigator.userAgent.toLowerCase(); //检测是否是ios</span><br><span class="line">var iLastTouch = null; //缓存上一次tap的时间</span><br><span class="line">if (agent.indexOf(&apos;iphone&apos;) &gt;= 0 || agent.indexOf(&apos;ipad&apos;) &gt;= 0)</span><br><span class="line">&#123;</span><br><span class="line">document.body.addEventListener(&apos;touchend&apos;, function(event)</span><br><span class="line">&#123;</span><br><span class="line">var iNow = new Date()</span><br><span class="line">.getTime();</span><br><span class="line">iLastTouch = iLastTouch || iNow + 1 /** 第一次时将iLastTouch设为当前时间+1 */ ;</span><br><span class="line">var delta = iNow - iLastTouch;</span><br><span class="line">if (delta &lt; 500 &amp;&amp; delta &gt; 0)</span><br><span class="line">&#123;</span><br><span class="line">event.preventDefault();</span><br><span class="line">return false;</span><br><span class="line">&#125;</span><br><span class="line">iLastTouch = iNow;</span><br><span class="line">&#125;, false);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><a href="http://lydia-blog.logdown.com/posts/7355883-ios-wkwebview-page-double-click-will-move-up" target="_blank" rel="noopener">http://lydia-blog.logdown.com/posts/7355883-ios-wkwebview-page-double-click-will-move-up</a><br><a href="http://www.voidcn.com/article/p-wememcnl-buq.html" target="_blank" rel="noopener">http://www.voidcn.com/article/p-wememcnl-buq.html</a></p>
 
           
         
@@ -370,7 +519,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/09/10/iOS-UIScrollView-Bug/">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/03/14/iOS中的一些特殊语法记录/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="D">
@@ -392,8 +541,8 @@
             
               
                 
-                <a class="post-title-link" href="/woodi.github.io/2018/09/10/iOS-UIScrollView-Bug/" itemprop="url">
-                  iOS UIScrollView Bug
+                <a class="post-title-link" href="/woodi.github.io/2019/03/14/iOS中的一些特殊语法记录/" itemprop="url">
+                  iOS中的一些特殊语法记录
                 </a>
               
             
@@ -409,8 +558,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-10T15:28:45+08:00">
-                2018-09-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-14T17:42:09+08:00">
+                2019-03-14
               </time>
             
 
@@ -448,11 +597,19 @@
         
           
             <blockquote>
-<p>这里记录一下，开发中遇到的一些问题：以便以后查阅</p>
+<p>本篇文章来解释一些iOS代码中的特殊语法、写法，语法糖</p>
 </blockquote>
-<h4 id="1-contentOffset问题"><a href="#1-contentOffset问题" class="headerlink" title="1. contentOffset问题"></a>1. <code>contentOffset</code>问题</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">先来说下环境：xcode 9.4.1 模拟器：iPhone SE 11.4</span><br><span class="line">我们先在一个view中放置一个scrollview，</span><br><span class="line">然后设置他的偏移量：self.scv.contentOffset = CGPointMake(-50, 0);</span><br><span class="line">然后点击一个别的页面，比如UITabbarController中别的item，</span><br><span class="line">再次回到带有scrollview的页面的时候，scrollview会把偏移量重置</span><br></pre></td></tr></table></figure>
-<p>现象如图：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-d44a470354f3e70d.gif?imageMogr2/auto-orient/strip" alt="示例GIF"></p>
-<p><a href="https://gitee.com/WooNoah/UIScrollviewBugDemo.git" target="_blank" rel="noopener">1.代码</a>不在GitHub上传了，传在<a href="https://gitee.com/WooNoah/UIScrollviewBugDemo.git" target="_blank" rel="noopener">码云仓库</a></p>
+<h4 id="1-FBKVOKeyPath"><a href="#1-FBKVOKeyPath" class="headerlink" title="1. FBKVOKeyPath"></a>1. FBKVOKeyPath</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define FBKVOKeyPath(KEYPATH) \</span><br><span class="line">@(((void)(NO &amp;&amp; ((void)KEYPATH, NO)), \</span><br><span class="line">(&#123; const char *fbkvokeypath = strchr(#KEYPATH, &apos;.&apos;); NSCAssert(fbkvokeypath, @&quot;Provided key path is invalid.&quot;); fbkvokeypath + 1; &#125;)))</span><br></pre></td></tr></table></figure>
+<p>摘录自<a href="https://github.com/facebook/KVOController" target="_blank" rel="noopener">KVOController</a>中<code>FBKVOController.h</code>中<br>官方解释如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">This macro ensures that key path exists at compile time.</span><br><span class="line">Given a real receiver with a key path as you would call it, it verifies at compile time that the key path exists, without calling it.</span><br><span class="line"></span><br><span class="line">For example:</span><br><span class="line"></span><br><span class="line">FBKVOKeyPath(string.length) =&gt; @&quot;length&quot;</span><br><span class="line"></span><br><span class="line">Or even the complex case:</span><br><span class="line"></span><br><span class="line">FBKVOKeyPath(string.lowercaseString.length) =&gt; @&quot;lowercaseString.length&quot;.</span><br></pre></td></tr></table></figure></p>
+<p>我们可以使用该宏定义获取<code>string.property</code>中的<code>property</code>属性，而且，默认转换成<code>NSString</code>类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">1 校验传入的KeyPath是否有编译错误</span><br><span class="line">((void)(NO &amp;&amp; ((void)KEYPATH, NO))</span><br><span class="line">// NO &amp;&amp; ... 是为了运行时直接返回NO减少操作， 因为有(void)KEYPATH的存在，所以编译时校验了object.property</span><br><span class="line"></span><br><span class="line">// 2 将传入的object.property转换为&quot;property&quot;</span><br><span class="line">&#123; const char *fbkvokeypath = strchr(#KEYPATH, &apos;.&apos;); NSCAssert(fbkvokeypath, @&quot;Provided key path is invalid.&quot;); fbkvokeypath + 1; &#125;</span><br><span class="line">// 2.1 #KEYPATH将object.property转为字符串&quot;object.property&quot;</span><br><span class="line">// 2.2 strchr截取&quot;.property&quot;</span><br><span class="line">// 2.3 NSCAssert保证fbkvokeypath有效</span><br><span class="line">// 2.4 &quot;.property&quot;+1=&quot;property&quot;</span><br><span class="line"></span><br><span class="line">// 3 使用@()语法糖将char *转换为NSString类型</span><br><span class="line">@(((void)NO, &quot;property&quot;))</span><br><span class="line">// 因为&apos;,&apos;操作符是返回后面的值，即string = (@&quot;a&quot;, @&quot;b&quot;);string的值为@&quot;b&quot;</span><br><span class="line"></span><br><span class="line">2.1 附：c语言中，##表示把两个宏参数贴合在一起，而单个#的功能是将其后面的宏参数进行字符串化操作</span><br><span class="line">2.2 strchr()函数定义：</span><br><span class="line">char *strchr( const char *str, int ch ); </span><br><span class="line">str: 传入的字符串指针</span><br><span class="line">ch：要搜索的字符</span><br><span class="line">return：返回特定字符**第一次**在字符串中的出现的指针，未找到时返回空指针</span><br><span class="line">2.3 NSCAssert和NSAssert区别，见2</span><br><span class="line">2.4 p+1 表示地址，指针p所指向的内存地址的下一个内存地址。</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-NSAssert和NSCAssert区别"><a href="#2-NSAssert和NSCAssert区别" class="headerlink" title="2. NSAssert和NSCAssert区别"></a>2. NSAssert和NSCAssert区别</h4><p>在苹果的SDK中可以看到这两个都是定义的宏<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define NSAssert(condition, desc, ...)  \  </span><br><span class="line">do &#123;                \  </span><br><span class="line">__PRAGMA_PUSH_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">if (!(condition)) &#123;     \  </span><br><span class="line">[[NSAssertionHandler currentHandler] handleFailureInMethod:_cmd \  </span><br><span class="line">object:self file:[NSString stringWithUTF8String:__FILE__] \  </span><br><span class="line">lineNumber:__LINE__ description:(desc), ##__VA_ARGS__]; \  </span><br><span class="line">&#125;               \  </span><br><span class="line">__PRAGMA_POP_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">&#125; while(0)  </span><br><span class="line">#endif</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define NSCAssert(condition, desc, ...) \  </span><br><span class="line">do &#123;                \  </span><br><span class="line">__PRAGMA_PUSH_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">if (!(condition)) &#123;     \  </span><br><span class="line">[[NSAssertionHandler currentHandler] handleFailureInFunction:[NSString stringWithUTF8String:__PRETTY_FUNCTION__] \  </span><br><span class="line">file:[NSString stringWithUTF8String:__FILE__] \  </span><br><span class="line">lineNumber:__LINE__ description:(desc), ##__VA_ARGS__]; \  </span><br><span class="line">&#125;               \  </span><br><span class="line">__PRAGMA_POP_NO_EXTRA_ARG_WARNINGS \  </span><br><span class="line">&#125; while(0)  </span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>都是使用断言来保证条件的正确性<br>但是要注意一点：<br><code>NSAssert</code>在实现中，强引用了<code>self</code>当前对象，这里有可能会引起循环引用</p>
+<h4 id="3-iOS枚举中直接设置值为字母"><a href="#3-iOS枚举中直接设置值为字母" class="headerlink" title="3. iOS枚举中直接设置值为字母"></a>3. iOS枚举中直接设置值为字母</h4><p>一般情况，我们写枚举like this：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, UIViewAnimationTransition) &#123;  </span><br><span class="line">UIViewAnimationTransitionNone,//默认从0开始  </span><br><span class="line">UIViewAnimationTransitionFlipFromLeft,  </span><br><span class="line">UIViewAnimationTransitionFlipFromRight,  </span><br><span class="line">UIViewAnimationTransitionCurlUp,  </span><br><span class="line">UIViewAnimationTransitionCurlDown,  </span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line">typedef NS_OPTIONS(NSUInteger, UIViewAutoresizing) &#123;  </span><br><span class="line">UIViewAutoresizingNone                 = 0,  </span><br><span class="line">UIViewAutoresizingFlexibleLeftMargin   = 1 &lt;&lt; 0,  </span><br><span class="line">UIViewAutoresizingFlexibleWidth        = 1 &lt;&lt; 1,  </span><br><span class="line">UIViewAutoresizingFlexibleRightMargin  = 1 &lt;&lt; 2,  </span><br><span class="line">UIViewAutoresizingFlexibleTopMargin    = 1 &lt;&lt; 3,  </span><br><span class="line">UIViewAutoresizingFlexibleHeight       = 1 &lt;&lt; 4,  </span><br><span class="line">UIViewAutoresizingFlexibleBottomMargin = 1 &lt;&lt; 5  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>但是，还会有这样的写法<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, Test)</span><br><span class="line">&#123;</span><br><span class="line">TestA = 0,</span><br><span class="line">TestB = 1,</span><br><span class="line">TestC = 4,</span><br><span class="line">TestD = G,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这种情况，就是<strong>使用了”G”的</strong><code>ASCII</code>，赋值给了<code>TestD</code></p>
+<h4 id="4-ReactiveCocoa中的RAC宏定义"><a href="#4-ReactiveCocoa中的RAC宏定义" class="headerlink" title="4. ReactiveCocoa中的RAC宏定义"></a>4. <a href="https://github.com/ReactiveCocoa/ReactiveCocoa" target="_blank" rel="noopener">ReactiveCocoa</a>中的<strong>RAC宏定义</strong></h4><p>先贴个连接：<a href="https://www.jianshu.com/p/7086e090069d" target="_blank" rel="noopener">https://www.jianshu.com/p/7086e090069d</a></p>
+<p><a href="https://www.jianshu.com/p/8deccb9c8398" target="_blank" rel="noopener">参考资料1：KVOController详解</a><br><a href="https://blog.csdn.net/likendsl/article/details/36631401" target="_blank" rel="noopener">参考资料2：NSAssert,NSCassert</a><br><a href="https://www.jianshu.com/p/6e444981ab45" target="_blank" rel="noopener">参考资料3：断言(NSAssert)的使用</a><br><a href="https://www.jianshu.com/p/740233c2d638" target="_blank" rel="noopener">参考资料4：iOS之枚举用法</a><br><a href="https://www.jianshu.com/p/4a1531bac39f" target="_blank" rel="noopener">参考资料5：Hello, 宏定义魔法世界</a>1</p>
 
           
         
@@ -493,7 +650,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/09/05/vim-ls-find-grep-sed指令/">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/01/25/iOS自定义图片位置按钮/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="D">
@@ -515,8 +672,8 @@
             
               
                 
-                <a class="post-title-link" href="/woodi.github.io/2018/09/05/vim-ls-find-grep-sed指令/" itemprop="url">
-                  vim ls find grep sed指令
+                <a class="post-title-link" href="/woodi.github.io/2019/01/25/iOS自定义图片位置按钮/" itemprop="url">
+                  iOS自定义图片位置按钮
                 </a>
               
             
@@ -532,8 +689,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T18:01:27+08:00">
-                2018-09-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-25T10:32:00+08:00">
+                2019-01-25
               </time>
             
 
@@ -570,268 +727,379 @@
       
         
           <blockquote>
-<p>先来说下意图：以前在做项目的时候，在网上找了好多demo去了解参考，然后时间长了，没有整理，整个桌面就显得格外的杂乱。于是，就起了一个整理下桌面的念头。</p>
+<p>项目中肯定会遇到需要自定义view的时候,这里不再赘述如何自定义view，今天来描述一下有些时候，我们需要微调的按钮的title以及图片的位置</p>
 </blockquote>
+<h4 id="这里先来一张效果图："><a href="#这里先来一张效果图：" class="headerlink" title="这里先来一张效果图："></a>这里先来一张效果图：</h4><p><img src="https://upload-images.jianshu.io/upload_images/1241385-c5ad2224e0f65f5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到，我们项目中这种基于系统的UI控件微调的还是比较多的，今天就来总结一下<strong>按钮的这种定制</strong></p>
+<p>首先，按钮是继承于<code>UIControl</code>的，<code>UIControl</code>有两个属性：</p>
+<ol>
+<li>UIControlContentHorizontalAlignment</li>
+<li>UIControlContentVerticalAlignment<br>从名字上就能很清楚的看出来属性的意思，<strong>即contrl内容水平轴和竖直轴上内容的排列方式</strong><br>然后这两个属性有以下几种枚举类型：<br><a href="dash-apple-api://load?request_key=hck3I76TGf" target="_blank" rel="noopener">UIControlContentVerticalAlignmentCenter</a><br><a href="dash-apple-api://load?request_key=hccF_jDDu2" target="_blank" rel="noopener">UIControlContentVerticalAlignmentTop</a><br><a href="dash-apple-api://load?request_key=hcIdraI-cl" target="_blank" rel="noopener">UIControlContentVerticalAlignmentBottom</a><br><a href="dash-apple-api://load?request_key=hcCHWLRd8J" target="_blank" rel="noopener">UIControlContentVerticalAlignmentFill</a><br><strong>Horizontal轴类似</strong>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/woodi.github.io/2019/01/25/iOS自定义图片位置按钮/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </li></ol></div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/01/11/Mac通用快捷键/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/01/11/Mac通用快捷键/" itemprop="url">
+                  Mac通用快捷键
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-11T15:43:10+08:00">
+                2019-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>以桌面（Finder）为例，不同软件中，快捷键有所不同，到时候以软件内部配置为准</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">功能</th>
+<th style="text-align:center">快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">打开</td>
+<td style="text-align:center">cmd+o</td>
+</tr>
+<tr>
+<td style="text-align:center">新打开一个窗口</td>
+<td style="text-align:center">cmd+n</td>
+</tr>
+<tr>
+<td style="text-align:center">新打开一个窗口的分栏</td>
+<td style="text-align:center">cmd+t</td>
+</tr>
+<tr>
+<td style="text-align:center">关闭</td>
+<td style="text-align:center">cmd+w</td>
+</tr>
+<tr>
+<td style="text-align:center">退出进程（大退）</td>
+<td style="text-align:center">cmd+q</td>
+</tr>
+<tr>
+<td style="text-align:center">切换同一程序中不同的窗口</td>
+<td style="text-align:center">cmd+`</td>
+</tr>
+<tr>
+<td style="text-align:center">切换程序</td>
+<td style="text-align:center">cmd+Tab</td>
+</tr>
+<tr>
+<td style="text-align:center">隐藏</td>
+<td style="text-align:center">cmd+h</td>
+</tr>
+<tr>
+<td style="text-align:center">从隐藏恢复</td>
+<td style="text-align:center">cmd+Tab</td>
+</tr>
+<tr>
+<td style="text-align:center">最小化到dock</td>
+<td style="text-align:center">cmd+m</td>
+</tr>
+<tr>
+<td style="text-align:center">从dock恢复</td>
+<td style="text-align:center">cmd+l</td>
+</tr>
+<tr>
+<td style="text-align:center">显示桌面</td>
+<td style="text-align:center">cmd+F3</td>
+</tr>
+<tr>
+<td style="text-align:center">显示当前桌面都有哪些窗口</td>
+<td style="text-align:center">F3</td>
+</tr>
+<tr>
+<td style="text-align:center">在不同桌面分屏之间切换</td>
+<td style="text-align:center">ctrl+左/右方向键</td>
+</tr>
+<tr>
+<td style="text-align:center">显示当前应用打开的全部窗口</td>
+<td style="text-align:center">ctrl+下方向键</td>
+</tr>
+<tr>
+<td style="text-align:center">显示一共创建了多少个桌面</td>
+<td style="text-align:center">ctrl+上方向键</td>
+</tr>
+<tr>
+<td style="text-align:center">删除桌面内容</td>
+<td style="text-align:center">cmd+del</td>
+</tr>
+<tr>
+<td style="text-align:center">撤销</td>
+<td style="text-align:center">cmd+z</td>
+</tr>
+<tr>
+<td style="text-align:center">获取当前桌面选中文件的信息</td>
+<td style="text-align:center">cmd+i</td>
+</tr>
+<tr>
+<td style="text-align:center">到指定文件夹</td>
+<td style="text-align:center">cmd+shift+g</td>
+</tr>
+<tr>
+<td style="text-align:center">复制</td>
+<td style="text-align:center">cmd+c</td>
+</tr>
+<tr>
+<td style="text-align:center">粘贴</td>
+<td style="text-align:center">cmd+v</td>
+</tr>
+<tr>
+<td style="text-align:center">剪切</td>
+<td style="text-align:center">cmd+option+v</td>
+</tr>
+</tbody>
+</table>
+<h4 id="相关文章："><a href="#相关文章：" class="headerlink" title="相关文章："></a>相关文章：</h4><p><a href="https://www.jianshu.com/p/b6030182f55d" target="_blank" rel="noopener">Xcode中的快捷键</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/01/10/iOS-AddChildViewController遇到的问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2019/01/10/iOS-AddChildViewController遇到的问题/" itemprop="url">
+                  iOS AddChildViewController遇到的问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-10T16:08:22+08:00">
+                2019-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>今天在项目中检查循环引用问题的时候遇到了此问题，查询了别的页面，发现打印log并不一样。所以查阅了资料，这里记录一下。</p>
+</blockquote>
+<p>很多时候，我们都会遇到，在一个viewController中，添加别的controller，已达到特殊的转场效果，或者为了用户能在一个页面看到并和多个页面的内容交互的效果。<br>因此，苹果给我们提供了这个概念，和实现方法：<code>addChildViewController</code></p>
+<p>这里有一个使用场景，</p>
+<ol>
+<li>页面初始化的时候，在viewDidLoad中添加了子控制器，此时先加载缓存数据（也就是页面会先展示）</li>
+<li>然后展示的同时，重新调用接口，拉取数据。</li>
+<li>得到数据之后，重新刷新页面<br>相信大部分人也都是这么实现的。</li>
+</ol>
+<p>因此，demo中是这么写的：</p>
 <blockquote>
-<p>然后这些文件之间，我发现了一些共性：<br>比如说iOS中导航栏相关的demo，基本都会包含有“Navigation”or“Nav”关键字，<br>遂，就有了【使用vim指令，查找包含“Nav”关键字的文件或者文件夹】这个思路。也就是本文诞生的理由。</p>
+<p>A(ViewController)页面中有一个按钮，跳转到B(TestViewController)页面, 然后B页面中有两个按钮，第一个按钮用来第一次添加childViewController-&gt;C页面(SecViewController), 第二个页面，用来模拟网络请求得到结果之后，重新刷新布局的操作。</p>
 </blockquote>
-<p>这里研究了<code>ls</code> <code>find</code> <code>grep</code> <code>sed</code>三个指令。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/woodi.github.io/2018/09/05/vim-ls-find-grep-sed指令/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/08/24/iOSBasicClassType/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/08/24/iOSBasicClassType/" itemprop="url">
-                  iOSBasicClassType
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-24T01:13:09+08:00">
-                2018-08-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>iOS中有很多类，今天我们来讨论一些基本的类，以及他们的子类,相信<code>NSString</code>,<code>NSArray</code>,<code>NSDictionary</code>每一个iOS开发者都不会陌生，然后我们平时在开发的时候，很多时候也都会用到他们的一个别的子类，<code>NSMutableXX</code>，即<code>可变对象</code>。</p>
-</blockquote>
-<h3 id="说到可变对象和不可变对象，可能少不了另一个知识点copy和mutableCopy了"><a href="#说到可变对象和不可变对象，可能少不了另一个知识点copy和mutableCopy了" class="headerlink" title="说到可变对象和不可变对象，可能少不了另一个知识点copy和mutableCopy了"></a>说到可变对象和不可变对象，可能少不了另一个知识点copy和mutableCopy了</h3><ol>
-<li>copy和mutableCopy，深拷贝和浅拷贝<br>这里粗略的说下结论：</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">原始对象</th>
-<th style="text-align:center">操作过程</th>
-<th style="text-align:center">拷贝完之后的对象</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">不可变对象</td>
-<td style="text-align:center">copy</td>
-<td style="text-align:center">浅拷贝，不会生成新对象，只是指针指向同一个对象</td>
-</tr>
-<tr>
-<td style="text-align:center">不可变对象</td>
-<td style="text-align:center">mutableCopy</td>
-<td style="text-align:center">深拷贝，会生成新的对象，新对象为可变对象</td>
-</tr>
-<tr>
-<td style="text-align:center">可变对象</td>
-<td style="text-align:center">copy</td>
-<td style="text-align:center">浅拷贝，会生成新的对象，新对象为不可变对象</td>
-</tr>
-<tr>
-<td style="text-align:center">可变对象</td>
-<td style="text-align:center">mutableCopy</td>
-<td style="text-align:center">深拷贝，会生成新对象，新对象也是可变对象</td>
-</tr>
-</tbody>
-</table>
-<ol start="2">
-<li>NSString,NSArray,NSDictionary类簇<br>其实，这些基本类，是存在一个类簇的概念的，也就是说我们外部调用的看着是同一个接口，但是内部操作的时候，可能会调用其他的子类,<br><strong>这里罗列一下在研究的时候看到的具体子类:</strong><br>2.1 <code>NSString</code>，这里先声明两个变量，<code>NSString *str声明的不可变string</code>和<code>NSMutableString *strM声明的可变string</code></li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">状态</th>
-<th style="text-align:center">类名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">str</td>
-<td style="text-align:center">__NSCFConstantString</td>
-</tr>
-<tr>
-<td style="text-align:center">[str copy]</td>
-<td style="text-align:center">__NSCFConstantString</td>
-</tr>
-<tr>
-<td style="text-align:center">strM</td>
-<td style="text-align:center">__NSCFString</td>
-</tr>
-<tr>
-<td style="text-align:center">[strM copy]</td>
-<td style="text-align:center">NSTaggedPointerString</td>
-</tr>
-<tr>
-<td style="text-align:center">[strM mutableCopy]</td>
-<td style="text-align:center">__NSCFString</td>
-</tr>
-</tbody>
-</table>
-<p>2.2 <code>NSArray</code>,两个变量<code>NSArray *arr声明的不可变array</code>，和<code>NSMutableArray *arrM声明的可变array</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">状态</th>
-<th style="text-align:center">类名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">arr</td>
-<td style="text-align:center">__NSArrayI</td>
-</tr>
-<tr>
-<td style="text-align:center">[arr copy]</td>
-<td style="text-align:center">__NSArrayI</td>
-</tr>
-<tr>
-<td style="text-align:center">arrM</td>
-<td style="text-align:center">__NSArrayM</td>
-</tr>
-<tr>
-<td style="text-align:center">[arrM copy]</td>
-<td style="text-align:center"><strong>NSFrozenArrayM 或者 </strong>NSArrayI</td>
-</tr>
-<tr>
-<td style="text-align:center">[arrM mutableCopy]</td>
-<td style="text-align:center">__NSArrayM</td>
-</tr>
-</tbody>
-</table>
-<p>2.3 <code>NSDictionary</code>,两个变量<code>NSDictionary *dict声明的不可变dictionary</code>和<code>NSMutableDictionary *dictM声明的可变dictionary</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">状态</th>
-<th style="text-align:center">类名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">dict</td>
-<td style="text-align:center">__NSDictionaryI</td>
-</tr>
-<tr>
-<td style="text-align:center">[dict copy]</td>
-<td style="text-align:center">__NSDictionaryI</td>
-</tr>
-<tr>
-<td style="text-align:center">dictM</td>
-<td style="text-align:center">__NSDictionaryM</td>
-</tr>
-<tr>
-<td style="text-align:center">[dict copy]</td>
-<td style="text-align:center">__NSFrozenDictioinaryM</td>
-</tr>
-<tr>
-<td style="text-align:center">[dict mutableCopy]</td>
-<td style="text-align:center">__NSDictionaryM</td>
-</tr>
-</tbody>
-</table>
-<p><a href="https://github.com/WooNoah/iOSBasicClassType" target="_blank" rel="noopener">给个demo</a></p>
-
+<p>这里有一个上述操作打印的log图<br><img src="https://upload-images.jianshu.io/upload_images/1241385-7533db896cf0aabb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>可以看到中间很醒目的dealloc！此处就造成了我的疑惑</code><br>然后来看下containerViewController中是怎么实现的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//TestViewController.m</span><br><span class="line">- (void)configureWithData:(NSArray *)array&#123;</span><br><span class="line">if (!array.count) return;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NSLog(@&quot;~~~~~~~~~~~~~~~~~~~~%@ ---- %@ 前&quot;,NSStringFromClass([self class]), NSStringFromSelector(_cmd));</span><br><span class="line">[self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];</span><br><span class="line">NSLog(@&quot;~~~~~~~~~~~~~~~~~~~~%@ ---- %@ 后&quot;,NSStringFromClass([self class]), NSStringFromSelector(_cmd));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">SecViewController *listVC = [[SecViewController alloc] init];</span><br><span class="line">listVC.view.frame = self.view.bounds;</span><br><span class="line">listVC.parentContainerViewController = self;</span><br><span class="line">[self addChildViewController:listVC];</span><br><span class="line">//        [listVC didMoveToParentViewController:self];</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此方法在重新布局UI的时候调用。</p>
+<p>可以看到；其中有一句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];</span><br></pre></td></tr></table></figure></p>
+<p>此处记录一下：<br><a href="https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html" target="_blank" rel="noopener">苹果官方文档</a>中是这么描述的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">### Removing a Child View Controller</span><br><span class="line"></span><br><span class="line">To remove a child view controller from your content, remove the parent-child relationship between the view controllers by doing the following:</span><br><span class="line"></span><br><span class="line">1.  Call the child’s `[willMoveToParentViewController:](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621381-willmovetoparentviewcontroller)` method with the value `nil`.</span><br><span class="line"></span><br><span class="line">2.  Remove any constraints that you configured with the child’s root view.</span><br><span class="line"></span><br><span class="line">3.  Remove the child’s root view from your container’s view hierarchy.</span><br><span class="line"></span><br><span class="line">4.  Call the child’s `[removeFromParentViewController](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621425-removefromparentviewcontroller)` method to finalize the end of the parent-child relationship.</span><br><span class="line"></span><br><span class="line">Removing a child view controller permanently severs the relationship between parent and child. Remove a child view controller only when you no longer need to refer to it. For example, a navigation controller does not remove its current child view controllers when a new one is pushed onto the navigation stack. It removes them only when they are popped off the stack.</span><br></pre></td></tr></table></figure></p>
+<p>大致意思就是：<br><em>如果想要移除一个子控制器，需要自控制器调用<code>willMoveToParentViewController</code>, 移除子控制器view在父视图中的位置约束，从父容器的层级中移除子控制器，然后调用子控制器的<code>removeFromParentViewController</code>。</em><br><strong>此种操作，就会造成子控制器不再被引用，然后执行了<code>dealloc</code>方法</strong>！<br><em>所以，此处就会造成， 在进入一个页面的时候（默认是只在dealloc处打印了，没有在viewDidLoad处打印），先看到了子控制器的dealloc</em></p>
+<h3 id="附-Demo"><a href="#附-Demo" class="headerlink" title="附 Demo"></a>附 <a href="https://github.com/WooNoah/AddChildViewControllerD.git" target="_blank" rel="noopener">Demo</a></h3>
           
         
       
@@ -871,7 +1139,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/08/23/iOS字典转json字符串/">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/01/04/iOS-Runloop/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="D">
@@ -893,8 +1161,8 @@
             
               
                 
-                <a class="post-title-link" href="/woodi.github.io/2018/08/23/iOS字典转json字符串/" itemprop="url">
-                  iOS字典转json字符串
+                <a class="post-title-link" href="/woodi.github.io/2019/01/04/iOS-Runloop/" itemprop="url">
+                  iOS Runloop
                 </a>
               
             
@@ -910,126 +1178,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-23T10:54:38+08:00">
-                2018-08-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">NSData *contentJSONData = [NSJSONSerialization dataWithJSONObject:contentDic options:(NSJSONWritingPrettyPrinted) error:nil];</span><br><span class="line">NSString *contentJSONStr = [[NSString alloc] initWithData:contentJSONData encoding:NSUTF8StringEncoding];</span><br><span class="line">contentJSONStr = [XLUtil htmlEntityDecode:contentJSONStr];</span><br><span class="line"></span><br><span class="line">//将 &amp;lt 等类似的字符转化为HTML中的“&lt;”等</span><br><span class="line">+(NSString *)htmlEntityDecode:(NSString *)string</span><br><span class="line">&#123;</span><br><span class="line">string = [string stringByReplacingOccurrencesOfString:@&quot;&amp;quot;&quot; withString:@&quot;\&quot;&quot;];</span><br><span class="line">string = [string stringByReplacingOccurrencesOfString:@&quot;&amp;apos;&quot; withString:@&quot;&apos;&quot;];</span><br><span class="line">string = [string stringByReplacingOccurrencesOfString:@&quot;&amp;lt;&quot; withString:@&quot;&lt;&quot;];</span><br><span class="line">string = [string stringByReplacingOccurrencesOfString:@&quot;&amp;gt;&quot; withString:@&quot;&gt;&quot;];</span><br><span class="line">string = [string stringByReplacingOccurrencesOfString:@&quot;&amp;amp;&quot; withString:@&quot;&amp;&quot;];</span><br><span class="line">// Do this last so that, e.g. @&quot;&amp;amp;lt;&quot; goes to @&quot;&amp;lt;&quot; not @&quot;&lt;&quot;</span><br><span class="line">return string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/08/17/Xcode快捷键/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/08/17/Xcode快捷键/" itemprop="url">
-                  Xcode快捷键
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-17T12:00:39+08:00">
-                2018-08-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T14:46:01+08:00">
+                2019-01-04
               </time>
             
 
@@ -1066,414 +1216,15 @@
       
         
           <blockquote>
-<p>记录一下xcode的快捷键，以供开发的时候提高效率</p>
+<p>这里记录下iOS中Runloop相关的知识点，以备以后复习总结。</p>
 </blockquote>
-<h4 id="左上角区域"><a href="#左上角区域" class="headerlink" title="左上角区域"></a>左上角区域</h4><p>从左到右依次为：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-5b1f1c9de4bff5d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">解释</th>
-<th style="text-align:center">项目文件索引useful</th>
-<th style="text-align:center">版本控制管理</th>
-<th style="text-align:center">符号导航</th>
-<th style="text-align:center">全局搜索替换useful</th>
-<th style="text-align:center">问题索引</th>
-<th style="text-align:center">测试索引</th>
-<th style="text-align:center">调试板块useful</th>
-<th style="text-align:center">断点useful</th>
-<th style="text-align:center">报告</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">快捷键</td>
-<td style="text-align:center"><code>cmd+1</code></td>
-<td style="text-align:center"><code>cmd+2</code></td>
-<td style="text-align:center"><code>cmd+3</code></td>
-<td style="text-align:center"><code>cmd+4</code></td>
-<td style="text-align:center"><code>cmd+5</code></td>
-<td style="text-align:center"><code>cmd+6</code></td>
-<td style="text-align:center"><code>cmd+7</code></td>
-<td style="text-align:center"><code>cmd+8</code></td>
-<td style="text-align:center"><code>cmd+9</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>&lt;useful&gt;</code>标记的为常用的几项<br>另外：<br>搜索快捷键：<code>cmd+shift+f</code></p>
+<h4 id="先来说下Runloop相关的概念："><a href="#先来说下Runloop相关的概念：" class="headerlink" title="先来说下Runloop相关的概念："></a>先来说下Runloop相关的概念：</h4><p>Runloop，顾名思义就是一个线程的循环，在有事件发生的时候处理事件，没事件的时候休眠。</p>
+<p>不管iOS还是Android，都有一个Event-Loop系统(iOS-&gt;Runloop, Android-&gt;Looper)，以此来达到CPU的最优使用。因为本人是iOS开发，所以本篇文章以iOS的Runloop来研究举例。</p>
+<p>根据<a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW23" target="_blank" rel="noopener">苹果开发者文档中的解释</a>，iOS的Runloop对象，有两个类<a href="">NSRunloop</a>和<a href="">CFRunloop</a>。而NSRunloop则是在CFRunloop的基础上封装的更高一级的类。有一个词叫做<code>toll-free bridged</code>即<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">某些数据类型能够在Core Foundation和Foundation之间互换使用，</span><br><span class="line">可被互换使用的数据类型被称为Toll-Free Bridged类型。</span><br><span class="line">这意味着同一数据类型即可以作为Core Foundation函数的参数，</span><br><span class="line">也可作为接收者向其发送Objective-C消息。</span><br><span class="line">Core Foundation与Foundation之间交换使用数据类型的技术被称为Toll-Free Bridging 。</span><br></pre></td></tr></table></figure></p>
+<p>由此可见，两个类基本可以理解为同一个类型，但是CoreFoundation框架更加底层一点。<strong>且暴露出来的接口更多一些，更加方便我们操控runloop对象</strong><br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/woodi.github.io/2018/08/17/Xcode快捷键/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/07/18/iOS异步变同步/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2018/07/18/iOS异步变同步/" itemprop="url">
-                  iOS异步变同步
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T13:15:36+08:00">
-                2018-07-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">__block BOOL result = NO;</span><br><span class="line">//异步线程中操作是否完成</span><br><span class="line">__block BOOL inThreadOperationComplete = NO;</span><br><span class="line">[[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) &#123;</span><br><span class="line">if (settings.authorizationStatus == UNAuthorizationStatusDenied) &#123;</span><br><span class="line">result = NO;</span><br><span class="line">&#125;else if (settings.authorizationStatus == UNAuthorizationStatusNotDetermined) &#123;</span><br><span class="line">result = NO;</span><br><span class="line">&#125;else if (settings.authorizationStatus == UNAuthorizationStatusAuthorized) &#123;</span><br><span class="line">result = YES;</span><br><span class="line">&#125;else &#123;</span><br><span class="line">result = NO;</span><br><span class="line">&#125;</span><br><span class="line">inThreadOperationComplete = YES;</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">while (!inThreadOperationComplete) &#123;</span><br><span class="line">[NSThread sleepForTimeInterval:0];</span><br><span class="line">&#125;</span><br><span class="line">return result;</span><br></pre></td></tr></table></figure>
-<p>另外一种写法：<strong><em>使用信号量</em></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (void)testDispatchSemaphore &#123;</span><br><span class="line">NSLog(@&quot;--------------------------begin-----------------&quot;);</span><br><span class="line">dispatch_semaphore_t sema = dispatch_semaphore_create(0);</span><br><span class="line">dispatch_queue_t que = dispatch_get_global_queue(0, 0);</span><br><span class="line"></span><br><span class="line">dispatch_async(que, ^&#123;</span><br><span class="line">NSLog(@&quot;--------------------------async begin-----------------&quot;);</span><br><span class="line">[NSThread sleepForTimeInterval:3];</span><br><span class="line">dispatch_semaphore_signal(sema);</span><br><span class="line">NSLog(@&quot;--------------------------async complete-----------------&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);</span><br><span class="line">NSLog(@&quot;--------------------------complete-----------------&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">--------------------------begin-----------------</span><br><span class="line">--------------------------async begin-----------------</span><br><span class="line">--------------------------async complete-----------------</span><br><span class="line">--------------------------complete-----------------</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2017/12/15/Emmet快速编写html/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2017/12/15/Emmet快速编写html/" itemprop="url">
-                  Emmet快速编写html
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-15T12:58:30+08:00">
-                2017-12-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="前面我们通过《超高速前端开发工具——Emmet》简单介绍了Emmet以及在编辑器中的安装，今天我们再来看用Emmet超高速的编写HTML代码。"><a href="#前面我们通过《超高速前端开发工具——Emmet》简单介绍了Emmet以及在编辑器中的安装，今天我们再来看用Emmet超高速的编写HTML代码。" class="headerlink" title="前面我们通过《超高速前端开发工具——Emmet》简单介绍了Emmet以及在编辑器中的安装，今天我们再来看用Emmet超高速的编写HTML代码。"></a>前面我们通过《超高速前端开发工具——Emmet》简单介绍了Emmet以及在编辑器中的安装，今天我们再来看用Emmet超高速的编写HTML代码。</h4><p>缩写是Emmet工具的核心，这些特殊的表达式通过Emmet解析并转化为结构化的代码块，而语法用CSS选择器，HTML标签和一些Emmet特定的代码生成，所以对于任何一个前端开发人员都可以很容易地掌握和使用。<br>你可以使用标签名称为div、p等生成HTML标签，Emmet没有一组预定义可用的标记名称，您可以编写任何单词并把它转化为一个标签，例如：</p>
-<p><code>div → &lt;div&gt;&lt;/div&gt;, footer → &lt;footer&gt;&lt;/footer&gt;</code></p>
-<h4 id="Emmet代码虽然没有特定的标签，但编写时还是有一定的规则与技巧，下面我们就看一看："><a href="#Emmet代码虽然没有特定的标签，但编写时还是有一定的规则与技巧，下面我们就看一看：" class="headerlink" title="Emmet代码虽然没有特定的标签，但编写时还是有一定的规则与技巧，下面我们就看一看："></a>Emmet代码虽然没有特定的标签，但编写时还是有一定的规则与技巧，下面我们就看一看：</h4><p>生成HTML文件的初始结构：<br>之前我们会用软件直接新建一个HTML文档，初始结构就生成了，但有些编辑器是不带这个功能的，手动输入是件痛苦的事，有了Emmet一切变得如此简单。生成HTML4（过渡）结构初始文档只需输入“html:4t”，HTML4（严格）结构初始文档只需输入“html:4s”，将生成标准的HTML4（严格）标准结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;  </span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;  </span><br><span class="line">&lt;head&gt;  </span><br><span class="line">    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;  </span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;  </span><br><span class="line">&lt;/head&gt;  </span><br><span class="line">&lt;body&gt;  </span><br><span class="line"></span><br><span class="line">&lt;/body&gt;  </span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/woodi.github.io/2017/12/15/Emmet快速编写html/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2017/10/09/iOS接入微信支付问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="D">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Woooodi's Private Zone">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/woodi.github.io/2017/10/09/iOS接入微信支付问题/" itemprop="url">
-                  iOS接入微信支付问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T14:00:01+08:00">
-                2017-10-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p> 首先记录下接入时间： 2017年09月13日</p>
-</blockquote>
-<h4 id="过程："><a href="#过程：" class="headerlink" title="过程："></a>过程：</h4><p>由于项目中要接入微信支付，所以我就先打开了<a href="https://pay.weixin.qq.com/wiki/doc/api/index.html" target="_blank" rel="noopener">微信支付开发文档</a>, 毕竟知己知彼，百战不殆啊。大概熟悉了一下流程之后，我们就可以开始<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=11_1" target="_blank" rel="noopener">下载demo</a>了 <strong>我这里接入的是APP支付，只有iOS和Android两个版本的，其他的H5支付和公众号支付，均是由后台接入！</strong></p>
-<h4 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h4><h5 id="1-我下载了iOSdemo之后-使用xcode要打开项目，发现报错，12个！"><a href="#1-我下载了iOSdemo之后-使用xcode要打开项目，发现报错，12个！" class="headerlink" title="1.  我下载了iOSdemo之后,使用xcode要打开项目，发现报错，12个！"></a>1.  我下载了iOSdemo之后,使用xcode要打开项目，发现报错，12个！</h5><p><img src="http://upload-images.jianshu.io/upload_images/1241385-5acc5d93af6ec5af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="12error"></p>
-<p>解决方法：<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/woodi.github.io/2017/10/09/iOS接入微信支付问题/#more" rel="contents">
+            <a class="btn" href="/woodi.github.io/2019/01/04/iOS-Runloop/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1516,7 +1267,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2017/09/30/换电脑后怎么继续维护以前hexo-Github创建的个人网站/">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/12/10/iOS不同手机显示问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="D">
@@ -1538,8 +1289,8 @@
             
               
                 
-                <a class="post-title-link" href="/woodi.github.io/2017/09/30/换电脑后怎么继续维护以前hexo-Github创建的个人网站/" itemprop="url">
-                  换电脑后怎么继续维护以前hexo+Github创建的个人网站
+                <a class="post-title-link" href="/woodi.github.io/2018/12/10/iOS不同手机显示问题/" itemprop="url">
+                  iOS不同手机显示问题
                 </a>
               
             
@@ -1555,8 +1306,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-30T15:28:02+08:00">
-                2017-09-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-10T15:58:54+08:00">
+                2018-12-10
               </time>
             
 
@@ -1593,56 +1344,17 @@
       
         
           
-            <hr>
-<h4 id="2018年11月25日补充："><a href="#2018年11月25日补充：" class="headerlink" title="2018年11月25日补充："></a>2018年11月25日补充：</h4><p>今天电脑升级了系统，然后hexo不知道怎么回事没有了。<br>等于又在自己电脑上重新安装了一遍hexo</p>
-<h5 id="先说一下途中遇到的一些问题："><a href="#先说一下途中遇到的一些问题：" class="headerlink" title="先说一下途中遇到的一些问题："></a>先说一下途中遇到的一些问题：</h5><blockquote>
-<p>在安装完hexo之后，我从github上拉取了以前的hexoBaseConfig文件夹</p>
-</blockquote>
-<p>本来以为直接把文章md源文件拖进来，然后主题相关文件夹拖到theme下即可。但是，在执行到<code>hexo s</code>之后，点击打开本地调试网页，发现报错说<code>找不到文件夹路径</code>，</p>
-<ol>
-<li>我先考虑可能是端口冲突了<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof -i tcp:4000</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>查询了一波。。发现只有node占用了这个端口。而且把本地虚拟调试网页关闭了之后，该指令并不能找到什么了。<strong>排除此猜想</strong></p>
-<ol start="2">
-<li>那只能是hexo路径的问题了<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"># Hexo Configuration</span><br><span class="line">## Docs: https://hexo.io/docs/configuration.html</span><br><span class="line">## Source: https://github.com/hexojs/hexo/</span><br><span class="line"></span><br><span class="line"># Site</span><br><span class="line">title: Hexo #网站标题</span><br><span class="line">subtitle:   #网站副标题</span><br><span class="line">description:  #网站描述</span><br><span class="line">author: John Doe  #作者</span><br><span class="line">language:    #语言</span><br><span class="line">timezone:    #网站时区。Hexo 默认使用您电脑的时区。时区列表。比如说：America/New_York, Japan, 和 UTC 。</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: http://yoursite.com   #你的站点Url</span><br><span class="line">root: /                       #站点的根目录</span><br><span class="line">permalink: :year/:month/:day/:title/   #文章的 永久链接 格式   </span><br><span class="line">permalink_defaults:    #永久链接中各部分的默认值</span><br><span class="line"></span><br><span class="line"># Directory   </span><br><span class="line">source_dir: source   #资源文件夹，这个文件夹用来存放内容</span><br><span class="line">public_dir: public     #公共文件夹，这个文件夹用于存放生成的站点文件。</span><br><span class="line">tag_dir: tags         # 标签文件夹     </span><br><span class="line">archive_dir: archives    #归档文件夹</span><br><span class="line">category_dir: categories      #分类文件夹</span><br><span class="line">code_dir: downloads/code     #Include code 文件夹</span><br><span class="line">i18n_dir: :lang                #国际化（i18n）文件夹</span><br><span class="line">skip_render:                #跳过指定文件的渲染，您可使用 glob 表达式来匹配路径。    </span><br><span class="line"></span><br><span class="line"># Writing</span><br><span class="line">new_post_name: :title.md # 新文章的文件名称</span><br><span class="line">default_layout: post     #预设布局</span><br><span class="line">titlecase: false # 把标题转换为 title case</span><br><span class="line">external_link: true # 在新标签中打开链接</span><br><span class="line">filename_case: 0     #把文件名称转换为 (1) 小写或 (2) 大写</span><br><span class="line">render_drafts: false  #是否显示草稿</span><br><span class="line">post_asset_folder: false  #是否启动 Asset 文件夹</span><br><span class="line">relative_link: false      #把链接改为与根目录的相对位址    </span><br><span class="line">future: true                #显示未来的文章</span><br><span class="line">highlight:                    #内容中代码块的设置    </span><br><span class="line">  enable: true</span><br><span class="line">  line_number: true</span><br><span class="line">  auto_detect: false</span><br><span class="line">  tab_replace:</span><br><span class="line"></span><br><span class="line"># Category &amp; Tag</span><br><span class="line">default_category: uncategorized</span><br><span class="line">category_map:          #分类别名</span><br><span class="line">tag_map:            #标签别名</span><br><span class="line"></span><br><span class="line"># Date / Time format</span><br><span class="line">## Hexo uses Moment.js to parse and display date</span><br><span class="line">## You can customize the date format as defined in</span><br><span class="line">## http://momentjs.com/docs/#/displaying/format/</span><br><span class="line">date_format: YYYY-MM-DD         #日期格式</span><br><span class="line">time_format: HH:mm:ss        #时间格式    </span><br><span class="line"></span><br><span class="line"># Pagination</span><br><span class="line">## Set per_page to 0 to disable pagination</span><br><span class="line">per_page: 10    #分页数量</span><br><span class="line">pagination_dir: page  </span><br><span class="line"></span><br><span class="line"># Extensions</span><br><span class="line">## Plugins: https://hexo.io/plugins/</span><br><span class="line">## Themes: https://hexo.io/themes/</span><br><span class="line">theme: landscape   #主题名称</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">#  部署部分的设置</span><br><span class="line">deploy:     </span><br><span class="line">  type:  #类型，常用的git</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>但是，<strong>在查看了Directory之后，发现也并没有什么问题!!!</strong><br>然后我尝试着改了<code>URL</code>相关的配置，</p>
-<blockquote>
-<p>网站存放在子目录<br>如果您的网站存放在子文件夹中，例如 <a href="">http://yoursite.com/subDirectory</a>，则请将您的 url 设为 <a href="">http://yoursite.com/subDirectory</a> 并把 root 设为 /subDirectory/</p>
-</blockquote>
-<p>此处root默认值为/，也就是意味着是跟_config.yml文件同一层级的。也就是说，如果我们博客是放在此层级中的某一个子文件夹中的时候，我们需要把子文件夹路径写上去！</p>
-<p>然后，填写完<code>root</code>之后，执行<code>hexo server</code>命令之后，会显示配置过的root路径上去，这里以<code>subBlogPath</code>字段为例，此时会显示为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO  Hexo is running at http://localhost:4000/subBlogPath. Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>在经过了一番搜索调试之后，发现，修改url也并没有什么用处。。<br>我也就彻底理解不了了，我只能理解为以前上传的HexoBaseConfig文件中存在一部分配置问题了。。这里如果有大佬知道问题所在，请不吝赐教！！先说声谢谢了！</p>
-</blockquote>
-<h4 id="虽然不明白，但是还是有解决方法的不是么？"><a href="#虽然不明白，但是还是有解决方法的不是么？" class="headerlink" title="虽然不明白，但是还是有解决方法的不是么？"></a><em>虽然不明白，但是还是有解决方法的不是么？</em></h4><p>这也就是更新此文章的意义所在！<br>正因为以前的配置可能跟现在的存在不同，或者冲突。然后导致了pull下来之后无法使用，那我们换个思路。</p>
-<ol>
-<li>我们只要安装好了hexo, 那可以很简单的通过执行<code>hexo init</code>指令来重新配置相关的环境。。</li>
-<li>配置完成之后，把<code>_config.yml文件</code>、<code>文章md源文件</code>、<code>主题文件</code>拷贝进去，那不就是完成了迁移了嘛？<br><strong>所以，只要备份了这些文件即可，别的hexo的相关配置，就交给hexo自己去重新配置吧！</strong></li>
-</ol>
-<p>如此这般，这般如此之后，配备了hexo的Blog文件夹又重新出现在了我的桌面上。。</p>
+            <p>今天遇到一个问题：设置一个view的高度，在不同手机下显示不一样：直接贴代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">- (UIView *)line1 &#123;</span><br><span class="line">if (!_line1) &#123;</span><br><span class="line">_line1 = [[UIView alloc]init];</span><br><span class="line">&#125;</span><br><span class="line">return _line1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (UIView *)line3 &#123;</span><br><span class="line">if (!_line3) &#123;</span><br><span class="line">_line3 = [[UIView alloc]init];</span><br><span class="line">&#125;</span><br><span class="line">return _line3;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-(void)setLines&#123;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">----------line1--------------</span><br><span class="line">|line2</span><br><span class="line">----------line3--------------</span><br><span class="line">**/</span><br><span class="line"></span><br><span class="line">[self addSubview:self.line1];</span><br><span class="line">[self addSubview:self.line3];</span><br><span class="line"></span><br><span class="line">[self.line1 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.top.right.equalTo(self);</span><br><span class="line">make.height.equalTo(@(0.5));</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">[self.line3 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.right.equalTo(self);</span><br><span class="line">make.bottom.equalTo(self).offset(-0.25);</span><br><span class="line">make.height.equalTo(self.line1);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码很简单，一目了然！<br>两条线按理说应该是一样的高度的。但是！！！<br>下面来看下结果！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//设置为0.33 6s：上下0.5px  max：上下都为0.33</span><br><span class="line">//设置为0.5  6s：上下都为0.5px, max：上0.67，下0.33</span><br><span class="line">//设置为0.44  6s：上下0.5px max：上下0.33</span><br><span class="line">//设置为0.66  6s：上0.5px 下1px max：上下都为0.66px</span><br><span class="line">//设置为0.66  6s：上下都为1px max：上下都为1px</span><br></pre></td></tr></table></figure></p>
+<p>我猜这个是跟屏幕的分辨率有关系，待以后研究下再来补充。<br>这里取折中方案，<strong><em>先设置为0.33</em></strong></p>
 <hr>
-<h4 id="2017年10月09日补充"><a href="#2017年10月09日补充" class="headerlink" title="2017年10月09日补充"></a>2017年10月09日补充</h4><p>由于十一国庆节前，只是有一个上面所说的想法，现在节后回来，总得按照这个实践一下。</p>
-<p>  其实上面所说的博客内容，还是<code>hexo生成的html文件</code>，如果以前的文件没有保存的话，还是没有任何作用的，因此，重点就在：<strong><em>保存博客文章的原始文件（也就是我们写博客的时候创建的markdown文件）</em></strong>，有了这个文件之后，我们就可以使用<code>hexo g</code>命令，重新生成html文件了。<br>今天，我试了2种方案:</p>
-<ol>
-<li>统一把整个博客文件夹（包含配置文件，.md文件，以及hexo处理后生成的各种文件夹）备份到GitHub上。但是，试过之后，效果是可以达到的，我发现了一些比较繁琐的一些问题： <strong>hexo自己生成的文件夹，由于hexo clean, hexo g等命令的作用下，会有重新生成或者删除的操作，在git管理下，需要繁琐的git checkout 或者git add。</strong> 所以我又萌生了另一种想法，也就是想法2</li>
-<li>其实这个方法就是退而求其次： 我们把hexo的配置文件备份到一个远程仓库，然后另外备份文章原始文件夹。<br>在更换电脑之后使用的时候，我们只需要，<code>git clone &lt;#hexo配置文件#&gt;</code>比如到桌面<em>blog文件夹</em>, 然后，删除掉.git隐藏文件（因为这个配置文件是只需要配置一次的，换电脑的时候，也是直接获取一次就可以。不需要重复配置，当然，如果你想要修改主题或者别的配置文件，那么也可以留着。）<br>然后<code>git clone &lt;#文章原始md文件#&gt;</code>到<code>blog-&gt;source-&gt;_posts文件夹</code>下， <strong><em>或者直接clone到source文件夹下，然后修改名字为_posts</em></strong>，这么以来，以后再提交的时候，就只需要使用hexo提交文章，然后<code>git add &lt;#新添加的文章md文件#&gt;</code>到远程仓库了，免去了繁琐的修改hexo所生成的文件的操作。</li>
-</ol>
-<p>如果在hexo s调试的时候，提示： no layout: index.html。<br>查看主题文件是否存在：<br>如果不存在，<br>cd到Blog根目录，<br><code>git clone https://github.com/iissnan/hexo-theme-next themes/next</code></p>
-<ol start="3">
-<li>经过几个小时的实践，方法二也存在一些问题，比如同步备份基础配置的时候，theme主题下的next文件夹不能同步到GitHub上，<br>多次配置修改hexo参数之后，出现GitHub404错误，所以也可以<strong><em>仅仅备份文章源文件，然后每次更换的时候，重新装载npm安装hexo，然后下载文章源文件到source/_posts文件夹下</em></strong></li>
-</ol>
-<hr>
-<h4 id="以下是原文章："><a href="#以下是原文章：" class="headerlink" title="以下是原文章："></a>以下是原文章：</h4><h4 id="首先"><a href="#首先" class="headerlink" title="首先"></a>首先</h4><p><strong>1. hexo的相关配置文件都是本地存放的。</strong><br><strong>2. 同步到GitHub上的文件都是<code>hexo g</code>之后生成的（博客根目录下的）public文件夹中的内容。</strong></p>
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><h5 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h5><p>如果以前是使用hexo搭建的博客，以前电脑中创建过hexo根目录，<br>然后中途更换过电脑，以前电脑上的配置文件 在<code>现电脑上都没有了</code></p>
-<h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h5><p><strong><em>如果想要重新在Github上创建repository，然后继续管理博客</em></strong><br>那么请移步我以前写的<a href="http://www.jianshu.com/p/e4ad163dd963" target="_blank" rel="noopener">hexo+github搭建博客心历路程</a><br><strong><em>如果想要继续维护以前的博客，那么：</em></strong></p>
-<ol>
-<li>首先，我们要把以前github上博客的仓库clone下来，通过实践，我们知道，这个clone下来的文件夹就是以前本地博客根目录下的<code>public</code>文件夹</li>
-<li>我们可以自己本地安装hexo之后，自己创建一个public文件夹，然后把clone下来的文件<strong><em>全部放进去</em></strong></li>
-<li>为了以后不再这么麻烦，我们可以直接<strong>在GitHub上备份一下我们的hexo配置文件</strong>，以后再遇到这种情况的时候，就可以直接<code>clone博客配置文件到本地， clone博客内容文件夹到本地，然后把内容文件夹该名称public放在配置文件夹根目录即可</code></li>
-</ol>
+<h3 id="2019年01月02日-更新"><a href="#2019年01月02日-更新" class="headerlink" title="2019年01月02日 更新"></a>2019年01月02日 更新</h3><blockquote>
+<p>根据参考文章中的知识点总结如下：</p>
+</blockquote>
+<h5 id="知识点1、iPhone中屏幕分辨率"><a href="#知识点1、iPhone中屏幕分辨率" class="headerlink" title="知识点1、iPhone中屏幕分辨率"></a>知识点1、iPhone中屏幕分辨率</h5><p>目前分为三种，@1x(iPhone 4之前的设备), @2x(iPhone 4 ~ iPhone XR中非Plus设备), @3x(iPhone X, XS XS Max, 和 Plus设备).<br>那么，可以得出结论，不同设备上，显示宽度为1个点占用的像素是不同的<br>（@1x上为1px，@2x上为2px, @3x上为3px）<br>也就是说，1px的宽度在不同scale的设备上是不同的（@1x的宽度为1个点，@2x的为0.5个点，@3x的为0.33个点）<br>因此就可以根据设备来分别设置1px的宽度<br><code>#define SINGLE_LINE_WIDTH    (1 / [UIScreen mainScreen].scale)</code></p>
+<h5 id="知识点2、iPhone的渲染机制"><a href="#知识点2、iPhone的渲染机制" class="headerlink" title="知识点2、iPhone的渲染机制"></a>知识点2、iPhone的渲染机制</h5><p>为了获得良好的视觉效果，绘图系统通常都会采用一个叫“antialiasing(反锯齿)”的技术，iOS也不例外,<br>显示屏幕有很多小的显示单元组成，可以接单的理解为一个单元就代表一个像素。如果要画一条黑线，条线刚好落在了一列或者一行显示显示单元之内，将会渲染出标准的一个像素的黑线。<br><code>但如果线落在了两个行或列的中间时，那么会得到一条“失真”的线，其实是两个像素宽的灰线。</code>如下图所示:<br><img src="https://upload-images.jianshu.io/upload_images/1241385-37a3749a6c6e3375.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>官方解释如上:<br>规定：奇数像素宽度的线在渲染的时候将会表现为柔和的宽度扩展到向上的整数宽度的线，除非你手动的调整线的位置，使线刚好落在一行或列的显示单元内。如何对齐呢？<strong>我们可以给渲染位置做下偏移！</strong><br>如果当前的线是“失真”的情况：使之偏移宽度的一半，即可渲染在正确的标准位置（通俗来讲就是没有渲染在两个点中间）<br>同样的提供一个宏来做计算偏移量<br><code>#define SINGLE_LINE_ADJUST_OFFSET   ((1 / [UIScreen mainScreen].scale) / 2)</code><br>这么一来，就可以绘制标准的线了</p>
+<p><strong><em>当然，我们实际开发中，判断当前位置是否是正好跨在两个点之间渲染的，是一个比较难的问题，我们只需要保证我们需要的线是准确的1px就可以了（即只使用上面的宏即可）</em></strong></p>
+<h4 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h4><p><a href="https://blog.csdn.net/hherima/article/details/46679157" target="_blank" rel="noopener">https://blog.csdn.net/hherima/article/details/46679157</a></p>
 
           
         
@@ -1674,11 +1386,269 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/30/打造多彩的Xcode-console系统/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2018/11/30/打造多彩的Xcode-console系统/" itemprop="url">
+                  打造多彩的Xcode console系统
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T17:02:59+08:00">
+                2018-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一、 下载日志、log分级模块</p>
+<p>1.安装<strong><a href="https://github.com/CocoaLumberjack/CocoaLumberjack" target="_blank" rel="noopener">CocoaLumberjack</a></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;CocoaLumberjack&apos;</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li>做出相关配置<strong><a href="https://raw.githubusercontent.com/CocoaLumberjack/CocoaLumberjack/master/Documentation/GettingStarted.md" target="_blank" rel="noopener">Get started using Lumberjack</a></strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//PrefixHeader.pch文件中</span><br><span class="line">#define LOG_LEVEL_DEF ddLogLevel</span><br><span class="line">#import &lt;CocoaLumberjack/CocoaLumberjack.h&gt;</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">static DDLogLevel __unused ddLogLevel = DDLogLevelAll;</span><br><span class="line">#else</span><br><span class="line">static DDLogLevel __unused ddLogLevel = DDLogLevelOff;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">//AppDelegate.m中 didFinishLaunchingWithOptions</span><br><span class="line">[DDLog addLogger:[DDOSLogger sharedInstance]]; // Uses os_log</span><br><span class="line"></span><br><span class="line">//    日志写入</span><br><span class="line">//    DDFileLogger *fileLogger = [[DDFileLogger alloc] init]; // File Logger</span><br><span class="line">//    fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling</span><br><span class="line">//    fileLogger.logFileManager.maximumNumberOfLogFiles = 7;</span><br><span class="line">//    [DDLog addLogger:fileLogger];</span><br><span class="line">[[DDTTYLogger sharedInstance] setColorsEnabled:YES];</span><br><span class="line"></span><br><span class="line">DDLogVerbose(@&quot;Verbose&quot;);</span><br><span class="line">DDLogDebug(@&quot;Debug&quot;);</span><br><span class="line">DDLogInfo(@&quot;Info&quot;);</span><br><span class="line">DDLogWarn(@&quot;Warn&quot;);</span><br><span class="line">DDLogError(@&quot;Error&quot;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>二、下载xcode插件，让xcode支持console栏的多颜色<br><strong><a href="https://github.com/robbiehanson/XcodeColors" target="_blank" rel="noopener">XcodeColors</a></strong></p>
+<p>但是Xcode8之后苹果禁止了使用自定义插件。所以目前导入之后，console栏无法显示出彩色。</p>
+<p>这里找到一个解决方法（没有尝试过）先记录下：<br><a href="https://blog.csdn.net/kcetry/article/details/79339712" target="_blank" rel="noopener">https://blog.csdn.net/kcetry/article/details/79339712</a></p>
+<p>首先我们知道，从Xcode8开始，Xcode屏蔽了第三方插件，导致插件无法使用。<br>解决方法是使用证书对Xcode进行签名(Github上<a href="https://github.com/XVimProject/XVim2" target="_blank" rel="noopener">XVim2</a>的指引)，再安装<a href="https://github.com/robbiehanson/XcodeColors" target="_blank" rel="noopener">XcodeColors</a>。<br>需要注意的是<a href="https://github.com/XVimProject/XVim2/blob/master/SIGNING_Xcode.md" target="_blank" rel="noopener">第二步</a><br><img src="https://upload-images.jianshu.io/upload_images/1241385-e50931e2fc7715f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>假如你已经有开发者证书，并且用第二个证书签名，那么第三步的命令就是<br><code>sudo codesign -f -s WV87GNFZXS /Applications/Xcode.app</code><br>安装XcodeColors时，别忘了执行<br><code>./update_compat.sh</code><br>最后还要添加环境变量<br>Product-&gt;Scheme-&gt;Edit Scheme-&gt;Run-&gt;Environment Variables<br><img src="https://upload-images.jianshu.io/upload_images/1241385-f6725206bbad19c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2018/11/27/GCD的一些使用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/woodi.github.io/2018/11/27/GCD的一些使用/" itemprop="url">
+                  GCD的一些使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-27T17:48:32+08:00">
+                2018-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>本片文字意在记录gcd的一些用法</p>
+</blockquote>
+<h4 id="1-dispatch-semaphore"><a href="#1-dispatch-semaphore" class="headerlink" title="1. dispatch_semaphore"></a>1. dispatch_semaphore</h4><blockquote>
+<p>相关方法：<br>dispatch_semaphore_create()   //创建信号量，设置能同时执行的最大线程数<br>dispatch_semaphore_wait()      //信号量-1<br>dispatch_semaphore_signal()  //信号量+1</p>
+</blockquote>
+<blockquote>
+<p>dispatch_semaphore_wait方法：<br>Decrement the counting semaphore. If the resulting value is less than zero, this function waits for a signal to occur before returning.<br>信号量减1，如果结果小于0，会阻塞当前线程等待新信号的出现。<br>如果为DISPATCH_TIME_FOREVER，则会一直等待<br>dispatch_semaphore_signal方法：<br>Increment the counting semaphore. If the previous value was less than zero, this function wakes a thread currently waiting in <a href="">dispatch_semaphore_wait</a><br>信号量加1，如果之前的信号量小于0，则会唤醒dispatch_semaphore_wait方法中等待着的线程</p>
+</blockquote>
+<p>使用的方法：<strong>先降后升</strong><br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/woodi.github.io/2018/11/27/GCD的一些使用/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/woodi.github.io/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/woodi.github.io/">1</a><span class="page-number current">2</span><a class="page-number" href="/woodi.github.io/page/3/">3</a><a class="page-number" href="/woodi.github.io/page/4/">4</a><a class="extend next" rel="next" href="/woodi.github.io/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/woodi.github.io/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/woodi.github.io/">1</a><span class="page-number current">2</span><a class="page-number" href="/woodi.github.io/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/woodi.github.io/page/6/">6</a><a class="extend next" rel="next" href="/woodi.github.io/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1721,7 +1691,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/woodi.github.io/archives">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1776,7 +1746,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

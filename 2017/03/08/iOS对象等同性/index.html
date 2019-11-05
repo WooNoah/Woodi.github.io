@@ -94,10 +94,12 @@
 <meta property="og:site_name" content="Woooodi&#39;s Private Zone">
 <meta property="og:description" content="前言最近看了一道题NSString *s1 = @&amp;quot;Hello world&amp;quot;; NSString *s2 = @&amp;quot;Hello world&amp;quot;;请问 s1 == s2的返回值是YES还是NO？,相信很多童鞋的答案都是NO，可能大家认为s1、s2两个对象的地址不同，但是事实真的如此么？ 为此特意写了一个demo来印证下：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-25T05:21:00.294Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-0d0638d2c13f1a32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-11-05T15:47:31.052Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS对象等同性">
 <meta name="twitter:description" content="前言最近看了一道题NSString *s1 = @&amp;quot;Hello world&amp;quot;; NSString *s2 = @&amp;quot;Hello world&amp;quot;;请问 s1 == s2的返回值是YES还是NO？,相信很多童鞋的答案都是NO，可能大家认为s1、s2两个对象的地址不同，但是事实真的如此么？ 为此特意写了一个demo来印证下：">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-0d0638d2c13f1a32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -359,6 +361,25 @@
 <p>而<code>==</code>则会比较两个对象的地址和值是否都相等</p>
 <p>毕竟判断两个对象是否相等的条件是：</p>
 <p><code>当且仅当其“指针值（pointer value）”完全相等时，这两个对象才相等</code>.</p>
+<hr>
+<h4 id="2018年11月26日延伸："><a href="#2018年11月26日延伸：" class="headerlink" title="2018年11月26日延伸："></a>2018年11月26日延伸：</h4><h4 id="一、NSString对象copy和strong修饰词的区别"><a href="#一、NSString对象copy和strong修饰词的区别" class="headerlink" title="一、NSString对象copy和strong修饰词的区别"></a>一、NSString对象<code>copy</code>和<code>strong</code>修饰词的区别</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//先声明两个变量</span><br><span class="line">@property (nonatomic, strong) NSString *strongStr;</span><br><span class="line">@property (nonatomic, copy) NSString *cpyStr;</span><br></pre></td></tr></table></figure>
+<p>然后这里分两种情况</p>
+<ol>
+<li>不可变str的情况<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (void)inmutableTest &#123;</span><br><span class="line">NSString *string = [NSString stringWithFormat:@&quot;abc&quot;];</span><br><span class="line">self.strongStr = string;</span><br><span class="line">self.cpyStr = string;</span><br><span class="line">NSLog(@&quot;string:%@, 对象地址:%p, 指针地址：%p&quot;, string,string,&amp;string);</span><br><span class="line">NSLog(@&quot;strongStr:%@, 对象地址:%p, 指针地址：%p,&quot;, self.strongStr,_strongStr,&amp;_strongStr);</span><br><span class="line">NSLog(@&quot;cpyStr:%@, 对象地址:%p, 指针地址：%p&quot;, self.cpyStr,_cpyStr,&amp;_cpyStr);</span><br><span class="line"></span><br><span class="line">//改变string的值</span><br><span class="line">string = @&quot;123&quot;;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;string:%@, 对象地址:%p, 指针地址：%p&quot;, string,string,&amp;string);</span><br><span class="line">NSLog(@&quot;strongStr:%@, 对象地址:%p, 指针地址：%p,&quot;, self.strongStr,_strongStr,&amp;_strongStr);</span><br><span class="line">NSLog(@&quot;cpyStr:%@, 对象地址:%p, 指针地址：%p&quot;, self.cpyStr,_cpyStr,&amp;_cpyStr);</span><br><span class="line">&#125;</span><br><span class="line">//结果：</span><br><span class="line">//string:abc, 对象地址:0xe9f9b161ce4bbd88, 指针地址：0x7ffee1306e48</span><br><span class="line">//strongStr:abc, 对象地址:0xe9f9b161ce4bbd88, 指针地址：0x7fcc7b42a660,</span><br><span class="line">//cpyStr:abc, 对象地址:0xe9f9b161ce4bbd88, 指针地址：0x7fcc7b42a668</span><br><span class="line">//string:123, 对象地址:0x10e8fa1a0, 指针地址：0x7ffee1306e48</span><br><span class="line">//strongStr:abc, 对象地址:0xe9f9b161ce4bbd88, 指针地址：0x7fcc7b42a660,</span><br><span class="line">//cpyStr:abc, 对象地址:0xe9f9b161ce4bbd88, 指针地址：0x7fcc7b42a668</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>可以看到，在string为NSString(不可变)的情况下，修改string的值意味着<strong><em>改变指针的指向</em></strong><br>此时，<strong><em><code>copy</code>和<code>strong</code>修饰的新字符串值都不会变！因为他们的指针指向的地址都还是以前的地址！！</em></strong></p>
+<ol start="2">
+<li>可变Str的情况<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (void)mutableTest &#123;</span><br><span class="line">NSMutableString *string= [[NSMutableString alloc]initWithString:@&quot;abc&quot;];</span><br><span class="line">self.strongStr = string;</span><br><span class="line">self.cpyStr = string;</span><br><span class="line">NSLog(@&quot;string:%@, 对象地址:%p, 指针地址：%p&quot;, string,string,&amp;string);</span><br><span class="line">NSLog(@&quot;strongStr:%@, 对象地址:%p, 指针地址：%p,&quot;, self.strongStr,_strongStr,&amp;_strongStr);</span><br><span class="line">NSLog(@&quot;cpyStr:%@, 对象地址:%p, 指针地址：%p&quot;, self.cpyStr,_cpyStr,&amp;_cpyStr);</span><br><span class="line"></span><br><span class="line">//改变string的值</span><br><span class="line">[string appendFormat:@&quot;%@&quot;,@&quot;123&quot;];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;string:%@, 对象地址:%p, 指针地址：%p&quot;, string,string,&amp;string);</span><br><span class="line">NSLog(@&quot;strongStr:%@, 对象地址:%p, 指针地址：%p,&quot;, self.strongStr,_strongStr,&amp;_strongStr);</span><br><span class="line">NSLog(@&quot;cpyStr:%@, 对象地址:%p, 指针地址：%p&quot;, self.cpyStr,_cpyStr,&amp;_cpyStr);</span><br><span class="line">&#125;</span><br><span class="line">//结果：</span><br><span class="line">//string:abc, 对象地址:0x60000094ffc0, 指针地址：0x7ffee2898758</span><br><span class="line">//strongStr:abc, 对象地址:0x60000094ffc0, 指针地址：0x7f998c70d520,</span><br><span class="line">//cpyStr:abc, 对象地址:0x9b661481bbd71a70, 指针地址：0x7f998c70d528</span><br><span class="line">//string:abc123, 对象地址:0x60000094ffc0, 指针地址：0x7ffee2898758</span><br><span class="line">//strongStr:abc123, 对象地址:0x60000094ffc0, 指针地址：0x7f998c70d520,</span><br><span class="line">//cpyStr:abc, 对象地址:0x9b661481bbd71a70, 指针地址：0x7f998c70d528</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>此结果就能明显看到区别了，<br><strong><code>strong</code>修饰的字符串，会跟随源字符串的变化而变化！<code>copy</code>修饰的并不会！！</strong></p>
+<p><strong><em>这也可以解释：为什么NSString的变量要用<code>copy</code>来修饰</em></strong><br><strong><em>生成NSString对象的时候，就是不想在后续的过程中改变他，如果使用<code>strong</code>来修饰，则途中修改了原值，strong修饰的变量也会跟着变化，这显然有悖于初衷</em></strong></p>
+<h4 id="二、有关原文中stringWithFormat生成对象地址和别的方法生成对象地址不同的问题："><a href="#二、有关原文中stringWithFormat生成对象地址和别的方法生成对象地址不同的问题：" class="headerlink" title="二、有关原文中stringWithFormat生成对象地址和别的方法生成对象地址不同的问题："></a>二、有关原文中stringWithFormat生成对象地址和别的方法生成对象地址不同的问题：</h4><blockquote>
+<p>由上文可以看到，<code>stringWithFormat</code>和<code>initWithFormat</code>两方法生成的NSString对象地址是相同的。其他的任何方法生成的对象都不同！因为<code>stringWithFormat</code>方法内部也是调用了<code>initWithFormat</code>方法。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/1241385-0d0638d2c13f1a32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>原因是这样：<br><code>stringWithFormat</code>方法会创建一个新的对象，开辟新的内存空间，遵循引用计数原则，创建释放等等。<br><code>stringWithString</code>等方法，其实并没有创建一个新的对象，苹果对于这种字面量字符串，一般都是存储在<code>常量区</code>，<code>stringWithFormat</code>等方法只是添加一个该常量的引用而已，<strong>并不会开辟新的内存空间</strong></p>
+<p>这也就能解释为什么这两种方式创建的字符串，内存地址不同了</p>
 
       
     </div>
@@ -471,7 +492,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/woodi.github.io/archives">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -519,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#由此可以得出结论"><span class="nav-number">2.</span> <span class="nav-text">由此可以得出结论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#因此"><span class="nav-number">3.</span> <span class="nav-text">因此</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PS："><span class="nav-number">4.</span> <span class="nav-text">PS：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#由此可以得出结论"><span class="nav-number">2.</span> <span class="nav-text">由此可以得出结论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#因此"><span class="nav-number">3.</span> <span class="nav-text">因此</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PS："><span class="nav-number">4.</span> <span class="nav-text">PS：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2018年11月26日延伸："><span class="nav-number">5.</span> <span class="nav-text">2018年11月26日延伸：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一、NSString对象copy和strong修饰词的区别"><span class="nav-number">6.</span> <span class="nav-text">一、NSString对象copy和strong修饰词的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、有关原文中stringWithFormat生成对象地址和别的方法生成对象地址不同的问题："><span class="nav-number">7.</span> <span class="nav-text">二、有关原文中stringWithFormat生成对象地址和别的方法生成对象地址不同的问题：</span></a></li></ol></div>
             
 
           </div>
@@ -542,7 +563,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

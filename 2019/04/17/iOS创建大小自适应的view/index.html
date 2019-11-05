@@ -1,0 +1,675 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="开发中免不了会遇到要定制那种宽高自适应的view。这里做下总结  1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）这种其实比较好处理。123456789101112131415161718192021222324252627282930313233343536373839#import &amp;quot;TestView.h&amp;quot;#import &amp;quot;Mason">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS创建大小自适应的view">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2019/04/17/iOS创建大小自适应的view/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="开发中免不了会遇到要定制那种宽高自适应的view。这里做下总结  1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）这种其实比较好处理。123456789101112131415161718192021222324252627282930313233343536373839#import &amp;quot;TestView.h&amp;quot;#import &amp;quot;Mason">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-b3d754b67996dac2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-29170cc6c90d429c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-6b0ead550b43a63b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-f7c249d3fb1c57c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-f8b22a4862d64eb6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-11-05T15:47:31.051Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS创建大小自适应的view">
+<meta name="twitter:description" content="开发中免不了会遇到要定制那种宽高自适应的view。这里做下总结  1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）这种其实比较好处理。123456789101112131415161718192021222324252627282930313233343536373839#import &amp;quot;TestView.h&amp;quot;#import &amp;quot;Mason">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-b3d754b67996dac2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2019/04/17/iOS创建大小自适应的view/">
+
+
+
+
+
+  <title> iOS创建大小自适应的view | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/04/17/iOS创建大小自适应的view/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS创建大小自适应的view
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-17T17:00:56+08:00">
+                2019-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>开发中免不了会遇到要定制那种宽高自适应的view。这里做下总结</p>
+</blockquote>
+<h4 id="1-包括的子view不可滚动（即不包含UIScrollView的别的控件）"><a href="#1-包括的子view不可滚动（即不包含UIScrollView的别的控件）" class="headerlink" title="1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）"></a>1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）</h4><p>这种其实比较好处理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;TestView.h&quot;</span><br><span class="line">#import &quot;Masonry.h&quot;</span><br><span class="line"></span><br><span class="line">@interface TestView()</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UIView *view1;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation TestView</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithFrame:(CGRect)frame &#123;</span><br><span class="line">if (self = [super initWithFrame:frame]) &#123;</span><br><span class="line">self.backgroundColor = [UIColor redColor];</span><br><span class="line">[self createSubviews];</span><br><span class="line">&#125;</span><br><span class="line">return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)createSubviews &#123;</span><br><span class="line">self.view1 = [[UIView alloc]init];</span><br><span class="line">self.view1.backgroundColor = [UIColor yellowColor];</span><br><span class="line">[self addSubview:self.view1];</span><br><span class="line">[self.view1 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.top.right.bottom.equalTo(self);</span><br><span class="line">make.size.mas_equalTo(CGSizeMake(150, 20));</span><br><span class="line">&#125;];      </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//ViewController.m中</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">TestView *test = [[TestView alloc]init];</span><br><span class="line">[self.view addSubview:test];</span><br><span class="line">[test mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.top.equalTo(grayView.mas_bottom).offset(5);</span><br><span class="line">make.centerX.equalTo(self.view);</span><br><span class="line">&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，只需要设置子视图的边距跟父视图相同，然后设置子视图的宽高即可。<br>但是要注意：<em>在外部给父视图做约束的时候，<code>不要设置跟size相关的属性</code></em><br><img src="https://upload-images.jianshu.io/upload_images/1241385-b3d754b67996dac2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到，父视图（红色）和子视图（黄色）大小是一致的。</p>
+<h4 id="2-子视图中包括可以滚动的控件（UIScrollView）"><a href="#2-子视图中包括可以滚动的控件（UIScrollView）" class="headerlink" title="2.子视图中包括可以滚动的控件（UIScrollView）"></a>2.子视图中包括可以滚动的控件（UIScrollView）</h4><p>比如这个需求：<br><img src="https://upload-images.jianshu.io/upload_images/1241385-29170cc6c90d429c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/1241385-6b0ead550b43a63b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>要弹出一个alert框，然后根据中间文字的长短，来调整整个框的大小！然后给一个最大高度，如果文字超过了这个高度，则为可滚动。</p>
+<p>按照上面的思路，给UIScrollview添加约束，UIScrollView的内部放一个UILabel，然后设置label的约束为四边距跟scrollview相同。我们来测试一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">@interface TestView()</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UIView *view1; //头部view</span><br><span class="line">@property (nonatomic, strong) UIView *view2; //底部view</span><br><span class="line">@property (nonatomic, strong) UIScrollView *scrollView; </span><br><span class="line">@property (nonatomic, strong) UILabel *content;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">- (void)createSubviews &#123;</span><br><span class="line">self.view1 = [[UIView alloc]init];</span><br><span class="line">self.view1.backgroundColor = [UIColor yellowColor];</span><br><span class="line">[self addSubview:self.view1];</span><br><span class="line">[self.view1 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.top.right.equalTo(self);</span><br><span class="line">make.size.mas_equalTo(CGSizeMake(150, 20));</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.scrollView = [[UIScrollView alloc]init];</span><br><span class="line">self.scrollView.backgroundColor = [UIColor orangeColor];</span><br><span class="line">[self addSubview:self.scrollView];</span><br><span class="line">[self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.right.equalTo(self);</span><br><span class="line">make.top.equalTo(self.view1.mas_bottom);</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">self.content = [[UILabel alloc]init];</span><br><span class="line">self.content.text = @&quot;按时；的房价阿斯兰的风景按时；大楼附近奥德赛；立方阿萨德管理局ad；管理会计we；了感觉肉而过；阿夫林的快感骄傲的高考哈尔；快给我如果；卡；管理科见到过；拉的积分；阿刘的时间安排温哥华；按时给家里；的设计费；阿刘四大金刚；卡到房管局；利润空间感；为了国家；打了个健康； 光和热涵盖了看法那个卡了人家给旅客进入那个卡了进入高考了人工；的房价阿斯兰的风景按时；大楼附近奥德赛；立&quot;;</span><br><span class="line">self.content.numberOfLines = 0;</span><br><span class="line">[self.scrollView addSubview:self.content];</span><br><span class="line"></span><br><span class="line">CGSize contentSize = [self.content sizeThatFits:CGSizeMake(150, 9999)];</span><br><span class="line">[self.content mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.edges.equalTo(self.scrollView);</span><br><span class="line">make.size.mas_equalTo(contentSize);</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">self.view2 = [[UIView alloc]init];</span><br><span class="line">self.view2.backgroundColor = [UIColor greenColor];</span><br><span class="line">[self addSubview:self.view2];</span><br><span class="line">[self.view2 mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.left.right.bottom.equalTo(self);</span><br><span class="line">make.top.equalTo(self.scrollView.mas_bottom);</span><br><span class="line">make.size.equalTo(self.view1);</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，已经设置了content的四边距和scrollview一致，然后也给了content一个size。<br>然后设置scrollview的左边和右边，跟父视图一致。<br>设置view2的顶部挨着scrollview的底部。<br>然后view2的底部跟父视图底部一致。<br>这个思路跟上面<a href="">1</a>中的，是符合的。<br>但是结果呢？<br><img src="https://upload-images.jianshu.io/upload_images/1241385-f7c249d3fb1c57c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到，只有view1和view2，<br><em>UIScrollview并没有显示在页面上</em><br>可见，这个时候，再使用<a href="">1</a>的方法就不行了。（如果是我约束设置错了，还请各位大佬批评指正）</p>
+<p>所以这里使用了另外一种思路。</p>
+<blockquote>
+<p>给scrollview的高度添加约束，然后强引用为一个属性。然后在content文字高度计算完全之后，重新更新此约束，即可修改scrollview的高度。当然，此时子视图的各个控件之间高度的约束就可以忽略了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, strong) NSLayoutConstraint *heightConstraint;</span><br><span class="line"></span><br><span class="line">//这里设置高度约束。初始值为0</span><br><span class="line">self.heightConstraint = [NSLayoutConstraint constraintWithItem:self.scrollView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeHeight) multiplier:1 constant:0];</span><br><span class="line">[self addConstraint:self.heightConstraint];</span><br><span class="line"></span><br><span class="line">//此处计算完成之后，更新约束值</span><br><span class="line">CGSize contentSize = [self.content sizeThatFits:CGSizeMake(150, 9999)];</span><br><span class="line">[self.content mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">make.edges.equalTo(self.scrollView);</span><br><span class="line">make.size.mas_equalTo(contentSize);</span><br><span class="line">&#125;];</span><br><span class="line">self.heightConstraint.constant = contentSize.height;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/1241385-f8b22a4862d64eb6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>此时，可以看到，就能达到我们要的效果。</p>
+<p>然后上面的那种弹框中所说的父视图超过最大高度的时候可滚动，可以在获取到高度的时候给约束添加个判断即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">内容label修改行间距</span><br><span class="line"></span><br><span class="line">@param contentStr 要展示的内容字符串</span><br><span class="line">*/</span><br><span class="line">- (void)replaceContentUsingSpecificLineSpacingWithString:(NSString *)contentStr &#123;</span><br><span class="line">NSMutableParagraphStyle *mps = [[NSMutableParagraphStyle alloc]init];</span><br><span class="line">mps.lineSpacing = 6;</span><br><span class="line">mps.lineBreakMode = NSLineBreakByWordWrapping;</span><br><span class="line"></span><br><span class="line">NSDictionary *contentAttributes = @&#123;</span><br><span class="line">NSParagraphStyleAttributeName: mps,</span><br><span class="line">NSFontAttributeName: [UIFont systemFontOfSize: 13],</span><br><span class="line">&#125;;</span><br><span class="line">NSMutableAttributedString *mas = [[NSMutableAttributedString alloc]initWithString:contentStr attributes:contentAttributes];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.content.attributedText = mas;</span><br><span class="line">[self layoutIfNeeded];</span><br><span class="line"></span><br><span class="line">if (self.content.height &lt; kPxValue(428)) &#123;</span><br><span class="line">LOG(@&quot;短&quot;);</span><br><span class="line">self.scrollHeightConstraint.constant = self.content.height;</span><br><span class="line">&#125;else &#123;</span><br><span class="line">LOG(@&quot;长&quot;);</span><br><span class="line">self.scrollHeightConstraint.constant = kPxValue(428);</span><br><span class="line">self.contentScrollView.contentSize = CGSizeMake(self.contentScrollView.width,self.content.height);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然， 这种效果图，还有一种实现方法：<code>UITextView</code><br>这里有一篇文章可供参考<br><a href="https://www.jianshu.com/p/9e960757de86" target="_blank" rel="noopener">iOS:如何优雅的让UITextView根据输入文字实时改变高度</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2019/04/15/iOS启动优化/" rel="next" title="iOS启动优化">
+                <i class="fa fa-chevron-left"></i> iOS启动优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2019/05/07/AutoLayout是这么进行自动布局的/" rel="prev" title="AutoLayout是这么进行自动布局的">
+                AutoLayout是这么进行自动布局的 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-包括的子view不可滚动（即不包含UIScrollView的别的控件）"><span class="nav-number">1.</span> <span class="nav-text">1. 包括的子view不可滚动（即不包含UIScrollView的别的控件）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-子视图中包括可以滚动的控件（UIScrollView）"><span class="nav-number">2.</span> <span class="nav-text">2.子视图中包括可以滚动的控件（UIScrollView）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

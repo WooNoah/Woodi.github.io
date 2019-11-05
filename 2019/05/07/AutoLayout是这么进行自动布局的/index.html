@@ -1,0 +1,710 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/woodi.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/woodi.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/woodi.github.io/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/woodi.github.io/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="AutoLayout底层实现为Cassowary算法 Cassowary是以高效的界面线性方程求解算法被提出来的，他解决的是界面的线性规划问题，而线性规划问题的解法是simplex算法 iOS12之前 AutoLayout存在的性能问题在WWDC 2018 202 session中介绍  Auto Layout 的生命周期Auto Layout 不只有布局算法 Cassowary，还包含了布局在运">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AutoLayout是这么进行自动布局的">
+<meta property="og:url" content="http://woonoah.github.io/woodi.github.io/2019/05/07/AutoLayout是这么进行自动布局的/index.html">
+<meta property="og:site_name" content="Woooodi&#39;s Private Zone">
+<meta property="og:description" content="AutoLayout底层实现为Cassowary算法 Cassowary是以高效的界面线性方程求解算法被提出来的，他解决的是界面的线性规划问题，而线性规划问题的解法是simplex算法 iOS12之前 AutoLayout存在的性能问题在WWDC 2018 202 session中介绍  Auto Layout 的生命周期Auto Layout 不只有布局算法 Cassowary，还包含了布局在运">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1241385-650ea7eff36ddbc6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-11-05T15:47:31.048Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AutoLayout是这么进行自动布局的">
+<meta name="twitter:description" content="AutoLayout底层实现为Cassowary算法 Cassowary是以高效的界面线性方程求解算法被提出来的，他解决的是界面的线性规划问题，而线性规划问题的解法是simplex算法 iOS12之前 AutoLayout存在的性能问题在WWDC 2018 202 session中介绍  Auto Layout 的生命周期Auto Layout 不只有布局算法 Cassowary，还包含了布局在运">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1241385-650ea7eff36ddbc6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/woodi.github.io/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://woonoah.github.io/woodi.github.io/2019/05/07/AutoLayout是这么进行自动布局的/">
+
+
+
+
+
+  <title> AutoLayout是这么进行自动布局的 | Woooodi's Private Zone </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/woodi.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Woooodi's Private Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/woodi.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/woodi.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/woodi.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://woonoah.github.io/woodi.github.io/woodi.github.io/2019/05/07/AutoLayout是这么进行自动布局的/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="D">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/woodi.github.io/images/profileIcon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Woooodi's Private Zone">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AutoLayout是这么进行自动布局的
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-07T19:19:15+08:00">
+                2019-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>AutoLayout底层实现为Cassowary算法</p>
+<p>Cassowary是以高效的界面线性方程求解算法被提出来的，他解决的是界面的线性规划问题，而线性规划问题的解法是simplex算法</p>
+<p>iOS12之前 AutoLayout存在的性能问题在<br><a href="https://developer.apple.com/videos/play/wwdc2018/220/" target="_blank" rel="noopener">WWDC 2018 202 session</a>中介绍</p>
+<hr>
+<h4 id="Auto-Layout-的生命周期"><a href="#Auto-Layout-的生命周期" class="headerlink" title="Auto Layout 的生命周期"></a>Auto Layout 的生命周期</h4><p>Auto Layout 不只有布局算法 Cassowary，还包含了布局在运行时的生命周期等一整套布局引擎系统，用来统一管理布局的创建、更新和销毁。了解 Auto Layout 的生命周期，是理解它的性能相关话题的基础。这样，在遇到问题，特别是性能问题时，我们才能从根儿上找到原因，从而避免或改进类似的问题。</p>
+<p>这一整套布局引擎系统叫作 Layout Engine ，是 Auto Layout 的核心，主导着整个界面布局。</p>
+<p>每个视图在得到自己的布局之前，Layout Engine 会将视图、约束、优先级、固定大小通过计算转换成最终的大小和位置。在 Layout Engine 里，每当约束发生变化，就会触发 Deffered Layout Pass，完成后进入监听约束变化的状态。当再次监听到约束变化，即进入下一轮循环中。整个过程如下图所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1241385-650ea7eff36ddbc6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Layout Engine 界面布局过程"></p>
+<p>图中， Constraints Change 表示的就是约束变化，添加、删除视图时会触发约束变化。Activating 或 Deactivating，设置 Constant 或 Priority 时也会触发约束变化。Layout Engine 在碰到约束变化后会重新计算布局，获取到布局后调用 superview.setNeedLayout()，然后进入 Deferred Layout Pass。</p>
+<p>Deferred Layout Pass 的主要作用是做容错处理。如果有些视图在更新约束时没有确定或缺失布局声明的话，会先在这里做容错处理。</p>
+<p>接下来，Layout Engine 会从上到下调用 layoutSubviews() ，通过 Cassowary 算法计算各个子视图的位置，算出来后将子视图的 frame 从 Layout Engine 里拷贝出来。</p>
+<p>在这之后的处理，就和手写布局的绘制、渲染过程一样了。</p>
+<hr>
+<h4 id="我们使用AutoLayout的方式有以下两种："><a href="#我们使用AutoLayout的方式有以下两种：" class="headerlink" title="我们使用AutoLayout的方式有以下两种："></a>我们使用AutoLayout的方式有以下两种：</h4><ol>
+<li>使用iOS提供的基于AutoLayout封装的<code>UIStackView</code><br>其实他更加类似于前端的<code>flexbox</code>布局思路，但是<strong>他有一个要求，就是必须是iOS9之后才可以使用</strong></li>
+</ol>
+<ol start="2">
+<li>另外一个，就是我们直接基于AutoLayout封装成库<br>使用DSL(Domain Specific Language)语言来处理页面布局的方式<br><a href="https://github.com/WooNoah/STMAssembleView" target="_blank" rel="noopener">https://github.com/WooNoah/STMAssembleView</a> (forked from <a href="https://github.com/ming1016/STMAssembleView" target="_blank" rel="noopener">ming1016/STMAssembleView</a>)</li>
+</ol>
+<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><ol>
+<li><p>使用AutoLayout, 要多使用UIView的<code>Compression Resistance Priority</code>和<code>Hugging Priority</code>，<br>可以参考<a href="https://github.com/WooNoah/showAutoLayout" target="_blank" rel="noopener">这个demo</a></p>
+</li>
+<li><h5 id="AutoLayout的一些基本概念"><a href="#AutoLayout的一些基本概念" class="headerlink" title="AutoLayout的一些基本概念"></a>AutoLayout的一些基本概念</h5></li>
+</ol>
+<ul>
+<li>利用约束来控制视图的大小和位置，系统会在运行时通过设置的约束计算得到frame再绘制屏幕</li>
+<li>两个属性Content Compression Resistance（排挤，值越高越固定）和Content Hugging（拥抱）,Masonry代码如下</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//content hugging 为1000</span><br><span class="line">[view setContentHuggingPriority:UILayoutPriorityRequired</span><br><span class="line">forAxis:UILayoutConstraintAxisHorizontal];</span><br><span class="line"></span><br><span class="line">//content compression 为250</span><br><span class="line">[view setContentCompressionResistancePriority:UILayoutPriorityDefaultLow</span><br><span class="line">forAxis:UILayoutConstraintAxisHorizontal];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>multipler属性表示约束值为约束对象的百分比，在Masonry里有对应的multipliedBy函数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//宽度为superView宽度的20%</span><br><span class="line">make.width.equalTo(superView.mas_width).multipliedBy(0.2);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>AutoLayout下UILabel设置多行计算需要设置preferredMaxLayoutWidth</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">label.preferredMaxWidth = [UIScreen mainScreen].bounds.size.width - margin - padding;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>preferredMaxLayoutWidth用来制定最大的宽，一般用在多行的UILabel中</li>
+<li>systemLayoutSizeFittingSize方法能够获得view的高度</li>
+<li>iOS7有两个很有用的属性，topLayoutGuide和bottomLayoutGuide，这个两个主要是方便获取UINavigationController和UITabBarController的头部视图区域和底部视图区域。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Masonry直接支持这个属性</span><br><span class="line">make.top.equalTo(self.mas_topLayoutGuide);</span><br></pre></td></tr></table></figure>
+<h5 id="3-AutoLayout关于更新的几个方法的区别"><a href="#3-AutoLayout关于更新的几个方法的区别" class="headerlink" title="3.AutoLayout关于更新的几个方法的区别"></a>3.<a href="https://github.com/ming1016/study/wiki/Masonry#autolayout%E5%85%B3%E4%BA%8E%E6%9B%B4%E6%96%B0%E7%9A%84%E5%87%A0%E4%B8%AA%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB" target="_blank" rel="noopener"></a>AutoLayout关于更新的几个方法的区别</h5><ul>
+<li>setNeedsLayout：告知页面需要更新，但是不会立刻开始更新。执行后会立刻调用layoutSubviews。</li>
+<li>layoutIfNeeded：告知页面布局立刻更新。所以一般都会和setNeedsLayout一起使用。如果希望立刻生成新的frame需要调用此方法，利用这点一般布局动画可以在更新布局后直接使用这个方法让动画生效。</li>
+<li>layoutSubviews：系统重写布局</li>
+<li>setNeedsUpdateConstraints：告知需要更新约束，但是不会立刻开始</li>
+<li>updateConstraintsIfNeeded：告知立刻更新约束</li>
+<li>updateConstraints：系统更新约束</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">针对Auto Layout的生命周期，我是这么理解的：</span><br><span class="line">Auto Layout拥有一套Layout Engine引擎，由它来主导页面的布局。</span><br><span class="line">App启动后，主线程的Run Loop会一直处于监听状态，</span><br><span class="line">当约束发生变化后会触发Deffered Layout Pass（延迟布局传递），</span><br><span class="line">在里面做容错处理（约束丢失等情况）并把view标识为dirty状态，然后Run Loop再次进入监听阶段。</span><br><span class="line">当下一次刷新屏幕动作来临（或者是调用layoutIfNeeded）时，</span><br><span class="line">Layout Engine 会从上到下调用 layoutSubviews() ，通过 Cassowary算法计算各个子视图的位置，</span><br><span class="line">算出来后将子视图的frame从Layout Engine拷贝出来，接下来的过程就跟手写frame是一样的了。</span><br></pre></td></tr></table></figure>
+<p>把循环这部分总结了一下：<br><em>触发约束变化 —&gt; Layout Engine就需要重新计算布局，会先获取到当前的布局，调用SuperView.SetNeedLayout() —&gt; Deffered Layout Pass进行监听 —&gt; Layout Engine 从上到下调用LayoutSubViews()，通过Cassowary算法计算各个子视图的位置，算出来后将子视图的Frame从Layout Engine里拷贝出来 —&gt; 和手写布局的绘制、渲染一样。</em></p>
+<p>参考：<br><a href="https://ming1016.github.io/2015/11/03/deeply-analyse-autolayout/" target="_blank" rel="noopener">https://ming1016.github.io/2015/11/03/deeply-analyse-autolayout/</a><br><a href="https://github.com/forkingdog/fdstackview" target="_blank" rel="noopener">https://github.com/forkingdog/fdstackview</a><br><a href="https://github.com/facebook/yoga" target="_blank" rel="noopener">https://github.com/facebook/yoga</a><br><a href="https://github.com/ming1016/study/wiki/Masonry" target="_blank" rel="noopener">https://github.com/ming1016/study/wiki/Masonry</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/woodi.github.io/2019/04/17/iOS创建大小自适应的view/" rel="next" title="iOS创建大小自适应的view">
+                <i class="fa fa-chevron-left"></i> iOS创建大小自适应的view
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/woodi.github.io/2019/07/12/iOS根据传入的值创建键值相同的字典/" rel="prev" title="iOS根据传入的值创建键值相同的字典">
+                iOS根据传入的值创建键值相同的字典 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/woodi.github.io/images/profileIcon.png" alt="D">
+          <p class="site-author-name" itemprop="name">D</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/woodi.github.io/archives">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Auto-Layout-的生命周期"><span class="nav-number">1.</span> <span class="nav-text">Auto Layout 的生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我们使用AutoLayout的方式有以下两种："><span class="nav-number">2.</span> <span class="nav-text">我们使用AutoLayout的方式有以下两种：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意："><span class="nav-number">3.</span> <span class="nav-text">注意：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#AutoLayout的一些基本概念"><span class="nav-number">3.1.</span> <span class="nav-text">AutoLayout的一些基本概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-AutoLayout关于更新的几个方法的区别"><span class="nav-number">3.2.</span> <span class="nav-text">3.AutoLayout关于更新的几个方法的区别</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/woodi.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/woodi.github.io/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/woodi.github.io/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/woodi.github.io/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
