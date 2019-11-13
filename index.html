@@ -353,6 +353,16 @@
 </blockquote>
 <h4 id="2019年10月30日-setContentHuggingPriority为抗拉伸优先级"><a href="#2019年10月30日-setContentHuggingPriority为抗拉伸优先级" class="headerlink" title="2019年10月30日 setContentHuggingPriority为抗拉伸优先级"></a>2019年10月30日 setContentHuggingPriority为抗拉伸优先级</h4><p>以前只是按照字面意思，以为是<code>拉伸优先级</code>，结果是<code>抗拉伸优先级</code>:<br>即： 优先级越高，越不容易被拉伸，优先级越低，则越容易被拉伸<br>同理，<code>setContentCompressionResistancePriority</code>为抗压缩优先级<br>即：优先级越高，越不容易被压缩，优先级越低，越容易被压缩。<br>默认情况下: HuggingPriority == 250,  CompressionResistancePriority == 750</p>
 <h4 id="2019年11月05日-可以在不借助第三个变量的情况下使用异或位运算交换两个数的值"><a href="#2019年11月05日-可以在不借助第三个变量的情况下使用异或位运算交换两个数的值" class="headerlink" title="2019年11月05日 可以在不借助第三个变量的情况下使用异或位运算交换两个数的值"></a>2019年11月05日 可以在不借助第三个变量的情况下使用异或位运算交换两个数的值</h4><p>a = 10<br>b = 8<br>a = a ^ b<br>b = a ^ b<br>a = a ^ b<br>结果，a = 8, b = 10</p>
+<h4 id="2019年11月07日"><a href="#2019年11月07日" class="headerlink" title="2019年11月07日"></a>2019年11月07日</h4><p>iOS13之后，初始化的时候通过约束设置的frame之后，再手动修改frame值时无效。</p>
+<h4 id="2019年11月13日"><a href="#2019年11月13日" class="headerlink" title="2019年11月13日"></a>2019年11月13日</h4><p>给iOS Layer添加basic动画的时候，设置fromValue和toValue的值，都是根据初始值的相对大小<br>eg:<br>假如自己画了一个竖着的时钟时针，那么</p>
+<ol>
+<li>fromValue如果设置为0，toValue设置为M_PI,则就是从竖直状态开始,顺时针转动180度。</li>
+<li>如果fromValue为3 <em> M_PI/2, toValue为 5 </em> M_PI/2, 则就是从9点钟放心顺时针转到3点钟方向。</li>
+<li>如果fromValue = M_PI/2, toValue = 0, 则就是 逆时针转动90度，从3点钟方向，到12点钟方向。<br>以此类推，<br>如果初始的时候，时针不是竖直的，而是<code>沿着x轴水平向右</code>的。<br>那么动画的效果又会截然不同：</li>
+<li>fromValue = 0, toValue = M_PI, 3点钟方向 顺时针转到9点钟方向</li>
+<li>fromValue = 3 <em> M_PI/2, toValue = 5 </em> M_PI/2, 则12点钟方向 顺时针转到 6点钟方向</li>
+<li>fromValue = M_PI/2, toValue = 0, 则 6点钟方向，逆时针 到3点钟方向。</li>
+</ol>
 
           
         
